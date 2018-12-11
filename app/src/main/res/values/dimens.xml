@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <dimen name="no_padding">0dp</dimen>
+    <dimen name="small_padding">6dp</dimen>
+    <dimen name="normal_padding">8dp</dimen>
+    <dimen name="large_padding">16dp</dimen>
+    <dimen name="xl_padding">24dp</dimen>
+
+    <dimen name="fab_margin">16dp</dimen>
+
+</resources>

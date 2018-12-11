@@ -1,0 +1,42 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- NOTE: Hide buttons to simplify the UI. Users can touch outside the dialog to
+         dismiss it. -->
+    <!-- NOTE: ListPreference's summary should be set to its value by the activity code. -->
+    <ListPreference
+        android:defaultValue="8"
+        android:entries="@array/pref_working_capacity_entries"
+        android:entryValues="@array/pref_working_capacity_values"
+        android:key="working_capacity"
+        android:negativeButtonText="@null"
+        android:positiveButtonText="@null"
+        android:title="@string/pref_working_capacity_title" />
+
+    <EditTextPreference
+        android:defaultValue="20"
+        android:inputType="number"
+        android:key="buffer_time"
+        android:numeric="integer"
+        android:selectAllOnFocus="true"
+        android:singleLine="true"
+        android:title="@string/pref_buffer_time_title" />
+
+    <EditTextPreference
+        android:defaultValue="1.0"
+        android:inputType="numberDecimal"
+        android:key="weighting_importance"
+        android:numeric="decimal"
+        android:selectAllOnFocus="true"
+        android:singleLine="true"
+        android:title="@string/pref_weighting_importance_title" />
+
+    <EditTextPreference
+        android:defaultValue="1.0"
+        android:inputType="numberDecimal"
+        android:key="weighting_urgency"
+        android:numeric="decimal"
+        android:selectAllOnFocus="true"
+        android:singleLine="true"
+        android:title="@string/pref_weighting_urgency_title" />
+
+</PreferenceScreen>

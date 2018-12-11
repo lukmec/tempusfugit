@@ -1,0 +1,41 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <PreferenceCategory
+        android:key="pref_cat_pers_export"
+        android:title="@string/pref_cat_pers_export">
+
+        <!-- A 'parent' preference, which enables/disables child preferences (below)
+             when checked/unchecked. -->
+        <SwitchPreference
+            android:defaultValue="false"
+            android:key="save_to_calendar"
+            android:title="@string/pref_save_to_calendar_title" />
+
+        <Preference
+            android:key="calendar"
+            android:dependency="save_to_calendar"
+            android:title="@string/pref_select_calendar_title"/>
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:key="pref_cat_pers_other"
+        android:title="@string/pref_cat_pers_other">
+
+    <!-- NOTE: This preference will be enabled only when the checkbox above is checked. -->
+    <SwitchPreference
+        android:defaultValue="false"
+        android:key="show_notification"
+        android:title="@string/pref_show_notification_title" />
+
+    <ListPreference
+        android:defaultValue="1"
+        android:key="time_clean_list"
+        android:entries="@array/pref_time_clean_list_entries"
+        android:entryValues="@array/pref_time_clean_list_values"
+        android:title="@string/pref_time_clean_list_title" />
+
+    </PreferenceCategory>
+
+</PreferenceScreen>
