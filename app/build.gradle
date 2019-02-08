@@ -1,4 +1,5 @@
 apply plugin: 'com.android.application'
+apply plugin: 'androidx.navigation.safeargs'
 
 android {
     compileSdkVersion 28
@@ -34,14 +35,16 @@ dependencies {
     def lifecycle_version = "2.0.0"
     // ViewModel and LiveData
     implementation "androidx.lifecycle:lifecycle-extensions:$lifecycle_version"
-    def room_version = "2.1.0-alpha02"
+//    def room_version = "2.1.0-alpha02"
+    def room_version = "2.1.0-alpha04"
     implementation "androidx.room:room-runtime:$room_version"
     annotationProcessor "androidx.room:room-compiler:$room_version"
     // use kapt for Kotlin
-    def paging_version = "2.1.0-beta01"
+//    def paging_version = "2.1.0-beta01"
+    def paging_version = "2.1.0"
     implementation "androidx.paging:paging-runtime:$paging_version"
     // use -ktx for Kotlin
-    def nav_version = "1.0.0-alpha07"
+    def nav_version = "1.0.0-beta01"
     implementation "android.arch.navigation:navigation-fragment:$nav_version"
     // use -ktx for Kotlin
     implementation "android.arch.navigation:navigation-ui:$nav_version"
@@ -52,5 +55,7 @@ dependencies {
     //Color Picker aus Internet - https://github.com/kristiyanP/colorpicker
     implementation 'petrov.kristiyan:colorpicker-library:1.1.10'
     //Icon Picker aus Internet - https://github.com/maltaisn/icondialoglib
-    implementation 'com.maltaisn:icondialog:2.0.2'
+    implementation 'com.maltaisn:icondialog:2.2.0'
+    implementation 'androidx.cardview:cardview:1.0.0'
+    implementation 'androidx.recyclerview:recyclerview:1.0.0'
 }

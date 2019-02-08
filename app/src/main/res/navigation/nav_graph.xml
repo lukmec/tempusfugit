@@ -2,7 +2,95 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/nav_graph">
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/ovrvw_ge_dest">
     <!--app:startDestination="">-->
 
+    <fragment
+        android:id="@+id/ovrvw_ge_dest"
+        android:name="de.lumdev.tempusfugit.OverviewGroupEventFragment"
+        android:label="OvrVwGEFragm"
+        tools:layout="@layout/fragment_overview_group_event" >
+        <action
+            android:id="@+id/action_ovrvw_ge_dest_to_edt_ge_dest"
+            app:destination="@id/edt_ge_dest" >
+            <argument
+                android:name="groupEventId"
+                android:defaultValue="-1" />
+        </action>
+        <action
+            android:id="@+id/action_ovrvw_ge_dest_to_dtl_ge_dest"
+            app:destination="@id/dtl_ge_dest" >
+            <argument
+                android:name="groupEventId"
+                android:defaultValue="-1" />
+        </action>
+    </fragment>
+    <fragment
+        android:id="@+id/edt_ge_dest"
+        android:name="de.lumdev.tempusfugit.EditGroupEventFragment"
+        android:label="EdtGEFragm"
+        tools:layout="@layout/fragment_edit_group_event">
+        <argument
+            android:name="groupEventId"
+            android:defaultValue="-1"
+            app:argType="integer" />
+    </fragment>
+    <fragment
+        android:id="@+id/ovrvw_e_dest"
+        android:name="de.lumdev.tempusfugit.OverviewEventFragment"
+        android:label="OvrVwEFragm"
+        tools:layout="@layout/fragment_overview_event" >
+        <action
+            android:id="@+id/action_ovrvw_e_dest_to_edt_e_dest"
+            app:destination="@id/edt_e_dest" >
+            <argument
+                android:name="eventId"
+                android:defaultValue="-1" />
+            <argument
+                android:name="parentGroupEvent"
+                android:defaultValue="-1" />
+        </action>
+    </fragment>
+    <fragment
+        android:id="@+id/edt_e_dest"
+        android:name="de.lumdev.tempusfugit.EditEventFragment"
+        android:label="EdtEFragm"
+        tools:layout="@layout/fragment_edit_event" >
+        <argument
+            android:name="eventId"
+            app:argType="integer"
+            android:defaultValue="-1" />
+        <argument
+            android:name="parentGroupEvent"
+            app:argType="integer"
+            android:defaultValue="-1" />
+    </fragment>
+    <fragment
+        android:id="@+id/dtl_ge_dest"
+        android:name="de.lumdev.tempusfugit.DetailledGroupEventFragment"
+        android:label="DtlGEFragm"
+        tools:layout="@layout/fragment_detailled_group_event" >
+        <action
+            android:id="@+id/action_dtl_ge_dest_to_edt_ge_dest"
+            app:destination="@id/edt_ge_dest" >
+            <argument
+                android:name="groupEventId"
+                android:defaultValue="-1" />
+        </action>
+        <action
+            android:id="@+id/action_dtl_ge_dest_to_edt_e_dest"
+            app:destination="@id/edt_e_dest" >
+            <argument
+                android:name="eventId"
+                android:defaultValue="-1" />
+            <argument
+                android:name="parentGroupEvent"
+                android:defaultValue="-1" />
+        </action>
+        <argument
+            android:name="groupEventId"
+            app:argType="integer"
+            android:defaultValue="-1" />
+    </fragment>
 </navigation>

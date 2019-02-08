@@ -13,19 +13,31 @@ public class DateTimeTypeConverter {
 
     @TypeConverter
     public static OffsetDateTime toOffsetDateTime(String value){
+        if (value == null){
+            return null;
+        }
         return formatter.parse(value, OffsetDateTime.FROM);
     }
     @TypeConverter
     public static String fromOffsetDateTime(OffsetDateTime value){
+        if (value == null){
+            return null;
+        }
         return value.format(formatter);
     }
 
     @TypeConverter
     public static Duration toDuration(String value){
+        if (value == null){
+            return null;
+        }
         return Duration.parse(value);
     }
     @TypeConverter
     public static String fromDuration(Duration value){
+        if (value == null){
+            return null;
+        }
         return value.toString();
     }
 }

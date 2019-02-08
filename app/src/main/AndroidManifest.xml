@@ -14,7 +14,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".GroupOverviewActivity"
+            android:name=".MainActivity"
             android:label="@string/title_activity_group_overview"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
@@ -23,16 +23,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".RoomWithViewNewEventActivity" />
-        <activity android:name=".MainActivity" />
-        <activity android:name=".NewGroupEvent" />
         <activity
             android:name=".SettingsActivity"
             android:label="@string/title_activity_settings" />
-        <activity
-            android:name=".TestBasicActivity"
-            android:label="@string/title_activity_test_basic"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>

@@ -42,7 +42,7 @@ public class GroupEvent {
         this.description = description;
         this.creationDate = OffsetDateTime.ofInstant(Instant.now(), ZoneOffset.systemDefault());
         //defaut values
-        this.color = R.color.colorAccent;
+        this.color = 4498259; //44a353 (hex) == 4498259 (dec) (color is green)
         this.icon = R.drawable.ic_directions_car_black_24dp;
         this.parentId = -1;
         this.visible = true;
@@ -58,6 +58,21 @@ public class GroupEvent {
         this.parentId = parentId;
         this.visible = true;
         this.progress = 0;
+    }
+
+    @Ignore
+    public GroupEvent deepcopy(){
+        GroupEvent newGE = new GroupEvent(this.name, this.description);
+        newGE.id = this.id;
+        newGE.name = this.name;
+        newGE.description = this.description;
+        newGE.creationDate = this.creationDate;
+        newGE.color = this.color;
+        newGE.icon = this.icon;
+        newGE.parentId = this.parentId;
+        newGE.visible = this.visible;
+        newGE.progress = this.progress;
+        return newGE;
     }
 
 }

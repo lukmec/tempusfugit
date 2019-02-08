@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <!--<androidx.cardview.widget.CardView-->
+        <!--android:id="@+id/cardView_event"-->
+        <!--android:layout_width="0dp"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_marginStart="@dimen/no_padding"-->
+        <!--android:layout_marginTop="@dimen/no_padding"-->
+        <!--android:layout_marginEnd="@dimen/no_padding"-->
+        <!--android:layout_marginBottom="@dimen/normal_padding"-->
+        <!--app:cardBackgroundColor="@color/groupEvent_grey"-->
+        <!--app:layout_constraintBottom_toBottomOf="parent"-->
+        <!--app:layout_constraintEnd_toEndOf="parent"-->
+        <!--app:layout_constraintStart_toStartOf="parent"-->
+        <!--app:layout_constraintTop_toTopOf="parent">-->
+
+        <!--<androidx.constraintlayout.widget.ConstraintLayout-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content">-->
+
+            <!--<CheckBox-->
+                <!--android:id="@+id/rVCard_checkbox_event_done"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_marginStart="@dimen/large_padding"-->
+                <!--android:layout_marginTop="@dimen/normal_padding"-->
+                <!--android:layout_marginBottom="@dimen/normal_padding"-->
+                <!--app:layout_constraintBottom_toBottomOf="parent"-->
+                <!--app:layout_constraintStart_toStartOf="parent"-->
+                <!--app:layout_constraintTop_toTopOf="parent" />-->
+
+            <!--<TextView-->
+                <!--android:id="@+id/rVCard_eventPriority"-->
+                <!--style="@style/card_title"-->
+                <!--android:layout_width="0dp"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_marginTop="@dimen/normal_padding"-->
+                <!--android:layout_marginEnd="@dimen/normal_padding"-->
+                <!--android:layout_marginBottom="@dimen/normal_padding"-->
+                <!--android:text="@string/placeholder_priority"-->
+                <!--app:layout_constraintBottom_toBottomOf="parent"-->
+                <!--app:layout_constraintEnd_toEndOf="parent"-->
+                <!--app:layout_constraintTop_toTopOf="parent" />-->
+
+            <!--<TextView-->
+                <!--android:id="@+id/rVCard_eventName"-->
+                <!--android:layout_width="0dp"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_marginStart="@dimen/large_padding"-->
+                <!--android:layout_marginTop="@dimen/normal_padding"-->
+                <!--android:layout_marginEnd="@dimen/normal_padding"-->
+                <!--android:layout_marginBottom="@dimen/normal_padding"-->
+                <!--android:text="@string/placeholder_name"-->
+                <!--app:layout_constraintBottom_toBottomOf="parent"-->
+                <!--app:layout_constraintEnd_toStartOf="@+id/rVCard_eventPriority"-->
+                <!--app:layout_constraintStart_toEndOf="@+id/rVCard_checkbox_event_done"-->
+                <!--app:layout_constraintTop_toTopOf="parent" />-->
+
+
+        <!--</androidx.constraintlayout.widget.ConstraintLayout>-->
+    <!--</androidx.cardview.widget.CardView>-->
+</androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!--<?xml version="1.0" encoding="utf-8"?>-->
+<!--<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"-->
+    <!--xmlns:app="http://schemas.android.com/apk/res-auto"-->
+    <!--xmlns:tools="http://schemas.android.com/tools"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:orientation="vertical">-->
+
+    <!--<androidx.cardview.widget.CardView-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:layout_marginBottom="@dimen/normal_padding"-->
+        <!--app:cardBackgroundColor="@color/groupEvent_grey">-->
+
+        <!--<LinearLayout-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="match_parent"-->
+            <!--android:orientation="horizontal"-->
+            <!--android:padding="@dimen/normal_padding">-->
+
+            <!--<CheckBox-->
+                <!--android:id="@+id/checkBox-try"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_marginStart="@dimen/normal_padding"-->
+                <!--android:layout_marginEnd="@dimen/large_padding"-->
+                <!--/>-->
+
+            <!--<TextView-->
+                <!--android:id="@+id/tV-try"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:text="@string/placeholder_name"-->
+                <!--android:layout_weight="1"/>-->
+
+            <!--<TextView-->
+                <!--android:id="@+id/tV2-try"-->
+                <!--style="@style/card_title"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_marginStart="@dimen/large_padding"-->
+                <!--android:text="@string/placeholder_number" />-->
+
+        <!--</LinearLayout>-->
+
+        <!--&lt;!&ndash;<RelativeLayout&ndash;&gt;-->
+            <!--&lt;!&ndash;android:layout_width="match_parent"&ndash;&gt;-->
+            <!--&lt;!&ndash;android:layout_height="wrap_content">&ndash;&gt;-->
+
+
+            <!--&lt;!&ndash;<CheckBox&ndash;&gt;-->
+                <!--&lt;!&ndash;android:id="@+id/checkBox-try"&ndash;&gt;-->
+                <!--&lt;!&ndash;android:layout_width="wrap_content"&ndash;&gt;-->
+                <!--&lt;!&ndash;android:layout_height="wrap_content"&ndash;&gt;-->
+                <!--&lt;!&ndash;android:layout_alignParentStart="true"&ndash;&gt;-->
+                <!--&lt;!&ndash;android:layout_alignParentTop="true"&ndash;&gt;-->
+                <!--&lt;!&ndash;android:layout_marginLeft="@dimen/large_padding"&ndash;&gt;-->
+                <!--&lt;!&ndash;android:layout_marginRight="@dimen/large_padding"&ndash;&gt;-->
+                <!--&lt;!&ndash;android:layout_marginTop="@dimen/normal_padding"&ndash;&gt;-->
+                <!--&lt;!&ndash;android:layout_marginBottom="@dimen/normal_padding"/>&ndash;&gt;-->
+
+            <!--&lt;!&ndash;<TextView&ndash;&gt;-->
+                <!--&lt;!&ndash;android:id="@+id/tV-try"&ndash;&gt;-->
+                <!--&lt;!&ndash;android:layout_width="wrap_content"&ndash;&gt;-->
+                <!--&lt;!&ndash;android:layout_height="wrap_content"&ndash;&gt;-->
+                <!--&lt;!&ndash;android:layout_alignEnd="@id/checkBox-try"&ndash;&gt;-->
+                <!--&lt;!&ndash;android:layout_alignParentTop="true"&ndash;&gt;-->
+                <!--&lt;!&ndash;android:layout_toStartOf="@id/tV2-try"&ndash;&gt;-->
+                <!--&lt;!&ndash;android:layout_toEndOf="@+id/checkBox-try"&ndash;&gt;-->
+                <!--&lt;!&ndash;android:text="@string/placeholder_name" />&ndash;&gt;-->
+
+            <!--&lt;!&ndash;<TextView&ndash;&gt;-->
+                <!--&lt;!&ndash;android:id="@+id/tV2-try"&ndash;&gt;-->
+                <!--&lt;!&ndash;style="@style/card_title"&ndash;&gt;-->
+                <!--&lt;!&ndash;android:layout_width="wrap_content"&ndash;&gt;-->
+                <!--&lt;!&ndash;android:layout_height="wrap_content"&ndash;&gt;-->
+                <!--&lt;!&ndash;android:layout_alignParentTop="true"&ndash;&gt;-->
+                <!--&lt;!&ndash;android:layout_alignParentEnd="true"&ndash;&gt;-->
+                <!--&lt;!&ndash;android:layout_marginTop="@dimen/normal_padding"&ndash;&gt;-->
+                <!--&lt;!&ndash;android:layout_marginBottom="@dimen/normal_padding"&ndash;&gt;-->
+                <!--&lt;!&ndash;android:layout_marginEnd="@dimen/normal_padding"&ndash;&gt;-->
+                <!--&lt;!&ndash;android:layout_marginStart="@dimen/normal_padding"&ndash;&gt;-->
+                <!--&lt;!&ndash;android:text="@string/placeholder_number" />&ndash;&gt;-->
+
+        <!--&lt;!&ndash;</RelativeLayout>&ndash;&gt;-->
+    <!--</androidx.cardview.widget.CardView>-->
+<!--</LinearLayout>-->

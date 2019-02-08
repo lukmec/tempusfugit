@@ -2,6 +2,7 @@ package de.lumdev.tempusfugit;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +16,8 @@ import com.maltaisn.icondialog.IconHelper;
 import androidx.annotation.DrawableRes;
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
+import androidx.navigation.Navigation;
+import androidx.navigation.fragment.NavHostFragment;
 import androidx.paging.PagedListAdapter;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
@@ -45,6 +48,7 @@ public class GroupEventAdapter extends PagedListAdapter<GroupEvent, GroupEventAd
             icon.setImageResource(R.drawable.ic_add_black_24dp);
             container.setCardBackgroundColor(itemView.getResources().getColor(R.color.design_default_color_background));
         }
+        
     }
 
 
@@ -77,7 +81,25 @@ public class GroupEventAdapter extends PagedListAdapter<GroupEvent, GroupEventAd
             holder.progress.setProgress(groupEvent.progress);
             setIcon(holder, groupEvent.icon);
             holder.container.setCardBackgroundColor(groupEvent.color);
-
+//            holder.container.setOnClickListener(editGroupEventOnClickListener);
+            holder.container.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    OverviewGroupEventFragmentDirections.ActionOvrvwGeDestToEdtGeDest action = OverviewGroupEventFragmentDirections.actionOvrvwGeDestToEdtGeDest();
+                    action.setGroupEventId(groupEvent.id);
+                    Navigation.findNavController(v).navigate(action);
+                    return true;
+                }
+            });
+            holder.container.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+//                    Log.d("-->", "GroupEventId: "+groupEvent.id);
+                    OverviewGroupEventFragmentDirections.ActionOvrvwGeDestToDtlGeDest action = OverviewGroupEventFragmentDirections.actionOvrvwGeDestToDtlGeDest();
+                    action.setGroupEventId(groupEvent.id);
+                    Navigation.findNavController(v).navigate(action);
+                }
+            });
         } else {
             // Null defines a placeholder item - PagedListAdapter automatically
             // invalidates this row when the actual object is loaded from the
@@ -86,8 +108,15 @@ public class GroupEventAdapter extends PagedListAdapter<GroupEvent, GroupEventAd
         }
     }
 
+
+
     private void setIcon(GroupEventAdapter.GroupEventViewHolder holder, int iconId){
         try{
+            //IconPicker allows "0" as ID, but .setImageRessource justs sets no icon for ID=0, instead of throwing exception
+            //--> Raising custom Exception, when ID=0 in order to let the IconHelper display correct Icon
+            if (iconId == 0){
+                throw new Exception("err: IconId=0, catching special case...");
+            }
             holder.icon.setImageResource(iconId);
         }catch (Exception e){
             try {

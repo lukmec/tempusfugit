@@ -1,0 +1,256 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <EditText
+                android:id="@+id/eT_edit_E_name"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="@string/hint_eventName"
+                android:inputType="textPersonName"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <EditText
+                android:id="@+id/eT_edit_E_description"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/normal_padding"
+                android:ems="10"
+                android:hint="@string/hint_eventDescription"
+                android:inputType="textPersonName"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/eT_edit_E_name" />
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/crdVw_edit_E_container_parentGroupEvent"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                app:cardBackgroundColor="@color/colorPrimary"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/eT_edit_E_description">
+
+                <TextView
+                    android:id="@+id/tV_edit_E_parentGroupEvent"
+                    style="@style/card_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/btn_parentGroupEvent"
+                    android:drawableEnd="@drawable/ic_directions_car_black_24dp"
+                    android:drawablePadding="@dimen/large_padding"
+                    android:padding="@dimen/large_padding"
+                    android:layout_gravity="center"/>
+
+            </androidx.cardview.widget.CardView>
+
+            <TextView
+                android:id="@+id/tV_edit_E_importance"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/large_padding"
+                android:text="@string/label_eventImportance"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/crdVw_edit_E_container_parentGroupEvent" />
+
+            <RadioGroup
+                android:id="@+id/rG_edit_E_importance"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/normal_padding"
+                android:orientation="horizontal"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tV_edit_E_importance">
+
+                <RadioButton
+                    android:id="@+id/rb_edit_E_importance_1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:checked="true"
+                    android:text="@string/label_rB_importance_1_very_low"
+                    tools:layout_editor_absoluteX="8dp" />
+
+                <RadioButton
+                    android:id="@+id/rb_edit_E_importance_3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/label_rB_importance_3_high"
+                    tools:layout_editor_absoluteX="104dp" />
+
+                <RadioButton
+                    android:id="@+id/rb_edit_E_importance_2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/label_rB_importance_2_low"
+                    tools:layout_editor_absoluteX="56dp" />
+
+                <RadioButton
+                    android:id="@+id/rb_edit_E_importance_4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/label_rB_importance_4_very_high"
+                    tools:layout_editor_absoluteX="96dp"
+                    tools:layout_editor_absoluteY="0dp" />
+
+            </RadioGroup>
+
+            <TextView
+                android:id="@+id/tV_edit_E_urgency"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/large_padding"
+                android:text="@string/label_eventUrgency"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/rG_edit_E_importance" />
+
+            <RadioGroup
+                android:id="@+id/rG_edit_E_urgency"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/normal_padding"
+                android:orientation="horizontal"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tV_edit_E_urgency">
+
+                <RadioButton
+                    android:id="@+id/rb_edit_E_urgency_1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:checked="true"
+                    android:text="@string/label_rB_urgency_1_very_low" />
+
+                <RadioButton
+                    android:id="@+id/rb_edit_E_urgency_2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/label_rB_urgency_2_low" />
+
+                <RadioButton
+                    android:id="@+id/rb_edit_E_urgency_3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/label_rB_urgency_3_high" />
+
+                <RadioButton
+                    android:id="@+id/rb_edit_E_urgency_4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/label_rB_urgency_4_very_high" />
+            </RadioGroup>
+
+            <TextView
+                android:id="@+id/tV_edit_E_duration"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/large_padding"
+                android:text="@string/label_eventDuration"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/rG_edit_E_urgency" />
+
+            <SeekBar
+                android:id="@+id/sB_edit_E_duration_minutes"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/normal_padding"
+                android:max="12"
+                android:progress="0"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/tV_edit_E_duration_minutes_value"
+                app:layout_constraintTop_toTopOf="@+id/tV_edit_E_duration_minutes_value" />
+
+            <TextView
+                android:id="@+id/tV_edit_E_duration_minutes"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/normal_padding"
+                android:text="@string/label_eventDuration_minutes"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tV_edit_E_duration" />
+
+            <TextView
+                android:id="@+id/tV_edit_E_duration_minutes_value"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/large_padding"
+                android:text="@string/placeholder_number"
+                app:layout_constraintStart_toEndOf="@+id/tV_edit_E_duration"
+                app:layout_constraintTop_toTopOf="@+id/tV_edit_E_duration_minutes" />
+
+            <TextView
+                android:id="@+id/tV_edit_E_duration_hours"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/normal_padding"
+                android:text="@string/label_eventDuration_hours"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tV_edit_E_duration_minutes" />
+
+            <TextView
+                android:id="@+id/tV_edit_E_duration_hours_value"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/large_padding"
+                android:text="@string/placeholder_number"
+                app:layout_constraintStart_toEndOf="@+id/tV_edit_E_duration"
+                app:layout_constraintTop_toTopOf="@+id/tV_edit_E_duration_hours" />
+
+            <SeekBar
+                android:id="@+id/sB_edit_E_duration_hours"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/normal_padding"
+                android:max="12"
+                android:progress="2"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/tV_edit_E_duration_hours_value"
+                app:layout_constraintTop_toTopOf="@+id/tV_edit_E_duration_hours_value" />
+
+            <TextView
+                android:id="@+id/tV_edit_E_dueDate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/large_padding"
+                android:text="@string/label_eventDueDate"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tV_edit_E_duration_hours" />
+
+            <Button
+                android:id="@+id/btn_edit_E_dueDate_setDate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/normal_padding"
+                android:text="@string/label_eventDueDate_setDate"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tV_edit_E_dueDate" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+
+</LinearLayout>
