@@ -3,12 +3,12 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <!--<color name="colorAccent">#ff4081</color>-->
-    <color name="colorAccent">#0bd7da</color>
+    <color name="colorAccent">#0BD7DA</color>
 
     <color name="groupEvent_green">#44a353</color>
     <color name="groupEvent_red">#d95353</color>
     <color name="groupEvent_blue">#5862cf</color>
     <color name="groupEvent_orange">#ffce5d</color>
-    <color name="groupEvent_grey">#9f9f9f</color>
+    <color name="groupEvent_grey">#9F9F9F</color>
 
 </resources>

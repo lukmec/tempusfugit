@@ -93,4 +93,29 @@
             app:argType="integer"
             android:defaultValue="-1" />
     </fragment>
+    <fragment
+        android:id="@+id/slct_ge_dest"
+        android:name="de.lumdev.tempusfugit.SelectGroupEventDialogFragment"
+        android:label="SlctGEDiagFragm"
+        tools:layout="@layout/fragment_overview_group_event" >
+        <action
+            android:id="@+id/action_slct_ge_dest_to_edt_e_dest"
+            app:destination="@id/edt_e_dest" >
+            <argument android:defaultValue="-1"
+                android:name="eventId" />
+            <argument
+                android:name="parentGroupEvent"
+                android:defaultValue="-1" />
+        </action>
+    </fragment>
+    <fragment
+        android:id="@+id/abt_app_dest"
+        android:name="de.lumdev.tempusfugit.AboutThisAppFragment"
+        android:label="AbtAppFragm"
+        tools:layout="@layout/fragment_about_this_app" />
+    <fragment
+        android:id="@+id/settings_dest"
+        android:name="de.lumdev.tempusfugit.SettingsFragment"
+        android:label="SettingsFragm"
+        tools:layout="@layout/fragment_settings" />
 </navigation>

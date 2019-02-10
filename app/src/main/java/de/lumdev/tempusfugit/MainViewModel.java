@@ -3,28 +3,34 @@ package de.lumdev.tempusfugit;
 import android.app.Application;
 import android.util.Log;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
+import androidx.navigation.NavController;
 import androidx.paging.PagedList;
 import de.lumdev.tempusfugit.data.DataRepository;
 import de.lumdev.tempusfugit.data.Event;
 import de.lumdev.tempusfugit.data.GroupEvent;
+import de.lumdev.tempusfugit.data.QuickDirtyDataHolder;
+import de.lumdev.tempusfugit.util.SelectGEDialogObserver;
 
 public class MainViewModel extends AndroidViewModel {
 
     private DataRepository dataRepository;
     private final LiveData<PagedList<GroupEvent>> allGroupEvents;
     private final LiveData<PagedList<Event>> allEvents;
+    private final LiveData<PagedList<Event>> allVisibleEvents;
 
     public MainViewModel(Application application){
         super(application);
         dataRepository = new DataRepository(application);
         allGroupEvents = dataRepository.getAllGroupEvents();
         allEvents = dataRepository.getAllEvents();
+        allVisibleEvents = dataRepository.getAllVisibleEvents();
     }
 
     //get List of all GroupEvents
@@ -33,9 +39,12 @@ public class MainViewModel extends AndroidViewModel {
     //get List of all Events
     LiveData<PagedList<Event>> getAllEvents(){ return allEvents; };
 
+    //get List of all Visible Events
+    LiveData<PagedList<Event>> getAllVisibleEvents(){ return allVisibleEvents; };
+
     //get List of all Events of specific GroupEvent
     LiveData<PagedList<Event>> getAllEventsOfGroup(int groupEventId){
-        return dataRepository.getAllEventsOfGroup(groupEventId);
+        return dataRepository.getAllEventsOfGroup(groupEventId, true);
     };
 
     //get single Group Event
@@ -74,8 +83,9 @@ public class MainViewModel extends AndroidViewModel {
     }
 
     //update done state of event in db
-    void setEventDone(int eventId, boolean done){
+    void setEventDone(int eventId, int groupEventId, boolean done){
         dataRepository.setEventDone(eventId, done);
+//        dataRepository.calculateGroupEventProgress(groupEventId); //---> not needed anymore, because Database Trigger handels calculation of progress
 //        Log.d("-->", "ViewModel.setEventDone("+done+")");
     }
 

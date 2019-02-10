@@ -37,4 +37,8 @@ public interface GroupEventDao {
 
 //    @Query("SELECT * FROM group_event WHERE parent_id = :parent_id ORDER BY id ASC")
 //    LiveData<List<GroupEvent>> getChildGroupEvents(int parent_id);
+
+    //query is currently not needed
+    @Query("UPDATE group_event SET progress = round((SELECT count(event.id) FROM event WHERE event.parent_id = :id AND event.done ='1')/((SELECT count(event.id) FROM event WHERE event.parent_id = :id)*1.0)*100) WHERE id = :id")
+    void calcProgress(int id);
 }

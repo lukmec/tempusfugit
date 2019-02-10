@@ -41,8 +41,8 @@
                 android:id="@+id/crdVw_edit_E_container_parentGroupEvent"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                app:cardBackgroundColor="@color/colorPrimary"
+                android:layout_marginTop="@dimen/normal_padding"
+                app:cardBackgroundColor="@color/colorAccent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/eT_edit_E_description">
@@ -52,11 +52,11 @@
                     style="@style/card_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/btn_parentGroupEvent"
+                    android:layout_gravity="center"
                     android:drawableEnd="@drawable/ic_directions_car_black_24dp"
                     android:drawablePadding="@dimen/large_padding"
                     android:padding="@dimen/large_padding"
-                    android:layout_gravity="center"/>
+                    android:text="@string/btn_parentGroupEvent" />
 
             </androidx.cardview.widget.CardView>
 
@@ -66,54 +66,66 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/large_padding"
                 android:text="@string/label_eventImportance"
+                style="@style/card_title"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/crdVw_edit_E_container_parentGroupEvent" />
 
-            <RadioGroup
-                android:id="@+id/rG_edit_E_importance"
+            <SeekBar
+                android:id="@+id/sB_edit_E_importance"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:max="100"
+                android:progress="0"
                 android:layout_marginTop="@dimen/normal_padding"
-                android:orientation="horizontal"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tV_edit_E_importance">
+                app:layout_constraintTop_toBottomOf="@+id/tV_edit_E_importance"/>
 
-                <RadioButton
-                    android:id="@+id/rb_edit_E_importance_1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:checked="true"
-                    android:text="@string/label_rB_importance_1_very_low"
-                    tools:layout_editor_absoluteX="8dp" />
+            <!--<RadioGroup-->
+                <!--android:id="@+id/rG_edit_E_importance"-->
+                <!--android:layout_width="0dp"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_marginTop="@dimen/normal_padding"-->
+                <!--android:orientation="horizontal"-->
+                <!--app:layout_constraintEnd_toEndOf="parent"-->
+                <!--app:layout_constraintStart_toStartOf="parent"-->
+                <!--app:layout_constraintTop_toBottomOf="@+id/tV_edit_E_importance">-->
 
-                <RadioButton
-                    android:id="@+id/rb_edit_E_importance_3"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="@string/label_rB_importance_3_high"
-                    tools:layout_editor_absoluteX="104dp" />
+                <!--<RadioButton-->
+                    <!--android:id="@+id/rb_edit_E_importance_1"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_weight="1"-->
+                    <!--android:checked="true"-->
+                    <!--android:text="@string/label_rB_importance_1_very_low"-->
+                    <!--tools:layout_editor_absoluteX="8dp" />-->
 
-                <RadioButton
-                    android:id="@+id/rb_edit_E_importance_2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="@string/label_rB_importance_2_low"
-                    tools:layout_editor_absoluteX="56dp" />
+                <!--<RadioButton-->
+                    <!--android:id="@+id/rb_edit_E_importance_3"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_weight="1"-->
+                    <!--android:text="@string/label_rB_importance_3_high"-->
+                    <!--tools:layout_editor_absoluteX="104dp" />-->
 
-                <RadioButton
-                    android:id="@+id/rb_edit_E_importance_4"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="@string/label_rB_importance_4_very_high"
-                    tools:layout_editor_absoluteX="96dp"
-                    tools:layout_editor_absoluteY="0dp" />
+                <!--<RadioButton-->
+                    <!--android:id="@+id/rb_edit_E_importance_2"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_weight="1"-->
+                    <!--android:text="@string/label_rB_importance_2_low"-->
+                    <!--tools:layout_editor_absoluteX="56dp" />-->
 
-            </RadioGroup>
+                <!--<RadioButton-->
+                    <!--android:id="@+id/rb_edit_E_importance_4"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_weight="1"-->
+                    <!--android:text="@string/label_rB_importance_4_very_high"-->
+                    <!--tools:layout_editor_absoluteX="96dp"-->
+                    <!--tools:layout_editor_absoluteY="0dp" />-->
+
+            <!--</RadioGroup>-->
 
             <TextView
                 android:id="@+id/tV_edit_E_urgency"
@@ -121,48 +133,60 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/large_padding"
                 android:text="@string/label_eventUrgency"
+                style="@style/card_title"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/rG_edit_E_importance" />
+                app:layout_constraintTop_toBottomOf="@+id/tV_edit_E_importance_low" />
 
-            <RadioGroup
-                android:id="@+id/rG_edit_E_urgency"
+            <SeekBar
+                android:id="@+id/sB_edit_E_urgency"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:max="100"
+                android:progress="0"
                 android:layout_marginTop="@dimen/normal_padding"
-                android:orientation="horizontal"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tV_edit_E_urgency">
+                app:layout_constraintTop_toBottomOf="@+id/tV_edit_E_urgency"/>
 
-                <RadioButton
-                    android:id="@+id/rb_edit_E_urgency_1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:checked="true"
-                    android:text="@string/label_rB_urgency_1_very_low" />
+            <!--<RadioGroup-->
+                <!--android:id="@+id/rG_edit_E_urgency"-->
+                <!--android:layout_width="0dp"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_marginTop="@dimen/normal_padding"-->
+                <!--android:orientation="horizontal"-->
+                <!--app:layout_constraintEnd_toEndOf="parent"-->
+                <!--app:layout_constraintStart_toStartOf="parent"-->
+                <!--app:layout_constraintTop_toBottomOf="@+id/tV_edit_E_urgency">-->
 
-                <RadioButton
-                    android:id="@+id/rb_edit_E_urgency_2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="@string/label_rB_urgency_2_low" />
+                <!--<RadioButton-->
+                    <!--android:id="@+id/rb_edit_E_urgency_1"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_weight="1"-->
+                    <!--android:checked="true"-->
+                    <!--android:text="@string/label_rB_urgency_1_very_low" />-->
 
-                <RadioButton
-                    android:id="@+id/rb_edit_E_urgency_3"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="@string/label_rB_urgency_3_high" />
+                <!--<RadioButton-->
+                    <!--android:id="@+id/rb_edit_E_urgency_2"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_weight="1"-->
+                    <!--android:text="@string/label_rB_urgency_2_low" />-->
 
-                <RadioButton
-                    android:id="@+id/rb_edit_E_urgency_4"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="@string/label_rB_urgency_4_very_high" />
-            </RadioGroup>
+                <!--<RadioButton-->
+                    <!--android:id="@+id/rb_edit_E_urgency_3"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_weight="1"-->
+                    <!--android:text="@string/label_rB_urgency_3_high" />-->
+
+                <!--<RadioButton-->
+                    <!--android:id="@+id/rb_edit_E_urgency_4"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_weight="1"-->
+                    <!--android:text="@string/label_rB_urgency_4_very_high" />-->
+            <!--</RadioGroup>-->
 
             <TextView
                 android:id="@+id/tV_edit_E_duration"
@@ -170,8 +194,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/large_padding"
                 android:text="@string/label_eventDuration"
+                style="@style/card_title"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/rG_edit_E_urgency" />
+                app:layout_constraintTop_toBottomOf="@+id/tV_edit_E_urgency_low" />
 
             <SeekBar
                 android:id="@+id/sB_edit_E_duration_minutes"
@@ -238,7 +263,8 @@
                 android:layout_marginTop="@dimen/large_padding"
                 android:text="@string/label_eventDueDate"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tV_edit_E_duration_hours" />
+                app:layout_constraintTop_toBottomOf="@+id/tV_edit_E_duration_hours"
+                android:visibility="gone"/>
 
             <Button
                 android:id="@+id/btn_edit_E_dueDate_setDate"
@@ -247,7 +273,44 @@
                 android:layout_marginTop="@dimen/normal_padding"
                 android:text="@string/label_eventDueDate_setDate"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tV_edit_E_dueDate" />
+                app:layout_constraintTop_toBottomOf="@+id/tV_edit_E_dueDate"
+                android:visibility="gone"/>
+
+            <TextView
+                android:id="@+id/tV_edit_E_importance_low"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/normal_padding"
+                android:text="@string/label_importance_urgency_low"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/sB_edit_E_importance" />
+
+            <TextView
+                android:id="@+id/tV_edit_E_importance_high"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/normal_padding"
+                android:text="@string/label_importance_urgency_high"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/sB_edit_E_importance" />
+
+            <TextView
+                android:id="@+id/tV_edit_E_urgency_low"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/normal_padding"
+                android:text="@string/label_importance_urgency_low"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/sB_edit_E_urgency"/>
+
+            <TextView
+                android:id="@+id/tV_edit_E_urgency_high"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/normal_padding"
+                android:text="@string/label_importance_urgency_high"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/sB_edit_E_urgency"/>
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>

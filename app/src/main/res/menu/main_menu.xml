@@ -4,23 +4,11 @@
 
 
     <item
-        android:id="@+id/menu_settings"
+        android:id="@+id/settings_dest"
         android:icon="@drawable/ic_settings_black_24dp"
         android:title="@string/label_settings" />
     <item
-        android:id="@+id/menu_aboutApp"
+        android:id="@+id/abt_app_dest"
         android:icon="@drawable/ic_info_outline_black_24dp"
         android:title="@string/label_aboutApp" />
-    <item
-        android:id="@+id/menu_test1"
-        android:title="Test Action 1" />
-    <item
-        android:id="@+id/menu_test2"
-        android:title="Test Action 2" />
-    <item
-        android:id="@+id/menu_test3"
-        android:title="Test Action 3" />
-    <item
-        android:id="@+id/menu_test4"
-        android:title="Test Action 4" />
 </menu>

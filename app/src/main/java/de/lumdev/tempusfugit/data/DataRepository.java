@@ -5,6 +5,11 @@ import android.os.AsyncTask;
 import android.os.SystemClock;
 import android.util.Log;
 
+import org.threeten.bp.Instant;
+import org.threeten.bp.OffsetDateTime;
+import org.threeten.bp.ZoneOffset;
+
+import java.util.ArrayList;
 import java.util.List;
 
 import androidx.lifecycle.LiveData;
@@ -18,6 +23,7 @@ import de.lumdev.tempusfugit.data.EventDao;
 import de.lumdev.tempusfugit.data.GroupEvent;
 import de.lumdev.tempusfugit.data.GroupEventDao;
 import de.lumdev.tempusfugit.data.LocalRoomDatabase;
+import de.lumdev.tempusfugit.util.SelectGEDialogObserver;
 
 public class DataRepository {
 
@@ -25,6 +31,7 @@ public class DataRepository {
     private EventDao myEventDao;
     private LiveData<PagedList<GroupEvent>> allGroupEvents;
     private LiveData<PagedList<Event>> allEvents;
+    private LiveData<PagedList<Event>> allVisibleEvents;
 
     public DataRepository(Application application){
         LocalRoomDatabase db = LocalRoomDatabase.getDatabase(application);
@@ -34,6 +41,7 @@ public class DataRepository {
         allGroupEvents = new LivePagedListBuilder<>(myGroupEventDao.getAllGroupEvents(),20).build();
 //        allEvents = myEventDao.getAllEvents(); //old implementation without factory
         allEvents = new LivePagedListBuilder<>(myEventDao.getAllEvents(),20).build();
+        allVisibleEvents = new LivePagedListBuilder<>(myEventDao.getVisibleEvents(),20).build();
     }
 
     public LiveData<PagedList<GroupEvent>> getAllGroupEvents(){
@@ -42,8 +50,11 @@ public class DataRepository {
     public LiveData<PagedList<Event>> getAllEvents(){
         return allEvents;
     }
-    public LiveData<PagedList<Event>> getAllEventsOfGroup(int groupEventId){
-        return new LivePagedListBuilder<>(myEventDao.getEventsOfParent(groupEventId),20).build();
+    public LiveData<PagedList<Event>> getAllVisibleEvents(){
+        return allVisibleEvents;
+    }
+    public LiveData<PagedList<Event>> getAllEventsOfGroup(int groupEventId, boolean only_visible_events){
+        return new LivePagedListBuilder<>(myEventDao.getEventsOfParent(groupEventId, only_visible_events),20).build();
     }
 
     /**
@@ -157,17 +168,37 @@ public class DataRepository {
 //        new insertEventAsyncTask(myEventDao).execute(event);
     }
     private static class setEventDoneAsyncTask extends AsyncTask<Void, Void, Void> {
-        private EventDao mAsyncTaskDao;
+        private EventDao mEventAsyncTaskDao;
         private int mEventId;
         private boolean mDone;
-        setEventDoneAsyncTask(EventDao dao, int eventId, boolean done) {
-            mAsyncTaskDao = dao;
+        setEventDoneAsyncTask(EventDao eventDao, int eventId, boolean done) {
+            mEventAsyncTaskDao = eventDao;
             mEventId = eventId;
             mDone = done;
         }
         @Override
         protected Void doInBackground(Void ... params) {
-            mAsyncTaskDao.setDone(mEventId, mDone);
+            OffsetDateTime doneDateTime = OffsetDateTime.ofInstant(Instant.now(), ZoneOffset.systemDefault());
+            mEventAsyncTaskDao.setDone(mEventId, mDone, doneDateTime);
+            return null;
+        }
+    }
+
+    //--------calculate GroupEvent Progress--------
+    public void calculateGroupEventProgress(int groupEventId){
+        new CalculateGroupEventProgressAsyncTask(myGroupEventDao, groupEventId).execute();
+    }
+    private static class CalculateGroupEventProgressAsyncTask extends AsyncTask<Void, Void, Void> {
+        private GroupEventDao mAsyncTaskDao;
+        private int mGroupEventId;
+        private boolean mVisible;
+        CalculateGroupEventProgressAsyncTask(GroupEventDao dao, int groupEventId) {
+            mAsyncTaskDao = dao;
+            mGroupEventId = groupEventId;
+        }
+        @Override
+        protected Void doInBackground(Void ... params) {
+            mAsyncTaskDao.calcProgress(mGroupEventId);
             return null;
         }
     }

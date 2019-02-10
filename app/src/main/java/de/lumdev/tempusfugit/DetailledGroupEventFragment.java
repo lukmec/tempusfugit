@@ -26,6 +26,7 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
+import androidx.appcompat.widget.Toolbar;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
@@ -74,9 +75,12 @@ public class DetailledGroupEventFragment extends Fragment {
         // Inflate the layout for this fragment
         final View rootView = inflater.inflate(R.layout.fragment_detailled_group_event, container, false);
         //get Views
+        Toolbar toolbar = getActivity().findViewById(R.id.toolbar_main);
+        toolbar.setTitle(R.string.dest_detailled_group_event);
         tabLayout = getActivity().findViewById(R.id.tabLayout_main);
         tabLayout.setVisibility(View.GONE); //set tabLayout to visible, in order to ensure that user can navigate
         fab = getActivity().findViewById(R.id.fab_main);
+        fab.show();
         //set onClickListeners
         fab.setOnClickListener(createEventOnClickListener);
 
@@ -161,7 +165,7 @@ public class DetailledGroupEventFragment extends Fragment {
         adapter.registerObserver(new EventObserver() {
             @Override
             public void onEventDone(Event event, boolean newDoneState) {
-                viewModel.setEventDone(event.id, newDoneState);
+                viewModel.setEventDone(event.id, event.parentId, newDoneState);
             }
             @Override
             public void onActionEditEvent(Event event){
@@ -181,6 +185,7 @@ public class DetailledGroupEventFragment extends Fragment {
     }
 
     public void createNewEvent(View v) {
+        fab.hide();
         NavHostFragment.findNavController(this).navigate(R.id.action_dtl_ge_dest_to_edt_e_dest);
     }
 

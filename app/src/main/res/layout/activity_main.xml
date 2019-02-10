@@ -18,29 +18,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"  />
 
-    <!--<include-->
-        <!--layout="@layout/content_group_overview"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_margin="@dimen/no_padding"-->
-        <!--app:layout_constraintEnd_toEndOf="parent"-->
-        <!--app:layout_constraintStart_toStartOf="parent"-->
-        <!--app:layout_constraintTop_toBottomOf="@+id/toolbar_group_overview" />-->
-
-    <!--<FrameLayout-->
-        <!--android:id="@+id/fragment_container"-->
-        <!--android:layout_width="0dp"-->
-        <!--android:layout_height="0dp"-->
-        <!--android:layout_marginStart="@dimen/normal_padding"-->
-        <!--android:layout_marginTop="@dimen/normal_padding"-->
-        <!--android:layout_marginEnd="@dimen/normal_padding"-->
-        <!--android:layout_marginBottom="@dimen/normal_padding"-->
-        <!--app:layout_constraintBottom_toBottomOf="parent"-->
-        <!--app:layout_constraintEnd_toEndOf="parent"-->
-        <!--app:layout_constraintStart_toStartOf="parent"-->
-        <!--app:layout_constraintTop_toBottomOf="@+id/toolbar_group_overview">-->
-    <!--</FrameLayout>-->
-
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/tabLayout_main"
         android:layout_width="match_parent"

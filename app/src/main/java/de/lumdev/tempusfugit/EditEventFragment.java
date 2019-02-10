@@ -1,6 +1,7 @@
 package de.lumdev.tempusfugit;
 
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -13,14 +14,13 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.ProgressBar;
-import android.widget.RadioGroup;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
+import androidx.appcompat.widget.Toolbar;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
@@ -33,6 +33,8 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.fragment.NavHostFragment;
 import de.lumdev.tempusfugit.data.Event;
 import de.lumdev.tempusfugit.data.GroupEvent;
+import de.lumdev.tempusfugit.data.QuickDirtyDataHolder;
+import de.lumdev.tempusfugit.util.SelectGEDialogObserver;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -42,10 +44,10 @@ public class EditEventFragment extends Fragment {
     private MainViewModel viewModel;
     private TabLayout tabLayout;
     private FloatingActionButton fab;
-    private View.OnClickListener newGroupEventOnClickListener = new View.OnClickListener() {
+    private View.OnClickListener createOrEditEventOnClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            createNewEvent(v);
+            createOrUpdateEvent(v);
         }
     };
 
@@ -54,16 +56,17 @@ public class EditEventFragment extends Fragment {
     private EditText eT_description;
     private CardView cV_container_parent_ge;
     private TextView tV_parent_ge;
-    private RadioGroup rG_importance;
-    private RadioGroup rG_urgency;
+    private SeekBar sB_importance;
+    private SeekBar sB_urgency;
     private TextView tV_duration_minutes;
     private TextView tV_duration_hours;
     private SeekBar sB_duration_minutes;
     private SeekBar sB_duration_hours;
     private Button btn_due_date_date;
 
-    private int eventId;
-    private int parentGroupEvent;
+    private int givenEventId;
+    private int givenParentGroupEventId;
+    private int newParentGroupEventId;
     private Event eventToEdit = null;
 
     public EditEventFragment() {
@@ -81,18 +84,21 @@ public class EditEventFragment extends Fragment {
         // Inflate the layout for this fragment
         final View rootView = inflater.inflate(R.layout.fragment_edit_event, container, false);
         //get general views
+        Toolbar toolbar = getActivity().findViewById(R.id.toolbar_main);
+        toolbar.setTitle(R.string.dest_edit_event);
         tabLayout = getActivity().findViewById(R.id.tabLayout_main);
         tabLayout.setVisibility(View.GONE); //hide navigation from user while editing group event
         fab = getActivity().findViewById(R.id.fab_main);
-        fab.setOnClickListener(newGroupEventOnClickListener);
+        fab.show();
+        fab.setOnClickListener(createOrEditEventOnClickListener);
 
         //get Views related to event
         eT_name = rootView.findViewById(R.id.eT_edit_E_name);
         eT_description = rootView.findViewById(R.id.eT_edit_E_description);
         cV_container_parent_ge = rootView.findViewById(R.id.crdVw_edit_E_container_parentGroupEvent);
         tV_parent_ge = rootView.findViewById(R.id.tV_edit_E_parentGroupEvent);
-        rG_importance = rootView.findViewById(R.id.rG_edit_E_importance);
-        rG_urgency = rootView.findViewById(R.id.rG_edit_E_urgency);
+        sB_importance = rootView.findViewById(R.id.sB_edit_E_importance);
+        sB_urgency = rootView.findViewById(R.id.sB_edit_E_urgency);
         tV_duration_minutes = rootView.findViewById(R.id.tV_edit_E_duration_minutes_value);
         tV_duration_hours = rootView.findViewById(R.id.tV_edit_E_duration_hours_value);
         sB_duration_minutes = rootView.findViewById(R.id.sB_edit_E_duration_minutes);
@@ -102,7 +108,34 @@ public class EditEventFragment extends Fragment {
         //set inital values
         tV_duration_minutes.setText(String.valueOf(sB_duration_minutes.getProgress()*5));
         tV_duration_hours.setText(String.valueOf(sB_duration_hours.getProgress()));
+
         //set listeners
+        cV_container_parent_ge.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+//                Navigation.findNavController(v).navigate(R.id.slct_ge_dest);
+//                viewModel.setNavController(Navigation.findNavController(v));
+
+                SelectGroupEventDialogFragment selectGroupEventFragment = new SelectGroupEventDialogFragment();
+
+                QuickDirtyDataHolder.getInstance().addSelectGEDialogObserver(new SelectGEDialogObserver() {
+                    //observer which helps detecting on which item (groupevent) the user clicked (in SelectGroupEventDialog)
+                    @Override
+                    public void onClickGroupEvent(GroupEvent groupEvent) {
+//                        toast("You clicked on GroupEvent with ID: "+groupEvent.id);
+                        newParentGroupEventId = groupEvent.id;
+                        selectGroupEventFragment.dismiss();
+                        //update UI with GroupEvent Info
+                        cV_container_parent_ge.setCardBackgroundColor(groupEvent.color);
+                        tV_parent_ge.setText(groupEvent.name);
+                        setIcon(groupEvent.icon, tV_parent_ge);
+                    }
+                });
+
+                selectGroupEventFragment.show(getFragmentManager(), "selectGroupEventDialog");
+
+            }
+        });
         sB_duration_minutes.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
@@ -133,36 +166,43 @@ public class EditEventFragment extends Fragment {
         //get typesafe Argument from (auto generted class from) androidx.navigation
         //if no arguments given id will be -1. However argument given can also be -1 (meaning no groupEvent specified)
         if (getArguments() != null) {
-            eventId = EditEventFragmentArgs.fromBundle(getArguments()).getEventId();
-            parentGroupEvent = EditEventFragmentArgs.fromBundle(getArguments()).getParentGroupEvent();
+            givenEventId = EditEventFragmentArgs.fromBundle(getArguments()).getEventId();
+            givenParentGroupEventId = EditEventFragmentArgs.fromBundle(getArguments()).getParentGroupEvent();
+            newParentGroupEventId = givenParentGroupEventId;
         } else {
-            eventId = -1;
-            parentGroupEvent = -1;
+            givenEventId = -1;
+            givenParentGroupEventId = -1;
+            newParentGroupEventId = givenParentGroupEventId;
         }
 
         //set values of fields, according to provided event
-        if (eventId != -1 && parentGroupEvent != -1) {
+        if (givenEventId != -1 && givenParentGroupEventId != -1) {
             //retrieve groupEvent
-            LiveData<Event> selectedEvent = viewModel.getEvent(eventId);
+            LiveData<Event> selectedEvent = viewModel.getEvent(givenEventId);
             selectedEvent.observe(this, event -> {
                 //save GroupEvent (as Deepcopy object) for later use
                 eventToEdit = event.deepcopy();
                 //update UI
                 eT_name.setText(event.name);
                 eT_description.setText(event.description);
+                sB_importance.setProgress((int)Math.round(event.importance));
+                sB_urgency.setProgress((int)Math.round(event.urgency));
+
                 Duration duration = event.duration;
-                long minutes = duration.toMinutes();
-                long hours = duration.toHours();
+                long duration_in_minutes = duration.toMinutes();
+                long minutes = duration_in_minutes % 60;
+                long hours = duration_in_minutes / 60;
                 tV_duration_minutes.setText(String.valueOf(minutes));
                 tV_duration_hours.setText(String.valueOf(hours));
                 sB_duration_minutes.setProgress(Math.round(minutes/5f));
                 if (hours <= 12) sB_duration_hours.setProgress((int)hours);
 
             });
-            LiveData<GroupEvent> selectedGroupEvent = viewModel.getGroupEvent(parentGroupEvent);
+            LiveData<GroupEvent> selectedGroupEvent = viewModel.getGroupEvent(givenParentGroupEventId);
             selectedGroupEvent.observe(this, groupEvent -> {
                 //update UI
                 cV_container_parent_ge.setCardBackgroundColor(groupEvent.color);
+                tV_parent_ge.setText(groupEvent.name);
                 setIcon(groupEvent.icon, tV_parent_ge);
             });
         }
@@ -174,18 +214,49 @@ public class EditEventFragment extends Fragment {
         fab.setImageResource(R.drawable.ic_check_black_24dp);
     }
 
-    public void createNewEvent(View v) {
-        if(isValidInput()) {
+    public void createOrUpdateEvent(View v) {
+        if (isValidInput()) {
+            if (givenEventId != -1){
+                eventToEdit.name = eT_name.getText().toString();
+                eventToEdit.description = eT_description.getText().toString();
+                eventToEdit.parentId = this.newParentGroupEventId;
+                eventToEdit.importance = sB_importance.getProgress();
+                eventToEdit.urgency = sB_urgency.getProgress();
+                eventToEdit.duration = Duration.ofMinutes(sB_duration_minutes.getProgress()*5).plusHours(sB_duration_hours.getProgress());
+                viewModel.updateEvent(eventToEdit);
+            }else {
+                Event event = new Event(eT_name.getText().toString(), eT_description.getText().toString(), this.newParentGroupEventId, sB_importance.getProgress(), sB_urgency.getProgress(), Duration.ofMinutes(sB_duration_minutes.getProgress()*5).plusHours(sB_duration_hours.getProgress()));
+                viewModel.insertEvent(event);
+            }
+            fab.hide();
+            hideKeyboardFrom(v.getContext(), v);
             NavHostFragment.findNavController(this).navigateUp();
+        }else{
+            //displaying error messages to user is done in this.isValidInput()
         }
     }
 
     private boolean isValidInput(){
+        if (eT_name.getText().toString().equals("")) {
+            toast(getResources().getString(R.string.err_invalid_input_missing_name, getResources().getString(R.string.event)));
+            return false;
+        }
+        if (newParentGroupEventId <= 0) {
+            toast(getResources().getString(R.string.err_invalid_input_parent_element, getResources().getString(R.string.group_event), getResources().getString(R.string.event)));
+            return false;
+        }
+        if(sB_duration_minutes.getProgress() == 0 && sB_duration_hours.getProgress() == 0) {
+            toast(getResources().getString(R.string.err_invalid_duration, getResources().getString(R.string.event)));
+            return false;
+        }
         return true;
     }
 
     public void toast(String textToToast){
-        Toast.makeText(getActivity().getApplicationContext(), textToToast, Toast.LENGTH_SHORT).show();
+        //added check for NULL after facing issues and reading http://justmobiledev.com/resolving-fragment-context-loss-issues/
+        if (this.getContext() != null) {
+            Toast.makeText(getContext(), textToToast, Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void setIcon(int iconId, TextView setIconInThisView){
@@ -212,9 +283,16 @@ public class EditEventFragment extends Fragment {
                     }
                 });
             }catch (Exception e2){
-                Toast.makeText(context, "err: Failed to display icon", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(context, "err: Failed to display icon", Toast.LENGTH_SHORT).show();
+                toast("err: Failed to display icon");
             }
         }
+    }
+
+    public static void hideKeyboardFrom(Context context, View view) {
+        //implemented after reading after https://stackoverflow.com/questions/1109022/close-hide-the-android-soft-keyboard
+        InputMethodManager imm = (InputMethodManager) context.getSystemService(Activity.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 }
 

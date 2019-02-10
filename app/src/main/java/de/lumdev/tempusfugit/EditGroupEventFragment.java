@@ -1,11 +1,13 @@
 package de.lumdev.tempusfugit;
 
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProviders;
@@ -16,6 +18,7 @@ import petrov.kristiyan.colorpicker.ColorPicker;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -41,7 +44,7 @@ public class EditGroupEventFragment extends Fragment implements IconDialog.Callb
     private View.OnClickListener newGroupEventOnClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            createNewGroupEvent(v);
+            createOrUpdateGroupEvent(v);
         }
     };
     private EditText eT_name;
@@ -86,9 +89,12 @@ public class EditGroupEventFragment extends Fragment implements IconDialog.Callb
         // Inflate the layout for this fragment
         final View rootView = inflater.inflate(R.layout.fragment_edit_group_event, container, false);
         //get Views
+        Toolbar toolbar = getActivity().findViewById(R.id.toolbar_main);
+        toolbar.setTitle(R.string.dest_edit_group_event);
         tabLayout = getActivity().findViewById(R.id.tabLayout_main);
         tabLayout.setVisibility(View.GONE); //hide navigation from user while editing group event
         fab = getActivity().findViewById(R.id.fab_main);
+        fab.show();
         eT_name = rootView.findViewById(R.id.eT_newGE_name);
         eT_description = rootView.findViewById(R.id.eT_newGE_description);
         btn_color = rootView.findViewById(R.id.btn_newGE_color);
@@ -149,7 +155,7 @@ public class EditGroupEventFragment extends Fragment implements IconDialog.Callb
         fab.setImageResource(R.drawable.ic_check_black_24dp);
     }
 
-    public void createNewGroupEvent(View v){
+    public void createOrUpdateGroupEvent(View v){
         if (isValidInput()) {
             if (groupEventId != -1){
 //                GroupEvent gEvent = new GroupEvent(eT_name.getText().toString(), eT_description.getText().toString(), pickedColor, pickedIconId, -1);
@@ -166,9 +172,12 @@ public class EditGroupEventFragment extends Fragment implements IconDialog.Callb
                 GroupEvent gEvent = new GroupEvent(eT_name.getText().toString(), eT_description.getText().toString(), pickedColor, pickedIconId, -1);
                 viewModel.insertGroupEvent(gEvent);
             }
+            fab.hide();
+            hideKeyboardFrom(v.getContext(), v);
             NavHostFragment.findNavController(this).navigateUp();
         }else{
-            toast(getString(R.string.err_invalid_input));
+            //displaying error messages to user is done in this.isValidInput()
+//            toast(getString(R.string.err_invalid_input));
         }
     }
 
@@ -255,25 +264,39 @@ public class EditGroupEventFragment extends Fragment implements IconDialog.Callb
         String description = eT_description.getText().toString();
         if (name.equals("")) {
 //            toast("Name: "+name);
+            toast(getResources().getString(R.string.err_invalid_input_missing_name, getResources().getString(R.string.group_event)));
             return false;
         }
-        if (description.equals("")) {
-//            toast("description: "+description);
-            return false;
-        }
+        //left check out, because not necessary (sometimes description might be left out)
+//        if (description.equals("")) {
+////            toast("description: "+description);
+//            toast(getResources().getString(R.string.err_invalid_input_description, getResources().getString(R.string.event)));
+//            return false;
+//        }
         if (pickedColor == 0) {
 //            toast("color: "+pickedColor);
+            toast(getResources().getString(R.string.err_invalid_input_color, getResources().getString(R.string.event)));
             return false;
         }
         if(!iconPicked) {
 //            toast("Icon picked: "+ pickedIcon.getId());
+            toast(getResources().getString(R.string.err_invalid_input_icon, getResources().getString(R.string.event)));
             return false;
         }
         return true;
     }
 
     public void toast(String textToToast){
-        Toast.makeText(getActivity().getApplicationContext(), textToToast, Toast.LENGTH_SHORT).show();
+        //added check for NULL after facing issues and reading http://justmobiledev.com/resolving-fragment-context-loss-issues/
+        if(this.getContext() != null) {
+            Toast.makeText(getActivity().getApplicationContext(), textToToast, Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    public static void hideKeyboardFrom(Context context, View view) {
+        //implemented after reading after https://stackoverflow.com/questions/1109022/close-hide-the-android-soft-keyboard
+        InputMethodManager imm = (InputMethodManager) context.getSystemService(Activity.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 
 }

@@ -1,8 +1,6 @@
 package de.lumdev.tempusfugit;
 
 import android.content.Context;
-import android.graphics.drawable.Drawable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,17 +11,19 @@ import android.widget.Toast;
 
 import com.maltaisn.icondialog.IconHelper;
 
-import androidx.annotation.DrawableRes;
+import java.util.ArrayList;
+
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.navigation.Navigation;
-import androidx.navigation.fragment.NavHostFragment;
 import androidx.paging.PagedListAdapter;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 import de.lumdev.tempusfugit.data.GroupEvent;
+import de.lumdev.tempusfugit.util.GroupEventObservable;
+import de.lumdev.tempusfugit.util.GroupEventObserver;
 
-public class GroupEventAdapter extends PagedListAdapter<GroupEvent, GroupEventAdapter.GroupEventViewHolder> {
+public class GroupEventAdapter extends PagedListAdapter<GroupEvent, GroupEventAdapter.GroupEventViewHolder> implements GroupEventObservable {
 
     class GroupEventViewHolder extends RecyclerView.ViewHolder {
         private final TextView name;
@@ -55,12 +55,14 @@ public class GroupEventAdapter extends PagedListAdapter<GroupEvent, GroupEventAd
 
     Context context;
     IconHelper iconHelper;
+    private ArrayList<GroupEventObserver> groupEventObservers;
 
     protected GroupEventAdapter(Context context) {
 //        mInflater = LayoutInflater.from(context);
         super(DIFF_CALLBACK);
         this.context = context;
         iconHelper = IconHelper.getInstance(context);
+        groupEventObservers = new ArrayList<>();
     }
 
     @NonNull
@@ -85,9 +87,10 @@ public class GroupEventAdapter extends PagedListAdapter<GroupEvent, GroupEventAd
             holder.container.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View v) {
-                    OverviewGroupEventFragmentDirections.ActionOvrvwGeDestToEdtGeDest action = OverviewGroupEventFragmentDirections.actionOvrvwGeDestToEdtGeDest();
-                    action.setGroupEventId(groupEvent.id);
-                    Navigation.findNavController(v).navigate(action);
+//                    OverviewGroupEventFragmentDirections.ActionOvrvwGeDestToEdtGeDest action = OverviewGroupEventFragmentDirections.actionOvrvwGeDestToEdtGeDest();
+////                    action.setGroupEventId(groupEvent.id);
+////                    Navigation.findNavController(v).navigate(action);
+                    notifyObserversOnLongClickGroupEvent(groupEvent);
                     return true;
                 }
             });
@@ -95,9 +98,10 @@ public class GroupEventAdapter extends PagedListAdapter<GroupEvent, GroupEventAd
                 @Override
                 public void onClick(View v) {
 //                    Log.d("-->", "GroupEventId: "+groupEvent.id);
-                    OverviewGroupEventFragmentDirections.ActionOvrvwGeDestToDtlGeDest action = OverviewGroupEventFragmentDirections.actionOvrvwGeDestToDtlGeDest();
-                    action.setGroupEventId(groupEvent.id);
-                    Navigation.findNavController(v).navigate(action);
+//                    OverviewGroupEventFragmentDirections.ActionOvrvwGeDestToDtlGeDest action = OverviewGroupEventFragmentDirections.actionOvrvwGeDestToDtlGeDest();
+//                    action.setGroupEventId(groupEvent.id);
+//                    Navigation.findNavController(v).navigate(action);
+                    notifyObserversOnClickGroupEvent(groupEvent);
                 }
             });
         } else {
@@ -150,4 +154,30 @@ public class GroupEventAdapter extends PagedListAdapter<GroupEvent, GroupEventAd
                 }
             };
 
+    @Override
+    public void registerObserver(GroupEventObserver groupEventObserver) {
+        if(!this.groupEventObservers.contains(groupEventObserver)) {
+            this.groupEventObservers.add(groupEventObserver);
+        }
+    }
+
+    @Override
+    public void removeObserver(GroupEventObserver groupEventObserver) {
+        if(this.groupEventObservers.contains(groupEventObserver)) {
+            this.groupEventObservers.remove(groupEventObserver);
+        }
+    }
+
+    @Override
+    public void notifyObserversOnClickGroupEvent(GroupEvent groupEvent) {
+        for (GroupEventObserver observer : this.groupEventObservers) {
+            observer.onClickGroupEvent(groupEvent);
+        }
+    }
+    @Override
+    public void notifyObserversOnLongClickGroupEvent(GroupEvent groupEvent) {
+        for (GroupEventObserver observer : this.groupEventObservers) {
+            observer.onLongClickGroupEvent(groupEvent);
+        }
+    }
 }

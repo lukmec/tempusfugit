@@ -56,12 +56,22 @@ public abstract class LocalRoomDatabase extends RoomDatabase {
                 @Override
                 public void onCreate (@NonNull SupportSQLiteDatabase db){
                     super.onCreate(db);
-                    //populate when db is created (db is created with installation; reinstall app to recreate db)
-                    new PopulateDbAsync(INSTANCE).execute();
 
                     //create Trigger in SQLite DB, which contain part of business logic
                     // 1) --> set color of event, when color of parent group_event changes
                     db.execSQL("CREATE TRIGGER group_event_color_change AFTER UPDATE OF color ON group_event BEGIN UPDATE event SET color = new.color WHERE event.parent_id = new.id; END;");
+                    // 2) --> set color of event, when new event is added, or when event is updated
+                    db.execSQL("CREATE TRIGGER set_event_color_on_insert AFTER INSERT ON event BEGIN UPDATE event SET color = (SELECT color FROM group_event WHERE event.parent_id = group_event.id) WHERE EXISTS (SELECT color FROM group_event WHERE event.parent_id = group_event.id); END;");
+                    db.execSQL("CREATE TRIGGER set_event_color_on_update AFTER UPDATE OF parent_id ON event BEGIN UPDATE event SET color = (SELECT color FROM group_event WHERE event.parent_id = group_event.id) WHERE EXISTS (SELECT color FROM group_event WHERE event.parent_id = group_event.id); END;");
+                    // 3) --> calculate priority when importance or urgency changes
+                    db.execSQL("CREATE TRIGGER event_calc_priority_after_importance_change AFTER UPDATE OF importance ON event BEGIN UPDATE event SET priority = new.importance + new.urgency WHERE event.id = new.id; END;");
+                    db.execSQL("CREATE TRIGGER event_calc_priority_after_urgency_change AFTER UPDATE OF urgency ON event BEGIN UPDATE event SET priority = new.importance + new.urgency WHERE event.id = new.id; END;");
+                    // 4) --> calculate group_event progress when new event is added, or when event is set to done
+                    db.execSQL("CREATE TRIGGER group_event_calc_progress_on_insert AFTER INSERT ON event BEGIN UPDATE group_event SET progress = round((SELECT count(event.id) FROM event WHERE event.parent_id = new.parent_id AND event.done ='1')/((SELECT count(event.id) FROM event WHERE event.parent_id = new.parent_id)*1.0)*100) WHERE id = new.parent_id; END;");
+                    db.execSQL("CREATE TRIGGER group_event_calc_progress_on_update AFTER UPDATE OF done ON event BEGIN UPDATE group_event SET progress = round((SELECT count(event.id) FROM event WHERE event.parent_id = new.parent_id AND event.done ='1')/((SELECT count(event.id) FROM event WHERE event.parent_id = new.parent_id)*1.0)*100) WHERE id = new.parent_id; END;");
+
+                    //populate when db is created (db is created with installation; reinstall app to recreate db)
+                    new PopulateDbAsync(INSTANCE).execute();
                 }
             };
 
@@ -96,7 +106,8 @@ public abstract class LocalRoomDatabase extends RoomDatabase {
             Event e1_2 = new Event("Literaturquellen raussuchen", " ", 1);
             Event e1_3 = new Event("Gedanken zur Entwickler- Dokumentation machen", " ", 1);
             Event e1_4 = new Event("mit Betreuern sprechen", " ", 1);
-            e1_1.done = false;
+            e1_1.done = true;
+            e1_2.done = true;
             e1_1.priority = 3.5;
             e1_2.priority = 1.4;
             e1_3.priority = 12.8;
@@ -136,7 +147,7 @@ public abstract class LocalRoomDatabase extends RoomDatabase {
             eDao.insert(e3_1);
             eDao.insert(e3_2);
 
-            Event e4_1 = new Event("neue Bremsscheiden besorgen", "wegen der HU", 4);
+            Event e4_1 = new Event("neue Bremsscheiben besorgen", "wegen der HU", 4);
             Event e4_2 = new Event("Reifen online bestellen", "noch vor dem Winter", 4);
             e4_1.priority = 1.9;
             e4_2.priority = 8.4;

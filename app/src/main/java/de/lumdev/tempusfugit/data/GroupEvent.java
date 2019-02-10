@@ -46,7 +46,7 @@ public class GroupEvent {
         this.icon = R.drawable.ic_directions_car_black_24dp;
         this.parentId = -1;
         this.visible = true;
-        this.progress = 50;
+        this.progress = 0;
     }
 
     public GroupEvent(String name, String description, int color, int icon, int parentId){

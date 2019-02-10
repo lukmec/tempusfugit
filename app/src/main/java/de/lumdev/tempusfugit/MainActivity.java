@@ -3,10 +3,12 @@ package de.lumdev.tempusfugit;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.NavController;
 import androidx.navigation.NavHost;
 import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
+import androidx.navigation.ui.NavigationUI;
 //import android.support.v7.widget.Toolbar;
 
 import android.content.Intent;
@@ -46,7 +48,7 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void onTabReselected(TabLayout.Tab tab) {}
     };
-//    private MainViewModel viewModel;
+    private MainViewModel viewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,34 +59,19 @@ public class MainActivity extends AppCompatActivity {
         NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment);
         this.navCtrlr = navHostFragment.getNavController();
 
+//        viewModel = ViewModelProviders.of(this).get(MainViewModel.class);
+//        viewModel.setNavController(this.navCtrlr);
+
         toolbar=findViewById(R.id.toolbar_main);
+        toolbar.setTitle(R.string.app_name);
         setSupportActionBar(toolbar);
         fab = findViewById(R.id.fab_main);
         tabLayout = findViewById(R.id.tabLayout_main);
 
         tabLayout.addOnTabSelectedListener(onTabSelectedListener);
 
-
-
-//        displayOverviewGroupEventFragment();
-
-//        viewModel = ViewModelProviders.of(this).get(MainViewModel.class);
-//        RecyclerView recyclerView = findViewById(R.id.recycler_groupEvents);
-//        GroupEventAdapter adapter = new GroupEventAdapter(this);
-//        viewModel.getAllGroupEvents().observe(this, adapter::submitList);
-//        recyclerView.setAdapter(adapter);
-//        recyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
 
-//    public void addGroupEvent(View v){
-////        Intent intent = new Intent(getApplicationContext(), NewGroupEvent.class);
-////        startActivity(intent);
-//
-////        removeDisplayedFragment();
-//        fab.setImageResource(R.drawable.ic_check_black_24dp);
-////        displayEditGroupEventFragment();
-//        Navigation.findNavController(findViewById(R.id.nav_host_fragment)).navigate(R.id.action_overviewGroupEventFragment_to_editGroupEventFragment);
-//    }
 
 
     @Override
@@ -96,65 +83,19 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
-        switch (item.getItemId()){
-            case R.id.menu_settings:
-                Intent settingsIntent = new Intent(getApplicationContext(), SettingsActivity.class);
-                startActivity(settingsIntent);
-                return true;
-            case R.id.menu_aboutApp:
-                return true;
-            case R.id.menu_test1:
-                return true;
-            case R.id.menu_test2:
-                return true;
-            case R.id.menu_test3:
-                return true;
-            case R.id.menu_test4:
-                return true;
-        }
+        //this is not needed anymore, cause navigation is handled by NavigationController (important: ids of menu-items and nav_graph destinations must be identical
+        //see https://developer.android.com/topic/libraries/architecture/navigation/navigation-ui#Tie-navdrawer
+//            switch (item.getItemId()){
+//                case R.id.settings_dest:
+//                    Intent settingsIntent = new Intent(getApplicationContext(), SettingsActivity.class);
+//                    startActivity(settingsIntent);
+//                    return true;
+//                case R.id.abt_app_dest:
+//                    return true;
+//            }
+//            return super.onOptionsItemSelected(item);
 
-        return super.onOptionsItemSelected(item);
+        return NavigationUI.onNavDestinationSelected(item, this.navCtrlr) || super.onOptionsItemSelected(item);
     }
-
-    /*
-    public void displayOverviewGroupEventFragment(){
-        OverviewGroupEventFragment overviewGroupEventFragment = OverviewGroupEventFragment.newInstance();
-        // Get the FragmentManager and start a transaction.
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager
-                .beginTransaction();
-        // Add the overviewGroupEventFragment.
-        fragmentTransaction
-                .add(R.id.fragment_container, overviewGroupEventFragment)
-                .addToBackStack(null)
-                .commit();
-    }
-
-    public void removeDisplayedFragment() {
-        // Get the FragmentManager.
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        // Check to see if a fragment is already showing.
-        Fragment alreadyDisplayedFragment = (Fragment) fragmentManager.findFragmentById(R.id.fragment_container);
-        if (alreadyDisplayedFragment != null) {
-            // Create and commit the transaction to remove the fragment.
-            FragmentTransaction fragmentTransaction =
-                    fragmentManager.beginTransaction();
-            fragmentTransaction.remove(alreadyDisplayedFragment).commit();
-        }
-    }
-
-    public void displayEditGroupEventFragment() {
-        EditGroupEventFragment editGroupEventFragment = EditGroupEventFragment.newInstance();
-        // Get the FragmentManager and start a transaction.
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager
-                .beginTransaction();
-        // Add the editGroupEventFragment.
-        fragmentTransaction
-                .add(R.id.fragment_container, editGroupEventFragment)
-                .addToBackStack(null)
-                .commit();
-    }
-    */
 
 }
