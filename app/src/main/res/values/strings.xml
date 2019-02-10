@@ -11,11 +11,11 @@
     <string name="dest_overview_event">Current Tasks</string>
     <string name="dest_detailled_group_event">Detailled Group</string>
     <string name="dest_edit_group_event">Edit Group</string>
-    <string name="dest_edit_event">Edit Task</string>
+    <string name="dest_edit_event">Create/ Edit Task</string>
 
     <!--Options Menu-->
     <string name="label_settings">Settings</string>
-    <string name="label_aboutApp">About</string>
+    <string name="label_aboutApp">About this App</string>
 
     <!--Select Group Event Dialog Fragment-->
     <string name="title_dialog_select_parent_group_event">Select a parent group:</string>
@@ -35,12 +35,12 @@
     <string name="label_about_contact_title">Contact</string>
     <string name="label_about_contact_content">lume5641@th-wildau.de</string>
     <string name="label_about_license_title">License</string>
-    <string name="label_about_license_content">MIT LICENSE \nCopyright 2019 Lukas Mechura \n\n Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions: \n\nThe above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software. \n\nTHE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.</string>
+    <string name="label_about_license_content">MIT LICENSE \nCopyright 2019 Lukas Mechura \n\nPermission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions: \n\nThe above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software. \n\nTHE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.</string>
     <string name="label_about_3rd_party_title">Third-Party Components</string>
     <string name="label_about_3rd_party_content">This app uses the following third-party software-components: \n\n\t(<b>1</b>) ColorPicker library of kristiyanP \n\t(published under MIT license) \n\n\t(<b>2</b>) Material Icon Picker Dialog by maltaisn \n\t(published under Apache 2.0 license)</string>
 
     <!--EditGroupEvent-->
-    <string name="hint_groupEventName">Group Name</string>
+    <string name="hint_groupEventName">Group Title</string>
     <string name="hint_groupEventDescription">Description or Notes</string>
     <string name="btn_groupEventColor">Group Color</string>
     <string name="label_groupEventIcon">Group Icon:</string>
@@ -50,8 +50,8 @@
     <string name="iconpicker_select_icon">Please select an icon:</string>
 
     <!--EditEvent-->
-    <string name="hint_eventName">Title (subject > predicate)</string>
-    <string name="hint_eventDescription">Description/ Notes (optional)</string>
+    <string name="hint_eventName">Title (e.g. buy food)</string>
+    <string name="hint_eventDescription">Notes (e.g. fridge is empty)</string>
     <string name="btn_parentGroupEvent">Group/ Category</string>
     <string name="label_eventImportance">Importance</string>
     <string name="label_importance_urgency_low">low</string>

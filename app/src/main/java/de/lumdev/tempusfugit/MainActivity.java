@@ -12,10 +12,13 @@ import androidx.navigation.ui.NavigationUI;
 //import android.support.v7.widget.Toolbar;
 
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
@@ -29,6 +32,10 @@ public class MainActivity extends AppCompatActivity {
     private TabLayout.BaseOnTabSelectedListener onTabSelectedListener = new TabLayout.BaseOnTabSelectedListener() {
         @Override
         public void onTabSelected(TabLayout.Tab tab) {
+            //set selected tab to bold
+            TextView textView = (TextView) tab.getCustomView();
+            textView.setTypeface(null, Typeface.BOLD);
+
             switch (tab.getPosition()){
                 case 0:
                     //Group Overview Selected
@@ -42,6 +49,9 @@ public class MainActivity extends AppCompatActivity {
         }
         @Override
         public void onTabUnselected(TabLayout.Tab tab) {
+            //set unselected tab back to normal
+            TextView textView = (TextView) tab.getCustomView();
+            textView.setTypeface(null, Typeface.NORMAL);
             //tab unselected, means different tab is now selected
             navCtrlr.popBackStack(); //when overview is selected, user should not be able to use back button to move to previous dest (--> forcing to use tablayout again)
         }
@@ -69,6 +79,33 @@ public class MainActivity extends AppCompatActivity {
         tabLayout = findViewById(R.id.tabLayout_main);
 
         tabLayout.addOnTabSelectedListener(onTabSelectedListener);
+
+        //code to make font changes of tablayout work
+        //see https://stackoverflow.com/questions/32031437/how-do-i-change-the-text-style-of-a-selected-tab-when-using-tablayout/40903654
+            for (int i = 0; i < tabLayout.getTabCount(); i++) {
+
+                TabLayout.Tab tab = tabLayout.getTabAt(i);
+                if (tab != null) {
+
+                    TextView tabTextView = new TextView(this);
+                    tab.setCustomView(tabTextView);
+
+                    tabTextView.getLayoutParams().width = ViewGroup.LayoutParams.WRAP_CONTENT;
+                    tabTextView.getLayoutParams().height = ViewGroup.LayoutParams.WRAP_CONTENT;
+
+                    tabTextView.setText(tab.getText());
+                    tabTextView.setTextColor(getResources().getColor(R.color.colorAccent));
+                    tabTextView.setScaleX(1.25f);
+                    tabTextView.setScaleY(1.25f);
+
+                    // First tab is the selected tab, so if i==0 then set BOLD typeface
+                    if (i == 0) {
+                        tabTextView.setTypeface(null, Typeface.BOLD);
+                    }
+
+                }
+
+            }
 
     }
 
