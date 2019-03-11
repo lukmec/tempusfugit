@@ -22,7 +22,7 @@
     <string name="label_about_contact_title">Kontakt</string>
     <string name="label_about_license_title">Lizenz</string>
     <string name="label_about_3rd_party_title">Drittanbieter Komponenten</string>
-    <string name="label_about_3rd_party_content">Diese App nutz die folgenden Software- Komponenten von Drittanbietern: \\n\\n\\t(<b>1</b>) ColorPicker library von kristiyanP \\n\\t(veröffentlicht unter MIT license) \\n\\n\\t(<b>2</b>) Material Icon Picker Dialog von maltaisn \\n\\t(veröffentlicht unter Apache 2.0 license)</string>
+    <string name="label_about_3rd_party_content">Diese App nutz die folgenden Software- Komponenten von Drittanbietern: \n\n\t(<b>1</b>) ColorPicker library von kristiyanP \n\t(veröffentlicht unter MIT license) \n\n\t(<b>2</b>) Material Icon Picker Dialog von maltaisn \n\t(veröffentlicht unter Apache 2.0 license)</string>
     <string name="hint_groupEventName">Gruppen Titel</string>
     <string name="hint_groupEventDescription">Beschreibung oder Notizen</string>
     <string name="btn_groupEventColor">Gruppenfarbe</string>
@@ -48,7 +48,7 @@
     <string name="err_invalid_input_description">Bitte gebe eine Beschreibung für die %1$s an.</string>
     <string name="err_invalid_input_color">Bitte wähle eine Farbel für die %1$s an.</string>
     <string name="err_invalid_input_icon">Bitte wähle ein Icon für die %1$s an.</string>
-    <string name="err_invalid_input_parent_element">Bitte wähle eine übergeordnete %1$s für die %2$s an.</string>
+    <string name="err_invalid_input_parent_element">Bitte gebe eine übergeordnete %1$s für die %2$s an.</string>
     <string name="err_invalid_duration">Bitte wähle eine Dauer länger als 0 Minuten für die %1$s an.</string>
     <string name="err_element_not_created">Error: %1$s wurde nicht erstellt.</string>
     <string name="title_activity_settings">Einstellungen</string>

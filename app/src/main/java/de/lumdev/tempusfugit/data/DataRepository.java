@@ -33,6 +33,14 @@ public class DataRepository {
     private LiveData<PagedList<Event>> allEvents;
     private LiveData<PagedList<Event>> allVisibleEvents;
 
+    private static DataRepository ourInstance;
+    public static DataRepository getInstance(Application application) {
+        if (ourInstance == null){
+            ourInstance = new DataRepository(application);
+        }
+        return ourInstance;
+    }
+
     public DataRepository(Application application){
         LocalRoomDatabase db = LocalRoomDatabase.getDatabase(application);
         myGroupEventDao = db.groupEventDao();

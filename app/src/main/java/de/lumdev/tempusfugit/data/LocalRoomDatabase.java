@@ -71,7 +71,7 @@ public abstract class LocalRoomDatabase extends RoomDatabase {
                     db.execSQL("CREATE TRIGGER group_event_calc_progress_on_update AFTER UPDATE OF done ON event BEGIN UPDATE group_event SET progress = round((SELECT count(event.id) FROM event WHERE event.parent_id = new.parent_id AND event.done ='1')/((SELECT count(event.id) FROM event WHERE event.parent_id = new.parent_id)*1.0)*100) WHERE id = new.parent_id; END;");
 
                     //populate when db is created (db is created with installation; reinstall app to recreate db)
-//                    new PopulateDbAsync(INSTANCE).execute();
+                    new PopulateDbAsync(INSTANCE).execute();
                 }
             };
 

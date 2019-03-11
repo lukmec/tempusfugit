@@ -27,7 +27,8 @@ public class MainViewModel extends AndroidViewModel {
 
     public MainViewModel(Application application){
         super(application);
-        dataRepository = new DataRepository(application);
+//        dataRepository = new DataRepository(application);
+        dataRepository = DataRepository.getInstance(application);
         allGroupEvents = dataRepository.getAllGroupEvents();
         allEvents = dataRepository.getAllEvents();
         allVisibleEvents = dataRepository.getAllVisibleEvents();
