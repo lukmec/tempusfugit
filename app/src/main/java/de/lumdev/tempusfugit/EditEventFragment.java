@@ -86,10 +86,10 @@ public class EditEventFragment extends Fragment {
         //get general views
         Toolbar toolbar = getActivity().findViewById(R.id.toolbar_main);
         toolbar.setTitle(R.string.dest_edit_event);
-        tabLayout = getActivity().findViewById(R.id.tabLayout_main);
-        tabLayout.setVisibility(View.GONE); //hide navigation from user while editing group event
-        fab = getActivity().findViewById(R.id.fab_main);
-        fab.show();
+//        tabLayout = getActivity().findViewById(R.id.tabLayout_main);
+//        tabLayout.setVisibility(View.GONE); //hide navigation from user while editing group event
+        fab = rootView.findViewById(R.id.fab_edt_e);
+//        fab.show();
         fab.setOnClickListener(createOrEditEventOnClickListener);
 
         //get Views related to event

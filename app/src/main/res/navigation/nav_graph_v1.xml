@@ -2,9 +2,9 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/nav_graph"
+    android:id="@+id/nav_graph_v1"
     app:startDestination="@id/ovrvw_ge_dest">
-    <!--app:startDestination="">-->
+    app:startDestination="">
 
     <fragment
         android:id="@+id/ovrvw_ge_dest"

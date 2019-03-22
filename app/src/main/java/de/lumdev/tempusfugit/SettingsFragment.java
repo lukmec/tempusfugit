@@ -34,8 +34,8 @@ public class SettingsFragment extends Fragment {
         //get general views
         tabLayout = getActivity().findViewById(R.id.tabLayout_main);
         tabLayout.setVisibility(View.GONE); //hide navigation from user while editing group event
-        fab = getActivity().findViewById(R.id.fab_main);
-        fab.hide(); //hide FAB on screen
+//        fab = getActivity().findViewById(R.id.fab_main);
+//        fab.hide(); //hide FAB on screen
 
         return rootView;
     }

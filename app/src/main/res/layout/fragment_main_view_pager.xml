@@ -1,0 +1,51 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainViewPagerFragment">
+
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/tabLayout_main"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimary"
+        app:tabGravity="fill"
+        app:tabMode="fixed"
+        app:tabTextColor="@color/colorAccent">
+
+        <com.google.android.material.tabs.TabItem
+            android:id="@+id/tabItem_group_overview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/tab_label_group_overview" />
+
+        <com.google.android.material.tabs.TabItem
+            android:id="@+id/tabItem_current_tasks"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/tab_label_event_overview" />
+
+    </com.google.android.material.tabs.TabLayout>
+
+    <androidx.viewpager.widget.ViewPager
+        android:id="@+id/main_view_pager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/tabLayout_main"
+        android:layout_alignStart="@id/tabLayout_main"/>
+
+    <!--<com.google.android.material.floatingactionbutton.FloatingActionButton-->
+        <!--android:id="@+id/fab_ovrvw_vp"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_marginBottom="@dimen/fab_margin"-->
+        <!--android:layout_marginEnd="@dimen/fab_margin"-->
+        <!--android:clickable="true"-->
+        <!--android:focusable="true"-->
+        <!--android:layout_alignParentEnd="true"-->
+        <!--android:layout_alignParentBottom="true"-->
+        <!--app:backgroundTint="@color/colorAccent"-->
+        <!--app:srcCompat="@drawable/ic_add_black_24dp" />-->
+
+</RelativeLayout>

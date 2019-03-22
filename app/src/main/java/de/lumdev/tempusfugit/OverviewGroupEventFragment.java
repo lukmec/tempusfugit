@@ -65,9 +65,10 @@ public class OverviewGroupEventFragment extends Fragment {
         //get Views
         Toolbar toolbar = getActivity().findViewById(R.id.toolbar_main);
         toolbar.setTitle(R.string.app_name);
-        tabLayout = getActivity().findViewById(R.id.tabLayout_main);
-        tabLayout.setVisibility(View.VISIBLE); //set tabLayout to visible, in order to ensure that user can navigate
-        fab = getActivity().findViewById(R.id.fab_main);
+//        tabLayout = getActivity().findViewById(R.id.tabLayout_main);
+//        tabLayout.setVisibility(View.VISIBLE); //set tabLayout to visible, in order to ensure that user can navigate
+//        fab = getParentFragment().getView().findViewById(R.id.fab_ovrvw_vp);
+        fab = rootView.findViewById(R.id.fab_ovrvw_ge);
         fab.show();
         //set onClickListeners
         fab.setOnClickListener(addGroupEventOnClickListener);
@@ -86,13 +87,15 @@ public class OverviewGroupEventFragment extends Fragment {
         adapter.registerObserver(new GroupEventObserver() {
             @Override
             public void onClickGroupEvent(GroupEvent groupEvent) {
-                OverviewGroupEventFragmentDirections.ActionOvrvwGeDestToDtlGeDest action = OverviewGroupEventFragmentDirections.actionOvrvwGeDestToDtlGeDest();
+//                OverviewGroupEventFragmentDirections.ActionOvrvwGeDestToDtlGeDest action = OverviewGroupEventFragmentDirections.actionOvrvwGeDestToDtlGeDest();
+                MainViewPagerFragmentDirections.ActionMvpDestToDtlGeDest action = MainViewPagerFragmentDirections.actionMvpDestToDtlGeDest();
                 action.setGroupEventId(groupEvent.id);
                 NavHostFragment.findNavController(getParentFragment()).navigate(action);
             }
             @Override
             public void onLongClickGroupEvent(GroupEvent groupEvent) {
-                OverviewGroupEventFragmentDirections.ActionOvrvwGeDestToEdtGeDest action = OverviewGroupEventFragmentDirections.actionOvrvwGeDestToEdtGeDest();
+//                OverviewGroupEventFragmentDirections.ActionOvrvwGeDestToEdtGeDest action = OverviewGroupEventFragmentDirections.actionOvrvwGeDestToEdtGeDest();
+                MainViewPagerFragmentDirections.ActionMvpDestToEdtGeDest action = MainViewPagerFragmentDirections.actionMvpDestToEdtGeDest();
                 action.setGroupEventId(groupEvent.id);
                 NavHostFragment.findNavController(getParentFragment()).navigate(action);
             }
@@ -110,7 +113,8 @@ public class OverviewGroupEventFragment extends Fragment {
 
     private void addGroupEvent(View v){
         fab.hide();
-        NavHostFragment.findNavController(this).navigate(R.id.action_ovrvw_ge_dest_to_edt_ge_dest);
+//        NavHostFragment.findNavController(this).navigate(R.id.action_ovrvw_ge_dest_to_edt_ge_dest);
+        NavHostFragment.findNavController(this).navigate(R.id.action_mvp_dest_to_edt_ge_dest);
     }
 
 }

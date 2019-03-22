@@ -33,6 +33,7 @@ public class SelectGroupEventDialogFragment extends DialogFragment {
         // you can use LayoutInflater.from(getContext()).inflate(...) if you have xml layout
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         mRecyclerView.setAdapter(adapter);
+        mRecyclerView.setPadding(20,30,20,10);
 
         adapter.registerObserver(new GroupEventObserver() {
             @Override

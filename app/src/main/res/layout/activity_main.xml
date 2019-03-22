@@ -18,45 +18,34 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"  />
 
-    <com.google.android.material.tabs.TabLayout
-        android:id="@+id/tabLayout_main"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/colorPrimary"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar_main"
-        app:tabTextColor="@color/colorAccent"
-        tools:layout_editor_absoluteX="0dp">
 
-        <com.google.android.material.tabs.TabItem
-            android:id="@+id/tabItem_group_overview"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/tab_label_group_overview" />
-
-        <com.google.android.material.tabs.TabItem
-            android:id="@+id/tabItem_current_tasks"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/tab_label_event_overview" />
-
-    </com.google.android.material.tabs.TabLayout>
+    <!--<androidx.viewpager.widget.ViewPager-->
+        <!--android:id="@+id/main_view_pager"-->
+        <!--android:layout_width="0dp"-->
+        <!--android:layout_height="0dp"-->
+        <!--android:layout_marginStart="@dimen/normal_padding"-->
+        <!--android:layout_marginTop="@dimen/normal_padding"-->
+        <!--android:layout_marginEnd="@dimen/normal_padding"-->
+        <!--android:layout_marginBottom="@dimen/normal_padding"-->
+        <!--app:layout_constraintBottom_toBottomOf="parent"-->
+        <!--app:layout_constraintEnd_toEndOf="parent"-->
+        <!--app:layout_constraintStart_toStartOf="parent"-->
+        <!--app:layout_constraintTop_toBottomOf="@+id/tabLayout_main" />-->
 
     <fragment
         android:id="@+id/nav_host_fragment"
         android:name="androidx.navigation.fragment.NavHostFragment"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginStart="@dimen/normal_padding"
-        android:layout_marginTop="@dimen/normal_padding"
-
-        android:layout_marginEnd="@dimen/normal_padding"
-        android:layout_marginBottom="@dimen/normal_padding"
+        android:layout_margin="@dimen/no_padding"
         app:defaultNavHost="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tabLayout_main"
-        app:navGraph="@navigation/nav_graph" />
+        app:layout_constraintTop_toBottomOf="@+id/toolbar_main"
+        app:navGraph="@navigation/nav_graph_v2" />
+
+
 
     <!--<androidx.recyclerview.widget.RecyclerView-->
         <!--android:id="@+id/recycler_groupEvents"-->
@@ -71,17 +60,17 @@
         <!--app:layout_constraintStart_toStartOf="parent"-->
         <!--app:layout_constraintTop_toBottomOf="@+id/toolbar_group_overview" />-->
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fab_main"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/fab_margin"
-        android:clickable="true"
-        android:focusable="true"
-        app:backgroundTint="@color/colorAccent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:srcCompat="@drawable/ic_add_black_24dp" />
+    <!--<com.google.android.material.floatingactionbutton.FloatingActionButton-->
+        <!--android:id="@+id/fab_main"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_margin="@dimen/fab_margin"-->
+        <!--android:clickable="true"-->
+        <!--android:focusable="true"-->
+        <!--app:backgroundTint="@color/colorAccent"-->
+        <!--app:layout_constraintBottom_toBottomOf="parent"-->
+        <!--app:layout_constraintEnd_toEndOf="parent"-->
+        <!--app:srcCompat="@drawable/ic_add_black_24dp" />-->
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

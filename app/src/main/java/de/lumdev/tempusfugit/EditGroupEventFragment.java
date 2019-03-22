@@ -91,10 +91,10 @@ public class EditGroupEventFragment extends Fragment implements IconDialog.Callb
         //get Views
         Toolbar toolbar = getActivity().findViewById(R.id.toolbar_main);
         toolbar.setTitle(R.string.dest_edit_group_event);
-        tabLayout = getActivity().findViewById(R.id.tabLayout_main);
-        tabLayout.setVisibility(View.GONE); //hide navigation from user while editing group event
-        fab = getActivity().findViewById(R.id.fab_main);
-        fab.show();
+//        tabLayout = getActivity().findViewById(R.id.tabLayout_main);
+//        tabLayout.setVisibility(View.GONE); //hide navigation from user while editing group event
+        fab = rootView.findViewById(R.id.fab_edt_ge);
+//        fab.show();
         eT_name = rootView.findViewById(R.id.eT_newGE_name);
         eT_description = rootView.findViewById(R.id.eT_newGE_description);
         btn_color = rootView.findViewById(R.id.btn_newGE_color);

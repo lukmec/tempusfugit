@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import de.lumdev.tempusfugit.data.Event;
 import de.lumdev.tempusfugit.util.EventObserver;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +20,9 @@ import androidx.appcompat.widget.Toolbar;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
+
+import java.util.Hashtable;
+import java.util.function.BiConsumer;
 
 
 /**
@@ -41,6 +45,8 @@ public class OverviewEventFragment extends Fragment {
     public OverviewEventFragment() {
         // Required empty public constructor
     }
+
+    private Hashtable<Event, Boolean> newDoneStates = new Hashtable<>();
 
     /**
      * Use this factory method to create a new instance of
@@ -66,9 +72,10 @@ public class OverviewEventFragment extends Fragment {
         //get Views
         Toolbar toolbar = getActivity().findViewById(R.id.toolbar_main);
         toolbar.setTitle(R.string.app_name);
-        tabLayout = getActivity().findViewById(R.id.tabLayout_main);
-        tabLayout.setVisibility(View.VISIBLE); //set tabLayout to visible, in order to ensure that user can navigate
-        fab = getActivity().findViewById(R.id.fab_main);
+//        tabLayout = getActivity().findViewById(R.id.tabLayout_main);
+//        tabLayout.setVisibility(View.VISIBLE); //set tabLayout to visible, in order to ensure that user can navigate
+//        fab = getParentFragment().getView().findViewById(R.id.fab_ovrvw_vp);
+        fab = rootView.findViewById(R.id.fab_ovrvw_e);
         fab.show();
         //set onClickListeners
         fab.setOnClickListener(addEventOnClickListener);
@@ -89,12 +96,26 @@ public class OverviewEventFragment extends Fragment {
         adapter.registerObserver(new EventObserver() {
             @Override
             public void onEventDone(Event event, boolean newDoneState) {
-                viewModel.setEventDone(event.id, event.parentId, newDoneState);
+//                viewModel.setEventDone(event.id, event.parentId, newDoneState);
+                if (! newDoneStates.containsKey(event)) {
+                    newDoneStates.put(event, Boolean.valueOf(newDoneState));
+                } else {
+//                    newDoneStates.replace(event, Boolean.valueOf(newDoneState)); //only available from API 24
+                    newDoneStates.remove(event);
+                    newDoneStates.put(event, Boolean.valueOf(newDoneState));
+                }
+//                Log.d("------->", "Size of HashTable: "+newDoneStates.size());
+//                Log.d("------->", "event 1 ID: "+event.id+"   done: "+newDoneStates.get(event));
+//                saving done States after a specified amount of changes --> advantage: UI is updated before fragment pauses and looks more smooth; disadvantage: every x changes there is a "lag" in the UI
+//                if (newDoneStates.size() == 1){
+//                    saveNewDoneStates();
+//                }
             }
             @Override
             public void onActionEditEvent(Event event){
                 //navigate to fragment where editing/ creating event is possible
-            OverviewEventFragmentDirections.ActionOvrvwEDestToEdtEDest action = OverviewEventFragmentDirections.actionOvrvwEDestToEdtEDest();
+//            OverviewEventFragmentDirections.ActionOvrvwEDestToEdtEDest action = OverviewEventFragmentDirections.actionOvrvwEDestToEdtEDest();
+            MainViewPagerFragmentDirections.ActionMvpDestToEdtEDest action = MainViewPagerFragmentDirections.actionMvpDestToEdtEDest();
             action.setEventId(event.id);
             action.setParentGroupEvent(event.parentId);
             NavHostFragment.findNavController(getParentFragment()).navigate(action);
@@ -112,9 +133,29 @@ public class OverviewEventFragment extends Fragment {
         fab.setImageResource(R.drawable.ic_add_black_24dp);
     }
 
+    @Override
+    public void onPause(){
+        super.onPause();
+        saveNewDoneStates();
+    }
+
+    private void saveNewDoneStates(){
+        //execute all new done-states of events (save done values to db via view model)
+        // --- using biConsumer - only available from API 24
+        //        BiConsumer<Event, Boolean> biConsumer = (event, newDoneState) -> {
+        //            viewModel.setEventDone(event.id, event.parentId, newDoneState);
+        //        };
+        //        newDoneStates.forEach(biConsumer);
+        for (Event event : newDoneStates.keySet()){
+            viewModel.setEventDone(event.id, event.parentId, newDoneStates.get(event));
+        }
+        newDoneStates.clear(); //clear hashTable, so next time fragment is resumed (shown again), it can be filled again
+    }
+
     private void addEvent(View v){
         fab.hide();
-        NavHostFragment.findNavController(this).navigate(R.id.action_ovrvw_e_dest_to_edt_e_dest);
+//        NavHostFragment.findNavController(this).navigate(R.id.action_ovrvw_e_dest_to_edt_e_dest);
+        NavHostFragment.findNavController(this).navigate(R.id.action_mvp_dest_to_edt_e_dest);
     }
 
 }

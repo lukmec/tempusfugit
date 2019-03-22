@@ -10,7 +10,6 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/no_padding"
-        android:layout_marginTop="@dimen/no_padding"
         android:layout_marginEnd="@dimen/no_padding"
         android:layout_marginBottom="@dimen/normal_padding"
         app:cardBackgroundColor="@color/groupEvent_grey"

@@ -9,6 +9,7 @@ import androidx.navigation.NavHost;
 import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.NavigationUI;
+import androidx.viewpager.widget.ViewPager;
 //import android.support.v7.widget.Toolbar;
 
 import android.content.Intent;
@@ -28,6 +29,8 @@ public class MainActivity extends AppCompatActivity {
     private NavController navCtrlr;
     private Toolbar toolbar;
     private FloatingActionButton fab;
+    private ViewPager viewPager;
+    private MainPagerAdapter mainPagerAdapter;
     private TabLayout tabLayout;
     private TabLayout.BaseOnTabSelectedListener onTabSelectedListener = new TabLayout.BaseOnTabSelectedListener() {
         @Override
@@ -72,40 +75,49 @@ public class MainActivity extends AppCompatActivity {
 //        viewModel = ViewModelProviders.of(this).get(MainViewModel.class);
 //        viewModel.setNavController(this.navCtrlr);
 
+//        //init viewPager
+//        viewPager = findViewById(R.id.main_view_pager);
+//        mainPagerAdapter = new MainPagerAdapter(getSupportFragmentManager());
+//        viewPager.setAdapter(mainPagerAdapter);
+////        viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
+////        tabLayout.setupWithViewPager(viewPager);
+
         toolbar=findViewById(R.id.toolbar_main);
         toolbar.setTitle(R.string.app_name);
         setSupportActionBar(toolbar);
-        fab = findViewById(R.id.fab_main);
-        tabLayout = findViewById(R.id.tabLayout_main);
+//        fab = findViewById(R.id.fab_main);
 
-        tabLayout.addOnTabSelectedListener(onTabSelectedListener);
+//        tabLayout = findViewById(R.id.tabLayout_main);
+//        tabLayout.addOnTabSelectedListener(onTabSelectedListener);
 
         //code to make font changes of tablayout work
         //see https://stackoverflow.com/questions/32031437/how-do-i-change-the-text-style-of-a-selected-tab-when-using-tablayout/40903654
-            for (int i = 0; i < tabLayout.getTabCount(); i++) {
-
-                TabLayout.Tab tab = tabLayout.getTabAt(i);
-                if (tab != null) {
-
-                    TextView tabTextView = new TextView(this);
-                    tab.setCustomView(tabTextView);
-
-                    tabTextView.getLayoutParams().width = ViewGroup.LayoutParams.WRAP_CONTENT;
-                    tabTextView.getLayoutParams().height = ViewGroup.LayoutParams.WRAP_CONTENT;
-
-                    tabTextView.setText(tab.getText());
-                    tabTextView.setTextColor(getResources().getColor(R.color.colorAccent));
-                    tabTextView.setScaleX(1.25f);
-                    tabTextView.setScaleY(1.25f);
-
-                    // First tab is the selected tab, so if i==0 then set BOLD typeface
-                    if (i == 0) {
-                        tabTextView.setTypeface(null, Typeface.BOLD);
-                    }
-
-                }
-
-            }
+//            for (int i = 0; i < tabLayout.getTabCount(); i++) {
+//
+//                TabLayout.Tab tab = tabLayout.getTabAt(i);
+//                if (tab != null) {
+//
+//                    TextView tabTextView = new TextView(this);
+//                    tab.setCustomView(tabTextView);
+//
+//                    tabTextView.getLayoutParams().width = ViewGroup.LayoutParams.WRAP_CONTENT;
+//                    tabTextView.getLayoutParams().height = ViewGroup.LayoutParams.WRAP_CONTENT;
+//
+//                    tabTextView.setText(tab.getText());
+//                    tabTextView.setTextColor(getResources().getColor(R.color.colorAccent));
+//                    tabTextView.setScaleX(1.25f);
+//                    tabTextView.setScaleY(1.25f);
+//
+//                    tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
+//
+//                    // First tab is the selected tab, so if i==0 then set BOLD typeface
+//                    if (i == 0) {
+//                        tabTextView.setTypeface(null, Typeface.BOLD);
+//                    }
+//
+//                }
+//
+//            }
 
     }
 
@@ -120,7 +132,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
-        //this is not needed anymore, cause navigation is handled by NavigationController (important: ids of menu-items and nav_graph destinations must be identical
+        //this is not needed anymore, cause navigation is handled by NavigationController (important: ids of menu-items and nav_graph_v1 destinations must be identical
         //see https://developer.android.com/topic/libraries/architecture/navigation/navigation-ui#Tie-navdrawer
 //            switch (item.getItemId()){
 //                case R.id.settings_dest:

@@ -11,6 +11,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginBottom="@dimen/normal_padding"
+        android:layout_marginStart="@dimen/no_padding"
+        android:layout_marginEnd="@dimen/no_padding"
         app:cardBackgroundColor="@color/groupEvent_grey">
 
         <LinearLayout
