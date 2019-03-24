@@ -37,4 +37,12 @@ public class MainPagerAdapter extends FragmentPagerAdapter {
         return mFragmentTitleList.get(position);
     }
 
+    public void setNewDoneStatesInOvrvwEventFragment(int positionOfOvrvwEFragm){
+        if (mFragmentList.size() >=2) {
+            //if (mFragmentList.get(positionOfOvrvwEFragm).getClass() == OverviewEventFragment.class)
+            OverviewEventFragment fragm = (OverviewEventFragment) mFragmentList.get(positionOfOvrvwEFragm);
+            fragm.saveNewDoneStates();
+        }
+    }
+
 }

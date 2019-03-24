@@ -139,7 +139,7 @@ public class OverviewEventFragment extends Fragment {
         saveNewDoneStates();
     }
 
-    private void saveNewDoneStates(){
+    public void saveNewDoneStates(){
         //execute all new done-states of events (save done values to db via view model)
         // --- using biConsumer - only available from API 24
         //        BiConsumer<Event, Boolean> biConsumer = (event, newDoneState) -> {
