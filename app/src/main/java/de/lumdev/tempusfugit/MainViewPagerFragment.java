@@ -51,6 +51,27 @@ public class MainViewPagerFragment extends Fragment {
          tabLayout = view.findViewById(R.id.tabLayout_main);
 //         tabLayout.addOnTabSelectedListener(onTabSelectedListener);
          tabLayout.setupWithViewPager(viewPager);
+
+         //do action when scrolling pages (see https://developer.android.com/reference/android/support/v4/view/ViewPager.OnPageChangeListener)
+         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+             @Override
+             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+             }
+             @Override
+             public void onPageSelected(int position) {
+             }
+
+             @Override
+             public void onPageScrollStateChanged(int state) {
+                 //if (state == ViewPager.SCROLL_STATE_IDLE){}
+                 if (state == ViewPager.SCROLL_STATE_DRAGGING){
+                     MainPagerAdapter adapter = (MainPagerAdapter) viewPager.getAdapter();
+                     int position = 1;
+                     adapter.setNewDoneStatesInOvrvwEventFragment(position);
+                 }
+                 //if (state == ViewPager.SCROLL_STATE_SETTLING){}
+             }
+         });
      }
 
 }
