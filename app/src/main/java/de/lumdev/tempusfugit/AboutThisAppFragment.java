@@ -31,8 +31,8 @@ public class AboutThisAppFragment extends Fragment {
         // Inflate the layout for this fragment
         final View rootView = inflater.inflate(R.layout.fragment_about_this_app, container, false);
         //get general views
-        tabLayout = getActivity().findViewById(R.id.tabLayout_main);
-        tabLayout.setVisibility(View.GONE); //hide navigation from user while editing group event
+//        tabLayout = getActivity().findViewById(R.id.tabLayout_main);
+//        tabLayout.setVisibility(View.GONE); //hide navigation from user while editing group event
 //        fab = getActivity().findViewById(R.id.fab_main);
 //        fab.hide(); //hide FAB on screen
 
