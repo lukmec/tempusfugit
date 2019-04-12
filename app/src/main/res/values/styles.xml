@@ -34,4 +34,18 @@
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
+    <!-- Style in order to make icons in tabs work; see https://guides.codepath.com/android/Google-Play-Style-Tabs-using-TabLayout#add-custom-view-to-tablayout -->
+    <!--Alternatively: https://newfivefour.com/android-design-library-tablayout-title-icons.html -->
+    <!-- Used in the definition of the View Pagers XML file -->
+    <!--<style name="MyCustomTabLayout" parent="Widget.Design.TabLayout">-->
+        <!--<item name="tabTextAppearance">@style/MyCustomTabTextAppearance</item>-->
+    <!--</style>-->
+    <style name="MyCustomTabTextAppearance" parent="TextAppearance.Design.Tab">
+        <!--<item name="textAllCaps">false</item>-->
+        <item name="textAllCaps">true</item>
+        <!--<item name="android:textSize">14sp</item>-->
+    </style>
+
+
+
 </resources>

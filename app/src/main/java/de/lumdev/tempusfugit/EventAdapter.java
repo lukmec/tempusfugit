@@ -16,7 +16,6 @@ import java.util.ArrayList;
 import androidx.annotation.ColorInt;
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
-import androidx.navigation.Navigation;
 import androidx.paging.PagedListAdapter;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
@@ -29,6 +28,7 @@ public class EventAdapter extends PagedListAdapter<Event, EventAdapter.EventView
     class EventViewHolder extends RecyclerView.ViewHolder {
         private final TextView name;
         private final TextView prio;
+        private final TextView tododay;
         private final CheckBox done;
         private final CardView container;
 
@@ -36,6 +36,7 @@ public class EventAdapter extends PagedListAdapter<Event, EventAdapter.EventView
             super(itemView);
             name = itemView.findViewById(R.id.rVCard_eventName);
             prio = itemView.findViewById(R.id.rVCard_eventPriority);
+            tododay = itemView.findViewById(R.id.rVCard_eventToDoDay);
             done = itemView.findViewById(R.id.rVCard_checkbox_event_done);
             container = itemView.findViewById(R.id.cardView_event);
         }
@@ -43,6 +44,7 @@ public class EventAdapter extends PagedListAdapter<Event, EventAdapter.EventView
         private void clear(){
             name.setText(R.string.placeholder_name);
             prio.setText(R.string.placeholder_priority);
+            tododay.setText(R.string.placeholder_totoday);
             done.setChecked(false);
             container.setCardBackgroundColor(itemView.getResources().getColor(R.color.design_default_color_background));
         }
@@ -65,7 +67,7 @@ public class EventAdapter extends PagedListAdapter<Event, EventAdapter.EventView
     @NonNull
     @Override
     public EventAdapter.EventViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int i) {
-        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.card_event, parent,false);
+        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.card_event___linear, parent,false);
         return new EventAdapter.EventViewHolder(itemView);
     }
 
@@ -76,6 +78,7 @@ public class EventAdapter extends PagedListAdapter<Event, EventAdapter.EventView
         if (event != null) {
             holder.name.setText(event.name);
             holder.prio.setText(String.valueOf(event.priority));
+            holder.tododay.setText(String.valueOf(event.toDoDay));
             holder.container.setCardBackgroundColor(event.color);
             setDone(holder, event.done, event.color);
 

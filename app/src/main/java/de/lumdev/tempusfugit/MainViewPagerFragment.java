@@ -40,8 +40,9 @@ public class MainViewPagerFragment extends Fragment {
 
          //init viewPager
          viewPager = view.findViewById(R.id.main_view_pager);
-         mainPagerAdapter = new MainPagerAdapter(getChildFragmentManager());
+         mainPagerAdapter = new MainPagerAdapter(getChildFragmentManager(), getContext());
          //adding fragments (/ tabs) to viewpager (and tablayout)
+         mainPagerAdapter.addFragment(new OverviewToDoEventFragment(), getString(R.string.tab_label_group_todo_overview));
          mainPagerAdapter.addFragment(new OverviewGroupEventFragment(), getString(R.string.tab_label_group_overview));
          mainPagerAdapter.addFragment(new OverviewEventFragment(), getString(R.string.tab_label_event_overview));
 //         viewPager.setPageMargin(20); //for additional space between fragments
@@ -51,6 +52,16 @@ public class MainViewPagerFragment extends Fragment {
          tabLayout = view.findViewById(R.id.tabLayout_main);
 //         tabLayout.addOnTabSelectedListener(onTabSelectedListener);
          tabLayout.setupWithViewPager(viewPager);
+         //set icon to tab
+//         tabLayout.getTabAt(0).setIcon(R.drawable.ic_star_white_24dp);
+
+         //set custom tab view (custom tab contains ticon and text)
+         tabLayout.getTabAt(0).setCustomView(mainPagerAdapter.getPageView(0));
+//         // Iterate over all tabs and set the custom view
+//         for (int i = 0; i < tabLayout.getTabCount(); i++) {
+//             TabLayout.Tab tab = tabLayout.getTabAt(i);
+//             tab.setCustomView(mainPagerAdapter.getPageView(i));
+//         }
 
          //do action when scrolling pages (see https://developer.android.com/reference/android/support/v4/view/ViewPager.OnPageChangeListener)
          viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
@@ -59,17 +70,22 @@ public class MainViewPagerFragment extends Fragment {
              }
              @Override
              public void onPageSelected(int position) {
+//                 Log.d("--> position", String.valueOf(position));
+                 MainPagerAdapter adapter = (MainPagerAdapter) viewPager.getAdapter();
+                 adapter.setNewDoneStatesInOvrvwToDoEventFragment(0);
+                 adapter.setNewDoneStatesInOvrvwEventFragment(2);
+
              }
 
              @Override
              public void onPageScrollStateChanged(int state) {
-                 //if (state == ViewPager.SCROLL_STATE_IDLE){}
-                 if (state == ViewPager.SCROLL_STATE_DRAGGING){
-                     MainPagerAdapter adapter = (MainPagerAdapter) viewPager.getAdapter();
-                     int position = 1;
-                     adapter.setNewDoneStatesInOvrvwEventFragment(position);
-                 }
-                 //if (state == ViewPager.SCROLL_STATE_SETTLING){}
+//                 //if (state == ViewPager.SCROLL_STATE_IDLE){}
+//                 if (state == ViewPager.SCROLL_STATE_DRAGGING){
+//                     MainPagerAdapter adapter = (MainPagerAdapter) viewPager.getAdapter();
+//                     int positionOfOvrwFragm = 2;
+//                     adapter.setNewDoneStatesInOvrvwEventFragment(positionOfOvrwFragm);
+//                 }
+//                 //if (state == ViewPager.SCROLL_STATE_SETTLING){}
              }
          });
      }

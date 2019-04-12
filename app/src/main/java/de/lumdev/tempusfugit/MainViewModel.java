@@ -1,29 +1,22 @@
 package de.lumdev.tempusfugit;
 
 import android.app.Application;
-import android.util.Log;
 
-import java.util.ArrayList;
-import java.util.List;
+import org.threeten.bp.Duration;
 
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModel;
-import androidx.navigation.NavController;
 import androidx.paging.PagedList;
 import de.lumdev.tempusfugit.data.DataRepository;
 import de.lumdev.tempusfugit.data.Event;
 import de.lumdev.tempusfugit.data.GroupEvent;
-import de.lumdev.tempusfugit.data.QuickDirtyDataHolder;
-import de.lumdev.tempusfugit.util.SelectGEDialogObserver;
 
 public class MainViewModel extends AndroidViewModel {
 
     private DataRepository dataRepository;
     private final LiveData<PagedList<GroupEvent>> allGroupEvents;
     private final LiveData<PagedList<Event>> allEvents;
-    private final LiveData<PagedList<Event>> allVisibleEvents;
+    private final LiveData<PagedList<Event>> allNonArchivedEvents;
 
     public MainViewModel(Application application){
         super(application);
@@ -31,7 +24,7 @@ public class MainViewModel extends AndroidViewModel {
         dataRepository = DataRepository.getInstance(application);
         allGroupEvents = dataRepository.getAllGroupEvents();
         allEvents = dataRepository.getAllEvents();
-        allVisibleEvents = dataRepository.getAllVisibleEvents();
+        allNonArchivedEvents = dataRepository.getAllNonArchivedEvents();
     }
 
     //get List of all GroupEvents
@@ -41,11 +34,16 @@ public class MainViewModel extends AndroidViewModel {
     LiveData<PagedList<Event>> getAllEvents(){ return allEvents; };
 
     //get List of all Visible Events
-    LiveData<PagedList<Event>> getAllVisibleEvents(){ return allVisibleEvents; };
+    LiveData<PagedList<Event>> getAllNonArchivedEvents(){ return allNonArchivedEvents; };
 
     //get List of all Events of specific GroupEvent
     LiveData<PagedList<Event>> getAllEventsOfGroup(int groupEventId){
-        return dataRepository.getAllEventsOfGroup(groupEventId, true);
+        return dataRepository.getAllEventsOfGroup(groupEventId, false);
+    };
+
+    //get List of all Events of specific toDoDay
+    LiveData<PagedList<Event>> getAllEventsOfToDoDay(int toDoDay){
+        return dataRepository.getEventsOfToDoDay(toDoDay);
     };
 
     //get single Group Event
@@ -71,16 +69,18 @@ public class MainViewModel extends AndroidViewModel {
     //insert new Event to db
     void insertEvent(Event event){
         dataRepository.insertEvent(event);
+//        calculateToDoDateOfEvents();
     }
 
     //update Event in db
     void updateEvent(Event event){
         dataRepository.updateEvent(event);
+//        calculateToDoDateOfEvents();
     }
 
     //update visibility of event in db
     void setEventVisibility(int eventId, boolean visible){
-        dataRepository.setEventVisibility(eventId, visible);
+        dataRepository.setEventArchivedState(eventId, visible);
     }
 
     //update done state of event in db
@@ -90,6 +90,10 @@ public class MainViewModel extends AndroidViewModel {
 //        Log.d("-->", "ViewModel.setEventDone("+done+")");
     }
 
+    void calculateToDoDateOfEvents(){
+        Duration wrkCapaPerDay = Duration.ofHours(4);
+        dataRepository.calculateToDoDateOfEvents(wrkCapaPerDay);
 
+    }
 
 }

@@ -46,11 +46,13 @@ public class Event {
 
     public double priority;
 
-    public boolean visible;
+    public boolean archived;
 
     public int color;
 
-    public int day; //day, when event has to be done (0 meaning today, 1 meaning tomorrow, -1 meaning yesterday, etc.)
+    public int icon;
+
+    public int toDoDay; //day, when event has to be done (0 meaning today, 1 meaning tomorrow, -1 meaning yesterday, etc.)
 
     @Ignore
     public Event(String name, String description, int parentId){
@@ -59,13 +61,14 @@ public class Event {
         this.done = false;
         this.creationDate = OffsetDateTime.ofInstant(Instant.now(), ZoneOffset.systemDefault());
         this.parentId = parentId;
-        this.duration = Duration.ofMinutes(90);
+        this.duration = Duration.ofMinutes(60);
         this.importance = 1.0;
         this.urgency = 1.0;
         this.priority = this.importance + this.urgency;
-        this.visible = true;
+        this.archived = false;
         this.color = 4498259; //44a353 (hex) == 4498259 (dec) (color is green)
-        this.day = 0;
+        this.icon = R.drawable.ic_directions_car_black_24dp;
+        this.toDoDay = 0;
     }
 
     public Event(String name, String description, int parentId, double importance, double urgency, Duration duration){
@@ -78,9 +81,10 @@ public class Event {
         this.importance = importance;
         this.urgency = urgency;
         this.priority = importance + urgency;
-        this.visible = true;
+        this.archived = false;
         this.color = 4498259; //44a353 (hex) == 4498259 (dec) (color is green)
-        this.day = 0;
+        this.icon = R.drawable.ic_directions_car_black_24dp;
+        this.toDoDay = 0;
     }
 
     @Ignore
@@ -98,9 +102,10 @@ public class Event {
         newE.importance = this.importance;
         newE.urgency = this.urgency;
         newE.priority = this.priority;
-        newE.visible = this.visible;
+        newE.archived = this.archived;
         newE.color = this.color;
-        newE.day = this.day;
+        newE.icon = this.icon;
+        newE.toDoDay = this.toDoDay;
         return newE;
     }
 }

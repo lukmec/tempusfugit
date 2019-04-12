@@ -28,6 +28,7 @@ public class GroupEventAdapter extends PagedListAdapter<GroupEvent, GroupEventAd
     class GroupEventViewHolder extends RecyclerView.ViewHolder {
         private final TextView name;
         private final TextView description;
+        private final TextView progressText;
         private final ProgressBar progress;
         private final ImageView icon;
         private final CardView container;
@@ -36,6 +37,7 @@ public class GroupEventAdapter extends PagedListAdapter<GroupEvent, GroupEventAd
             super(itemView);
             name = itemView.findViewById(R.id.rVCard_groupEventName);
             description = itemView.findViewById(R.id.rVCard_groupEventDescription);
+            progressText = itemView.findViewById(R.id.rVCard_groupEvent_progressText);
             progress = itemView.findViewById(R.id.rVCard_groupEventProgress);
             icon = itemView.findViewById(R.id.rVCard_groupEventIcon);
             container = itemView.findViewById(R.id.cardView_groupEvent);
@@ -80,6 +82,7 @@ public class GroupEventAdapter extends PagedListAdapter<GroupEvent, GroupEventAd
 //            holder.bindTo(groupEvent);
             holder.name.setText(groupEvent.name);
             holder.description.setText(groupEvent.description);
+            holder.progressText.setText(String.valueOf(groupEvent.progress));
             holder.progress.setProgress(groupEvent.progress);
             setIcon(holder, groupEvent.icon);
             holder.container.setCardBackgroundColor(groupEvent.color);

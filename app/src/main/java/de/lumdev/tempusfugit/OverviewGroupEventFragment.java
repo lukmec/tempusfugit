@@ -66,7 +66,7 @@ public class OverviewGroupEventFragment extends Fragment {
         Toolbar toolbar = getActivity().findViewById(R.id.toolbar_main);
         toolbar.setTitle(R.string.app_name);
 //        tabLayout = getActivity().findViewById(R.id.tabLayout_main);
-//        tabLayout.setVisibility(View.VISIBLE); //set tabLayout to visible, in order to ensure that user can navigate
+//        tabLayout.setVisibility(View.VISIBLE); //set tabLayout to archived, in order to ensure that user can navigate
 //        fab = getParentFragment().getView().findViewById(R.id.fab_ovrvw_vp);
         fab = rootView.findViewById(R.id.fab_ovrvw_ge);
         fab.show();

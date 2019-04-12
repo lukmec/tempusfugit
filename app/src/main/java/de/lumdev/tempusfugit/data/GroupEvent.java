@@ -32,7 +32,7 @@ public class GroupEvent {
     @ColumnInfo(name = "parent_id")
     public int parentId;
 
-    public boolean visible;
+    public boolean archived;
 
     public int progress;
 
@@ -45,7 +45,7 @@ public class GroupEvent {
         this.color = 4498259; //44a353 (hex) == 4498259 (dec) (color is green)
         this.icon = R.drawable.ic_directions_car_black_24dp;
         this.parentId = -1;
-        this.visible = true;
+        this.archived = false;
         this.progress = 0;
     }
 
@@ -56,7 +56,7 @@ public class GroupEvent {
         this.color = color;
         this.icon = icon;
         this.parentId = parentId;
-        this.visible = true;
+        this.archived = false;
         this.progress = 0;
     }
 
@@ -70,7 +70,7 @@ public class GroupEvent {
         newGE.color = this.color;
         newGE.icon = this.icon;
         newGE.parentId = this.parentId;
-        newGE.visible = this.visible;
+        newGE.archived = this.archived;
         newGE.progress = this.progress;
         return newGE;
     }

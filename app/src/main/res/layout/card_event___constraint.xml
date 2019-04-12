@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <androidx.cardview.widget.CardView
+    android:id="@+id/cardView_event"
+    android:layout_width="0dp"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="@dimen/no_padding"
+    android:layout_marginTop="@dimen/no_padding"
+    android:layout_marginEnd="@dimen/no_padding"
+    android:layout_marginBottom="@dimen/normal_padding"
+    app:cardBackgroundColor="@color/groupEvent_grey"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <CheckBox
+    android:id="@+id/rVCard_checkbox_event_done"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="@dimen/large_padding"
+    android:layout_marginTop="@dimen/normal_padding"
+    android:layout_marginBottom="@dimen/normal_padding"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/rVCard_eventPriority"
+            style="@style/card_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/small_padding"
+            android:text="@string/placeholder_priority"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <TextView
+            android:id="@+id/rVCard_eventName"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/large_padding"
+            android:layout_marginTop="@dimen/normal_padding"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="@dimen/normal_padding"
+            android:text="@string/placeholder_lorem_ipsum_20words"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/rVCard_event_spacer"
+            app:layout_constraintStart_toEndOf="@+id/rVCard_checkbox_event_done"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/rVCard_eventToDoDay"
+            style="@style/card_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/small_padding"
+            android:text="@string/placeholder_totoday"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/rVCard_label_eventPriority"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/small_padding"
+            android:text="@string/label_cV_event_priority"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toBottomOf="@+id/rVCard_eventPriority"
+            app:layout_constraintEnd_toStartOf="@+id/rVCard_eventPriority"
+            app:layout_constraintTop_toTopOf="@+id/rVCard_eventPriority" />
+
+        <TextView
+            android:id="@+id/rVCard_label_eventToDoDay"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/small_padding"
+            android:text="@string/label_cV_event_tododay"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toBottomOf="@+id/rVCard_eventToDoDay"
+            app:layout_constraintEnd_toStartOf="@+id/rVCard_eventToDoDay"
+            app:layout_constraintTop_toTopOf="@+id/rVCard_eventToDoDay" />
+
+        <TextView
+            android:id="@+id/rVCard_event_spacer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/no_padding"
+            android:layout_marginEnd="@dimen/no_padding"
+            android:layout_marginBottom="@dimen/no_padding"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/rVCard_label_eventPriority"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.cardview.widget.CardView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

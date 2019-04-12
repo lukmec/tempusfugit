@@ -78,7 +78,7 @@ public class DetailledGroupEventFragment extends Fragment {
         Toolbar toolbar = getActivity().findViewById(R.id.toolbar_main);
         toolbar.setTitle(R.string.dest_detailled_group_event);
 //        tabLayout = getActivity().findViewById(R.id.tabLayout_main);
-//        tabLayout.setVisibility(View.GONE); //set tabLayout to visible, in order to ensure that user can navigate
+//        tabLayout.setVisibility(View.GONE); //set tabLayout to archived, in order to ensure that user can navigate
         fab = rootView.findViewById(R.id.fab_dtl_ge);
 //        fab.show();
         //set onClickListeners

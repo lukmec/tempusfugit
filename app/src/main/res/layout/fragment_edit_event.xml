@@ -252,7 +252,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/normal_padding"
                 android:max="12"
-                android:progress="2"
+                android:progress="1"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/tV_edit_E_duration_hours_value"
                 app:layout_constraintTop_toTopOf="@+id/tV_edit_E_duration_hours_value" />
