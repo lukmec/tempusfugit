@@ -11,12 +11,15 @@ import androidx.navigation.NavHost;
 import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.NavigationUI;
+import androidx.preference.Preference;
+import androidx.preference.PreferenceFragmentCompat;
 import androidx.viewpager.widget.ViewPager;
 //import android.support.v7.widget.Toolbar;
 
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -26,7 +29,8 @@ import android.widget.TextView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements
+        PreferenceFragmentCompat.OnPreferenceStartFragmentCallback {
 
     private NavController navCtrlr;
     private Toolbar toolbar;
@@ -86,6 +90,7 @@ public class MainActivity extends AppCompatActivity {
 
         toolbar=findViewById(R.id.toolbar_main);
         toolbar.setTitle(R.string.app_name);
+//        toolbar.setNavigationIcon(null);
         setSupportActionBar(toolbar);
 //        fab = findViewById(R.id.fab_main);
 
@@ -138,7 +143,7 @@ public class MainActivity extends AppCompatActivity {
         //see https://developer.android.com/topic/libraries/architecture/navigation/navigation-ui#Tie-navdrawer
 //            switch (item.getItemId()){
 //                case R.id.settings_dest:
-//                    Intent settingsIntent = new Intent(getApplicationContext(), SettingsActivity.class);
+//                    Intent settingsIntent = new Intent(getApplicationContext(), OLDSettingsActivity.class);
 //                    startActivity(settingsIntent);
 //                    return true;
 //                case R.id.abt_app_dest:
@@ -149,4 +154,17 @@ public class MainActivity extends AppCompatActivity {
         return NavigationUI.onNavDestinationSelected(item, this.navCtrlr) || super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public boolean onPreferenceStartFragment(PreferenceFragmentCompat caller, Preference pref) {
+        //followed this guide for implementation: https://developer.android.com/guide/topics/ui/settings/organize-your-settings
+
+        int destinationId = R.id.settings_main_dest; //init destination with main-settings page as default
+        if (pref.getFragment().equals("de.lumdev.tempusfugit.settings.SettingsGeneralFragment")) destinationId = R.id.settings_general_dest;
+        if (pref.getFragment().equals("de.lumdev.tempusfugit.settings.SettingsPlanningPrefsFragment")) destinationId = R.id.settings_plan_dest;
+        if (pref.getFragment().equals("de.lumdev.tempusfugit.settings.SettingsPersonalizationFragment")) destinationId = R.id.settings_perso_dest;
+
+        final Bundle args = pref.getExtras();
+        this.navCtrlr.navigate(destinationId, args);
+        return true;
+    }
 }

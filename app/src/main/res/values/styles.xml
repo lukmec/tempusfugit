@@ -13,6 +13,10 @@
         <item name="android:textStyle">bold</item>
     </style>
 
+    <style name="tab_title">
+        <item name="android:textColor">@color/tf_white</item>
+    </style>
+
     <!-- for Android Room with View Example -->
     <!-- The default font for RecyclerView items is too small.
     The margin is a simple delimiter between the words. -->
@@ -37,12 +41,14 @@
     <!-- Style in order to make icons in tabs work; see https://guides.codepath.com/android/Google-Play-Style-Tabs-using-TabLayout#add-custom-view-to-tablayout -->
     <!--Alternatively: https://newfivefour.com/android-design-library-tablayout-title-icons.html -->
     <!-- Used in the definition of the View Pagers XML file -->
-    <!--<style name="MyCustomTabLayout" parent="Widget.Design.TabLayout">-->
-        <!--<item name="tabTextAppearance">@style/MyCustomTabTextAppearance</item>-->
-    <!--</style>-->
+    <style name="MyCustomTabLayout" parent="Widget.Design.TabLayout">
+        <item name="tabTextAppearance">@style/MyCustomTabTextAppearance</item>
+    </style>
     <style name="MyCustomTabTextAppearance" parent="TextAppearance.Design.Tab">
         <!--<item name="textAllCaps">false</item>-->
         <item name="textAllCaps">true</item>
+        <item name="android:textColor">@color/tf_white</item>
+        <item name="android:textAlignment">center</item>
         <!--<item name="android:textSize">14sp</item>-->
     </style>
 

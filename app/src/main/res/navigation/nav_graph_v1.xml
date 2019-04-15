@@ -115,7 +115,7 @@
         tools:layout="@layout/fragment_about_this_app" />
     <fragment
         android:id="@+id/settings_dest"
-        android:name="de.lumdev.tempusfugit.SettingsFragment"
+        android:name="de.lumdev.tempusfugit.settings.OLDSettingsFragment"
         android:label="SettingsFragm"
-        tools:layout="@layout/fragment_settings" />
+        tools:layout="@layout/__old__fragment_settings" />
 </navigation>

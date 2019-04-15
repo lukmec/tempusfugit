@@ -1,4 +1,4 @@
-package de.lumdev.tempusfugit;
+package de.lumdev.tempusfugit.settings;
 
 import android.annotation.TargetApi;
 import android.content.Context;
@@ -14,6 +14,8 @@ import android.preference.Preference;
 import android.preference.PreferenceActivity;
 
 import androidx.appcompat.app.ActionBar;
+import de.lumdev.tempusfugit.AppCompatPreferenceActivity;
+import de.lumdev.tempusfugit.R;
 
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
@@ -34,7 +36,7 @@ import java.util.List;
  * href="http://developer.android.com/guide/topics/ui/settings.html">Settings
  * API Guide</a> for more information on developing a Settings UI.
  */
-public class SettingsActivity extends AppCompatPreferenceActivity {
+public class OLDSettingsActivity extends AppCompatPreferenceActivity {
 
     /**
      * A preference value change listener that updates the preference's summary
@@ -149,7 +151,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
     @Override
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     public void onBuildHeaders(List<Header> target) {
-        loadHeadersFromResource(R.xml.pref_headers, target);
+        loadHeadersFromResource(R.xml.__old__pref_headers, target);
     }
 
     /**
@@ -172,7 +174,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
         @Override
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
-            addPreferencesFromResource(R.xml.pref_general);
+            addPreferencesFromResource(R.xml.__old__pref_general);
             setHasOptionsMenu(true);
 
             // Bind the summaries of EditText/List/Dialog/Ringtone preferences
@@ -186,7 +188,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
         public boolean onOptionsItemSelected(MenuItem item) {
             int id = item.getItemId();
             if (id == android.R.id.home) {
-                startActivity(new Intent(getActivity(), SettingsActivity.class));
+                startActivity(new Intent(getActivity(), OLDSettingsActivity.class));
                 return true;
             }
             return super.onOptionsItemSelected(item);
@@ -202,7 +204,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
         @Override
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
-            addPreferencesFromResource(R.xml.pref_personalization);
+            addPreferencesFromResource(R.xml.__old__pref_personalization);
             setHasOptionsMenu(true);
 
             // Bind the summaries of EditText/List/Dialog/Ringtone preferences
@@ -217,7 +219,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
         public boolean onOptionsItemSelected(MenuItem item) {
             int id = item.getItemId();
             if (id == android.R.id.home) {
-                startActivity(new Intent(getActivity(), SettingsActivity.class));
+                startActivity(new Intent(getActivity(), OLDSettingsActivity.class));
                 return true;
             }
             return super.onOptionsItemSelected(item);
@@ -233,7 +235,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
         @Override
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
-            addPreferencesFromResource(R.xml.pref_planning_preferences);
+            addPreferencesFromResource(R.xml.__old__pref_planning_preferences);
             setHasOptionsMenu(true);
 
             // Bind the summaries of EditText/List/Dialog/Ringtone preferences
@@ -250,7 +252,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
         public boolean onOptionsItemSelected(MenuItem item) {
             int id = item.getItemId();
             if (id == android.R.id.home) {
-                startActivity(new Intent(getActivity(), SettingsActivity.class));
+                startActivity(new Intent(getActivity(), OLDSettingsActivity.class));
                 return true;
             }
             return super.onOptionsItemSelected(item);

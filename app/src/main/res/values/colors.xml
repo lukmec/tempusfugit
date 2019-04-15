@@ -4,12 +4,18 @@
     <color name="colorPrimaryDark">#303F9F</color>
     <!--<color name="colorAccent">#ff4081</color>-->
     <!--<color name="colorAccent">#0BD7DA</color>-->
-    <color name="colorAccent">#FFFFFF</color>
+    <!--<color name="colorAccent">#FFFFFF</color>-->
+    <color name="colorAccent">#5974FF</color>
+    <!--<color name="colorAccent">#3F51B5</color>-->
+    <!--<color name="colorAccent">#D8DFFF</color>-->
 
     <color name="groupEvent_green">#44a353</color>
     <color name="groupEvent_red">#d95353</color>
     <color name="groupEvent_blue">#5862cf</color>
     <color name="groupEvent_orange">#ffce5d</color>
     <color name="groupEvent_grey">#9F9F9F</color>
+
+    <color name="tf_white">#FFFFFF</color>
+    <color name="tf_black">#000000</color>
 
 </resources>

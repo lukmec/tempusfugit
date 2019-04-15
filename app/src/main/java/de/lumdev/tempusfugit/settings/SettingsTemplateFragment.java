@@ -1,60 +1,41 @@
-package de.lumdev.tempusfugit;
-
+package de.lumdev.tempusfugit.settings;
 
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.View;
 
 import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
+import androidx.preference.PreferenceFragmentCompat;
+import de.lumdev.tempusfugit.R;
 
-import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.View;
-import android.view.ViewGroup;
+public class SettingsTemplateFragment extends PreferenceFragmentCompat implements OnBackPressedCallback {
 
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.tabs.TabLayout;
-
-
-/**
- * A simple {@link Fragment} subclass.
- */
-public class AboutThisAppFragment extends Fragment implements OnBackPressedCallback {
-
-    private TabLayout tabLayout;
-    private FloatingActionButton fab;
     private Toolbar toolbar;
+    private int toolbarTitleResId = 0;
 
-    public AboutThisAppFragment() {
-        // Required empty public constructor
+    //this method always has to be implemented by Child-classes
+    @Override
+    public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
+        //child-classes typically call following two methods:
+//        setPreferencesFromResource(R.xml.pref_main, rootKey);
+//        setupToolbar(R.string.toolbar_settings_title);
     }
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        final View rootView = inflater.inflate(R.layout.fragment_about_this_app, container, false);
-        //get general views
-//        tabLayout = getActivity().findViewById(R.id.tabLayout_main);
-//        tabLayout.setVisibility(View.GONE); //hide navigation from user while editing group event
-//        fab = getActivity().findViewById(R.id.fab_main);
-//        fab.hide(); //hide FAB on screen
-
-        //setting icon for navigating back in toolbar
+    void setupToolbar(int toolbarTitleResId){
+        this.toolbarTitleResId = toolbarTitleResId;
         AppCompatActivity activity = (AppCompatActivity) getActivity();
         toolbar = activity.findViewById(R.id.toolbar_main);
-        toolbar.setTitle(R.string.toolbar_settings_about_app);
+        toolbar.setTitle(this.toolbarTitleResId);
         toolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp);
         toolbar.setNavigationContentDescription(R.string.toolbar_settings_navigation_description);
         toolbar.setNavigationOnClickListener((View v) -> {
             NavHostFragment.findNavController(this).navigateUp();
             toolbar.setNavigationIcon(null); //disbale icon in toolbar again
         });
-
-        return rootView;
     }
 
     //disable options menu in toolbar
@@ -88,6 +69,7 @@ public class AboutThisAppFragment extends Fragment implements OnBackPressedCallb
         NavHostFragment.findNavController(this).navigateUp();
         toolbar.setNavigationIcon(null);
         //Log.e(getClass().getSimpleName(), "handleOnBackPressed");
+
         return true;
     }
     @Override
@@ -96,4 +78,11 @@ public class AboutThisAppFragment extends Fragment implements OnBackPressedCallb
         getActivity().removeOnBackPressedCallback(this);
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (toolbarTitleResId != 0){
+            setupToolbar(this.toolbarTitleResId);
+        }
+    }
 }

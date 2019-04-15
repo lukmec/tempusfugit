@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.preference.PreferenceScreen
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <Preference
+        app:key="page_general"
+        app:icon="@drawable/ic_info_black_24dp"
+        app:title="@string/pref_page_general"
+        app:fragment="de.lumdev.tempusfugit.settings.SettingsGeneralFragment"/>
+
+    <Preference
+        app:key="page_planning_preferences"
+        app:icon="@drawable/ic_poll_black_24dp"
+        app:title="@string/pref_page_planning_preferences"
+        app:fragment="de.lumdev.tempusfugit.settings.SettingsPlanningPrefsFragment"/>
+
+    <Preference
+        app:key="page_personalization"
+        app:icon="@drawable/ic_person_black_24dp"
+        app:title="@string/pref_page_personalization"
+        app:fragment="de.lumdev.tempusfugit.settings.SettingsPersonalizationFragment"/>
+
+</androidx.preference.PreferenceScreen>

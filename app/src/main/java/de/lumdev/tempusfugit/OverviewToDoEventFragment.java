@@ -137,7 +137,7 @@ public class OverviewToDoEventFragment extends Fragment {
     }
 
     private void onFabClick(View v){
-        viewModel.calculateToDoDateOfEvents();
+        viewModel.calculateToDoDateOfEvents(getContext());
 
 
 //        viewModel.getAllEventsOfToDoDay(0).observe(this, new Observer<PagedList<Event>>() {

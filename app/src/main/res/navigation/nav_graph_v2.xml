@@ -113,10 +113,9 @@
         android:label="AbtAppFragm"
         tools:layout="@layout/fragment_about_this_app" />
     <fragment
-        android:id="@+id/settings_dest"
-        android:name="de.lumdev.tempusfugit.SettingsFragment"
-        android:label="SettingsFragm"
-        tools:layout="@layout/fragment_settings" />
+        android:id="@+id/settings_main_dest"
+        android:name="de.lumdev.tempusfugit.settings.SettingsMainFragment"
+        android:label="SettingsMainFragm" />
     <fragment
         android:id="@+id/mvp_dest"
         android:name="de.lumdev.tempusfugit.MainViewPagerFragment"
@@ -167,4 +166,16 @@
                 android:name="parentGroupEvent" />
         </action>
     </fragment>
+    <fragment
+        android:id="@+id/settings_general_dest"
+        android:name="de.lumdev.tempusfugit.settings.SettingsGeneralFragment"
+        android:label="SettingsGeneralFragm" />
+    <fragment
+        android:id="@+id/settings_perso_dest"
+        android:name="de.lumdev.tempusfugit.settings.SettingsPersonalizationFragment"
+        android:label="SettingsPersonalizationFragment" />
+    <fragment
+        android:id="@+id/settings_plan_dest"
+        android:name="de.lumdev.tempusfugit.settings.SettingsPlanningPrefsFragment"
+        android:label="SettingsPlanningPrefsFragment" />
 </navigation>

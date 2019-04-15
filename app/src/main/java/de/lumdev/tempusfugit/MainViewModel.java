@@ -1,12 +1,16 @@
 package de.lumdev.tempusfugit;
 
 import android.app.Application;
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.util.Log;
 
 import org.threeten.bp.Duration;
 
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.paging.PagedList;
+import androidx.preference.PreferenceManager;
 import de.lumdev.tempusfugit.data.DataRepository;
 import de.lumdev.tempusfugit.data.Event;
 import de.lumdev.tempusfugit.data.GroupEvent;
@@ -90,8 +94,13 @@ public class MainViewModel extends AndroidViewModel {
 //        Log.d("-->", "ViewModel.setEventDone("+done+")");
     }
 
-    void calculateToDoDateOfEvents(){
-        Duration wrkCapaPerDay = Duration.ofHours(4);
+    void calculateToDoDateOfEvents(Context context){
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context /* Activity context */);
+        String wrkCapaStr = sharedPreferences.getString("working_capacity", "4");
+        int wrkCapa = Integer.valueOf(wrkCapaStr);
+//        Log.d("--------", String.valueOf(wrkCapa));
+
+        Duration wrkCapaPerDay = Duration.ofHours(wrkCapa);
         dataRepository.calculateToDoDateOfEvents(wrkCapaPerDay);
 
     }
