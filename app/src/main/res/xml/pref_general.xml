@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <EditTextPreference
-        app:key="user_name"
+        app:key="@string/pref_id_user_name"
         app:defaultValue="@string/pref_default_user_name"
         app:singleLine="true"
         app:title="@string/pref_user_name_title"
@@ -12,7 +12,7 @@
 
     <SwitchPreference
         app:defaultValue="true"
-        app:key="elements_deletable"
+        app:key="@string/pref_id_elements_deletable"
         app:title="@string/pref_elements_deletable_title" />
 
 </androidx.preference.PreferenceScreen>

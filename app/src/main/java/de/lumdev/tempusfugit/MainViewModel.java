@@ -96,11 +96,15 @@ public class MainViewModel extends AndroidViewModel {
 
     void calculateToDoDateOfEvents(Context context){
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context /* Activity context */);
-        String wrkCapaStr = sharedPreferences.getString("working_capacity", "4");
-        int wrkCapa = Integer.valueOf(wrkCapaStr);
-//        Log.d("--------", String.valueOf(wrkCapa));
+        String wrkCapaHrsStr = sharedPreferences.getString(context.getResources().getString(R.string.pref_id_working_capacity), "4");
+//        String buffertimePercStr = sharedPreferences.getString(context.getResources().getString(R.string.pref_id_buffertime), "0");
+        double buffertimePerc = sharedPreferences.getInt(context.getResources().getString(R.string.pref_id_buffertime), 0);
+        double wrkCapaHrs = Double.valueOf(wrkCapaHrsStr);
+//        int buffertimePerc = Integer.valueOf(buffertimePercStr);
+        long totalCapaMinPerDay = Math.round((wrkCapaHrs*60)-(wrkCapaHrs * 60 * buffertimePerc / 100.0));
+        Log.d("Total Wrk-Capa per Day", String.valueOf(totalCapaMinPerDay) + " minutes");
 
-        Duration wrkCapaPerDay = Duration.ofHours(wrkCapa);
+        Duration wrkCapaPerDay = Duration.ofMinutes(totalCapaMinPerDay);
         dataRepository.calculateToDoDateOfEvents(wrkCapaPerDay);
 
     }

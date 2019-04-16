@@ -4,19 +4,19 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <Preference
-        app:key="page_general"
+        app:key="pref_id_page_general"
         app:icon="@drawable/ic_info_black_24dp"
         app:title="@string/pref_page_general"
         app:fragment="de.lumdev.tempusfugit.settings.SettingsGeneralFragment"/>
 
     <Preference
-        app:key="page_planning_preferences"
+        app:key="pref_id_page_planning_preferences"
         app:icon="@drawable/ic_poll_black_24dp"
         app:title="@string/pref_page_planning_preferences"
         app:fragment="de.lumdev.tempusfugit.settings.SettingsPlanningPrefsFragment"/>
 
     <Preference
-        app:key="page_personalization"
+        app:key="pref_id_page_personalization"
         app:icon="@drawable/ic_person_black_24dp"
         app:title="@string/pref_page_personalization"
         app:fragment="de.lumdev.tempusfugit.settings.SettingsPersonalizationFragment"/>

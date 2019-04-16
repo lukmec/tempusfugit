@@ -4,33 +4,33 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <PreferenceCategory
-        app:key="pref_cat_pers_export"
+        app:key="@string/pref_id_pref_cat_pers_export"
         app:title="@string/pref_cat_pers_export">
 
         <SwitchPreferenceCompat
             app:defaultValue="false"
-            app:key="save_to_calendar"
+            app:key="@string/pref_id_save_to_calendar"
             app:title="@string/pref_save_to_calendar_title" />
 
         <Preference
-            app:key="calendar"
-            app:dependency="save_to_calendar"
+            app:key="@string/pref_id_calendar"
+            app:dependency="@string/pref_id_save_to_calendar"
             app:title="@string/pref_select_calendar_title"/>
 
     </PreferenceCategory>
 
     <PreferenceCategory
-        app:key="pref_cat_pers_other"
+        app:key="@string/pref_id_pref_cat_pers_other"
         app:title="@string/pref_cat_pers_other">
 
         <SwitchPreferenceCompat
             app:defaultValue="false"
-            app:key="show_notification"
+            app:key="@string/pref_id_show_notification"
             app:title="@string/pref_show_notification_title" />
 
         <ListPreference
             app:defaultValue="1"
-            app:key="time_clean_list"
+            app:key="@string/pref_id_time_clean_list"
             app:entries="@array/pref_time_clean_list_entries"
             app:entryValues="@array/pref_time_clean_list_values"
             app:title="@string/pref_time_clean_list_title"

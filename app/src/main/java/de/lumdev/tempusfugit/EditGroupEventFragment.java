@@ -3,18 +3,26 @@ package de.lumdev.tempusfugit;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffColorFilter;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.ContextCompat;
+import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.fragment.NavHostFragment;
 import de.lumdev.tempusfugit.data.GroupEvent;
+import de.lumdev.tempusfugit.util.MaterialColorHelper;
 import petrov.kristiyan.colorpicker.ColorPicker;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -135,7 +143,7 @@ public class EditGroupEventFragment extends Fragment implements IconDialog.Callb
                 btn_color.setBackgroundColor(pickedColor);
                 pickedIconId = ge.icon;
                 iconPicked = true;
-                setIcon(pickedIconId);
+                setIcon(pickedIconId, groupEventToEdit.textColor);
             });
 //            //set values in views
 //            if (groupEvent != null && groupEvent.getValue() != null) {
@@ -189,6 +197,12 @@ public class EditGroupEventFragment extends Fragment implements IconDialog.Callb
                 // put code
 //                toast("Picked Color: "+color + " pos: "+position);
                 pickedColor = color;
+
+//                Log.d("--->", String.valueOf(MaterialColorHelper.getTextColor(color, MaterialColorHelper.RETURN_FLAG)));
+                int textColor = MaterialColorHelper.getTextColor(color, MaterialColorHelper.RETURN_COLOR);
+                btn_color.setTextColor(textColor);
+                setIconTint(textColor);
+
                 btn_color.setBackgroundColor(color);
             }
 
@@ -202,6 +216,9 @@ public class EditGroupEventFragment extends Fragment implements IconDialog.Callb
                 .setColumns(5)
                 .setTitle(getString(R.string.colorpicker_select_color))
                 .setRoundColorButton(true)
+                .setColorButtonSize(35, 35)
+                .setColors(R.array.colors_for_color_picker_normal)
+//                .setColors(R.array.colors_for_color_picker_reduced)
                 .show();
     }
 
@@ -231,10 +248,18 @@ public class EditGroupEventFragment extends Fragment implements IconDialog.Callb
 //        toast("IconId: "+pickedIconId);
         iconPicked = true;
 //        btn_icon.setImageResource(pickedIcons[0].getId());
+//        Drawable iconDrawable = pickedIcon.getDrawable(getContext());
+//        DrawableCompat.setTint(iconDrawable,ContextCompat.getColor(getContext(), R.color.tf_white));
+//        btn_icon.setImageDrawable(iconDrawable);
         btn_icon.setImageDrawable(pickedIcon.getDrawable(getContext()));
+//        setIconTint(ContextCompat.getColor(getContext(), R.color.tf_white));
     }
 
-    private void setIcon(int iconId){
+    private void setIconTint(int color){
+        DrawableCompat.setTint(btn_icon.getDrawable(),color);
+    }
+
+    private void setIcon(int iconId, int textColor){
         Context context = getContext();
         IconHelper iconHelper = IconHelper.getInstance(context);
         try{
@@ -250,13 +275,18 @@ public class EditGroupEventFragment extends Fragment implements IconDialog.Callb
                     @Override
                     public void onDataLoaded() {
                         // This happens on UI thread, and is guaranteed to be called.
-                        btn_icon.setImageDrawable(iconHelper.getIcon(iconId).getDrawable(context));
+                        Drawable iconDrawable = iconHelper.getIcon(iconId).getDrawable(context);
+//                        iconDrawable.setTint(Color.WHITE);
+//                        DrawableCompat.setTint(iconDrawable,ContextCompat.getColor(context, R.color.tf_white));
+//                        iconDrawable.setColorFilter(new PorterDuffColorFilter(Color.YELLOW, PorterDuff.Mode.MULTIPLY));
+                        btn_icon.setImageDrawable(iconDrawable);
                     }
                 });
             }catch (Exception e2){
                 Toast.makeText(context, "err: Failed to display icon", Toast.LENGTH_SHORT).show();
             }
         }
+        setIconTint(textColor);
     }
 
     private boolean isValidInput(){

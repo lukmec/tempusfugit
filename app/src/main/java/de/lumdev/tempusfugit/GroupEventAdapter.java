@@ -85,6 +85,10 @@ public class GroupEventAdapter extends PagedListAdapter<GroupEvent, GroupEventAd
             holder.progressText.setText(String.valueOf(groupEvent.progress));
             holder.progress.setProgress(groupEvent.progress);
             setIcon(holder, groupEvent.icon);
+            //set colors
+            holder.name.setTextColor(groupEvent.textColor);
+            holder.description.setTextColor(groupEvent.textColor);
+            holder.progressText.setTextColor(groupEvent.textColor);
             holder.container.setCardBackgroundColor(groupEvent.color);
 //            holder.container.setOnClickListener(editGroupEventOnClickListener);
             holder.container.setOnLongClickListener(new View.OnLongClickListener() {

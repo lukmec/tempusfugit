@@ -52,11 +52,16 @@ public class MainViewPagerFragment extends Fragment {
          tabLayout = view.findViewById(R.id.tabLayout_main);
 //         tabLayout.addOnTabSelectedListener(onTabSelectedListener);
          tabLayout.setupWithViewPager(viewPager);
+
+         tabLayout.setTabTextColors(getResources().getColor(R.color.primaryLight200), getResources().getColor(R.color.onPrimary));
+         tabLayout.setSelectedTabIndicatorColor(getResources().getColor(R.color.onPrimary));
          //set icon to tab
 //         tabLayout.getTabAt(0).setIcon(R.drawable.ic_star_white_24dp);
+//         tabLayout.getTabAt(0).setText(null);
 
          //set custom tab view (custom tab contains ticon and text)
-         tabLayout.getTabAt(0).setCustomView(mainPagerAdapter.getPageView(0));
+//         tabLayout.getTabAt(0).setCustomView(mainPagerAdapter.getPageView(0));
+//         tabLayout.getTabAt(1).setCustomView(mainPagerAdapter.getPageView(1));
 //         // Iterate over all tabs and set the custom view
 //         for (int i = 0; i < tabLayout.getTabCount(); i++) {
 //             TabLayout.Tab tab = tabLayout.getTabAt(i);

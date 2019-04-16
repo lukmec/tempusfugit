@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!--Colors work in progress)-->
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <!--<color name="colorAccent">#ff4081</color>-->
     <!--<color name="colorAccent">#0BD7DA</color>-->
     <!--<color name="colorAccent">#FFFFFF</color>-->
-    <color name="colorAccent">#5974FF</color>
-    <!--<color name="colorAccent">#3F51B5</color>-->
+    <!--<color name="colorAccent">#5974FF</color>-->
+    <color name="colorAccent">#3F51B5</color>
     <!--<color name="colorAccent">#D8DFFF</color>-->
 
     <color name="groupEvent_green">#44a353</color>
@@ -17,5 +18,35 @@
 
     <color name="tf_white">#FFFFFF</color>
     <color name="tf_black">#000000</color>
+
+
+    <!--Colors v2.0-->
+    <!--see https://material.io/design/color/the-color-system.html#tools-for-picking-colors-->
+    <color name="primary">#3F51B5</color>
+    <color name="primaryLight50">#e8eaf6</color>
+    <color name="primaryLight100">#c5cae9</color>
+    <color name="primaryLight200">#9fa8da</color>
+    <color name="primaryLight">#7986cb</color>
+    <color name="primaryDark">#303F9F</color>
+    <color name="secondary">#78cc8c</color>
+    <color name="secondaryLight">#c5e8cd</color>
+    <color name="secondaryDark">#39b55b</color>
+
+    <color name="primary_complementary">#b5a33f</color>
+    <color name="primary_analoguos_1">#3f8cb5</color>
+    <color name="primary_analoguos_2">#683fb5</color>
+    <color name="primary_triadic_1">#a33fb5</color>
+    <color name="primary_triadic_2">#b53f51</color>
+
+    <color name="surface">#FFFFFF</color>
+    <color name="background">#FFFFFF</color>
+    <color name="error">#B00020</color>
+
+    <color name="onPrimary">#FFFFFF</color>
+    <color name="onSecondary">#000000</color>
+    <color name="onSurface">#000000</color>
+    <color name="onBackground">#000000</color>
+    <color name="onError">#FFFFFF</color>
+
 
 </resources>

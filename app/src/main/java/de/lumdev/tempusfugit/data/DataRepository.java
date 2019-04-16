@@ -284,13 +284,12 @@ public class DataRepository {
         protected void onPostExecute(List<Event> eventsByPriority) {
 
             boolean ERR_WRKCAPA_NOT_SUFFICIENT_FOR_SINGLE_EVENT = false;
-            Duration unusedTimeOnDayZero = Duration.ZERO;
+            Duration unusedTimeOnDayZero = Duration.ZERO.plus(mWorkingCapacityPerDay);
 
             int toDoDay = 0;
-            Duration remainingWorkingCapacity = Duration.ZERO;
-            remainingWorkingCapacity = remainingWorkingCapacity.plus(mWorkingCapacityPerDay);
+            Duration remainingWorkingCapacity = Duration.ZERO.plus(mWorkingCapacityPerDay);
 
-            Log.d("--> RemWrkCapa (hrs)", String.valueOf(remainingWorkingCapacity.toHours()));
+//            Log.d("--> RemWrkCapa (hrs)", String.valueOf(remainingWorkingCapacity.toHours()));
 
             Event event = null;
             //set proper toDoDay to events
@@ -298,7 +297,11 @@ public class DataRepository {
                 event = eventsByPriority.get(i);
                 remainingWorkingCapacity = remainingWorkingCapacity.minus(event.duration);
                 if (remainingWorkingCapacity.isNegative()) {
-                    if (toDoDay == 0) unusedTimeOnDayZero = unusedTimeOnDayZero.plus(remainingWorkingCapacity); //set value for displaying in UI
+                    //calculate remaining unused capacity in minutes for day 0
+                    if (toDoDay == 0) {
+                        Log.d("Unused Time on Day 0", String.valueOf(unusedTimeOnDayZero.abs().getSeconds()/60)+" minutes");
+                    }
+                    //do setup for calculating next days
                     toDoDay += 1;
                     remainingWorkingCapacity = Duration.ZERO;
                     remainingWorkingCapacity = remainingWorkingCapacity.plus(mWorkingCapacityPerDay);
@@ -318,6 +321,11 @@ public class DataRepository {
                         new setToDoDateOfEventsAsyncTask(mEventAsyncTaskDao, event.id, 0).execute(); //set event that failed to 0 (in order to make it visible in UI)
                     }
                 } else {
+                    //calculate remaining unused capacity in minutes for day 0
+                    if (toDoDay == 0) {
+//                        Log.d("unused time day 0", String.valueOf(unusedTimeOnDayZero.getSeconds()/60));
+                        unusedTimeOnDayZero = unusedTimeOnDayZero.minus(event.duration);
+                    }
                     //remaining Capacity is (now) 0 or above (meaning task can still be fulfilled --- toDoDay may be updated)
                     new setToDoDateOfEventsAsyncTask(mEventAsyncTaskDao, event.id, toDoDay).execute(); //set proper day to event
 //                    Log.d("Event Nr. " + event.id, "Day: " + event.toDoDay +"("+toDoDay+")" + " --- Remaining Time on day: " + String.valueOf(remainingWorkingCapacity.toMinutes()));

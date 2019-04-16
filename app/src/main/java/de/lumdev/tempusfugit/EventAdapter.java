@@ -3,6 +3,7 @@ package de.lumdev.tempusfugit;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +23,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import de.lumdev.tempusfugit.data.Event;
 import de.lumdev.tempusfugit.util.EventObservable;
 import de.lumdev.tempusfugit.util.EventObserver;
+import de.lumdev.tempusfugit.util.MaterialColorHelper;
 
 public class EventAdapter extends PagedListAdapter<Event, EventAdapter.EventViewHolder> implements EventObservable {
 
@@ -79,6 +81,10 @@ public class EventAdapter extends PagedListAdapter<Event, EventAdapter.EventView
             holder.name.setText(event.name);
             holder.prio.setText(String.valueOf(event.priority));
             holder.tododay.setText(String.valueOf(event.toDoDay));
+            //set colors
+            holder.name.setTextColor(event.textColor);
+            holder.prio.setTextColor(event.textColor);
+            holder.prio.setTextColor(event.textColor);
             holder.container.setCardBackgroundColor(event.color);
             setDone(holder, event.done, event.color);
 
@@ -140,8 +146,8 @@ public class EventAdapter extends PagedListAdapter<Event, EventAdapter.EventView
         int new_color;
         if (done){
             //darken background
-            new_color = changeColorSaturation(color, 0.0f);
-            new_color = changeColorBrightness(new_color, 0.85f);
+            new_color = MaterialColorHelper.changeColorSaturation(color, 0.0f);
+            new_color = MaterialColorHelper.changeColorBrightness(new_color, 0.85f);
         }else{
 //            //lighten up background
 //            new_color = changeColorSaturation(color, 1.3f);
@@ -180,24 +186,25 @@ public class EventAdapter extends PagedListAdapter<Event, EventAdapter.EventView
                 }
             };
 
-    // Darken a Color with a factor smaller 1f (e.g. 0.8f)
-    // Lighten a Color with a factor greater 1f (e.g. 1.2f)
-    @ColorInt
-    int changeColorBrightness(@ColorInt int color, float factor) {
-        float[] hsv = new float[3];
-        Color.colorToHSV(color, hsv);
-        hsv[2] *= factor;
-        return Color.HSVToColor(hsv);
-    }
-    // Decrease Saturation of a Color with a factor smaller 1f (e.g. 0.8f)
-    // Increase Saturation of a Color with a factor greater 1f (e.g. 1.2f)
-    @ColorInt
-    int changeColorSaturation(@ColorInt int color, float factor) {
-        float[] hsv = new float[3];
-        Color.colorToHSV(color, hsv);
-        hsv[1] *= factor;
-        return Color.HSVToColor(hsv);
-    }
+    //Moved to helper class "MaterialColorHelper"
+//    // Darken a Color with a factor smaller 1f (e.g. 0.8f)
+//    // Lighten a Color with a factor greater 1f (e.g. 1.2f)
+//    @ColorInt
+//    int changeColorBrightness(@ColorInt int color, float factor) {
+//        float[] hsv = new float[3];
+//        Color.colorToHSV(color, hsv);
+//        hsv[2] *= factor;
+//        return Color.HSVToColor(hsv);
+//    }
+//    // Decrease Saturation of a Color with a factor smaller 1f (e.g. 0.8f)
+//    // Increase Saturation of a Color with a factor greater 1f (e.g. 1.2f)
+//    @ColorInt
+//    int changeColorSaturation(@ColorInt int color, float factor) {
+//        float[] hsv = new float[3];
+//        Color.colorToHSV(color, hsv);
+//        hsv[1] *= factor;
+//        return Color.HSVToColor(hsv);
+//    }
 
     @Override
     public void registerObserver(EventObserver eventObserver) {

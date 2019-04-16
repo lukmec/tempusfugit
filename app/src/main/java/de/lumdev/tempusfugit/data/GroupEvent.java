@@ -1,5 +1,7 @@
 package de.lumdev.tempusfugit.data;
 
+import android.util.Log;
+
 import org.threeten.bp.Instant;
 import org.threeten.bp.OffsetDateTime;
 import org.threeten.bp.ZoneOffset;
@@ -10,6 +12,7 @@ import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 import de.lumdev.tempusfugit.R;
+import de.lumdev.tempusfugit.util.MaterialColorHelper;
 
 @Entity(tableName = "group_event")
 public class GroupEvent {
@@ -27,6 +30,8 @@ public class GroupEvent {
 
     public int color;
 
+    public int textColor;
+
     public int icon;
 
     @ColumnInfo(name = "parent_id")
@@ -43,6 +48,7 @@ public class GroupEvent {
         this.creationDate = OffsetDateTime.ofInstant(Instant.now(), ZoneOffset.systemDefault());
         //defaut values
         this.color = 4498259; //44a353 (hex) == 4498259 (dec) (color is green)
+        this.textColor = 0xFF000000; //0 (hex) == 0 (dec) (color is black)
         this.icon = R.drawable.ic_directions_car_black_24dp;
         this.parentId = -1;
         this.archived = false;
@@ -54,6 +60,10 @@ public class GroupEvent {
         this.description = description;
         this.creationDate = OffsetDateTime.ofInstant(Instant.now(), ZoneOffset.systemDefault());
         this.color = color;
+//        this.textColor = 0xFF000000; //0 (hex) == 0 (dec) (color is black)
+        this.textColor = 0xFFFFFFFF; // (color is white)
+//        Log.d("--->", String.valueOf(MaterialColorHelper.getTextColor(color, MaterialColorHelper.RETURN_COLOR)));
+//        this.textColor = MaterialColorHelper.getTextColor(color, MaterialColorHelper.RETURN_COLOR);
         this.icon = icon;
         this.parentId = parentId;
         this.archived = false;
@@ -68,6 +78,7 @@ public class GroupEvent {
         newGE.description = this.description;
         newGE.creationDate = this.creationDate;
         newGE.color = this.color;
+        newGE.textColor = this.textColor;
         newGE.icon = this.icon;
         newGE.parentId = this.parentId;
         newGE.archived = this.archived;

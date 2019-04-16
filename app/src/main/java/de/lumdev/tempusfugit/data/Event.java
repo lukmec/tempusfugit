@@ -50,6 +50,8 @@ public class Event {
 
     public int color;
 
+    public int textColor;
+
     public int icon;
 
     public int toDoDay; //day, when event has to be done (0 meaning today, 1 meaning tomorrow, -1 meaning yesterday, etc.)
@@ -66,7 +68,10 @@ public class Event {
         this.urgency = 1.0;
         this.priority = this.importance + this.urgency;
         this.archived = false;
+        //provide color in form 0xAARRGGBB --- Alpha, Red, Green, Blue --- //https://stackoverflow.com/questions/4602902/how-to-set-the-text-color-of-textview-in-code
+        //after change of color: deinstall, and reinstall app, in order to polulate db new
         this.color = 4498259; //44a353 (hex) == 4498259 (dec) (color is green)
+        this.textColor = 0xFF000000; //0 (hex) == 0 (dec) (color is black) -16777216 == 0xFF000000
         this.icon = R.drawable.ic_directions_car_black_24dp;
         this.toDoDay = 0;
     }
@@ -83,6 +88,8 @@ public class Event {
         this.priority = importance + urgency;
         this.archived = false;
         this.color = 4498259; //44a353 (hex) == 4498259 (dec) (color is green)
+        this.textColor = -16777216
+        ; //0 (hex) == 0 (dec) (color is black) //http://www.binaryconvert.com/result_signed_int.html?hexadecimal=FF121212
         this.icon = R.drawable.ic_directions_car_black_24dp;
         this.toDoDay = 0;
     }
@@ -104,6 +111,7 @@ public class Event {
         newE.priority = this.priority;
         newE.archived = this.archived;
         newE.color = this.color;
+        newE.textColor = this.textColor;
         newE.icon = this.icon;
         newE.toDoDay = this.toDoDay;
         return newE;

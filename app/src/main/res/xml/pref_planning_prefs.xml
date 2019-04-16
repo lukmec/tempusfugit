@@ -11,14 +11,14 @@
         app:defaultValue="8"
         app:entries="@array/pref_working_capacity_entries"
         app:entryValues="@array/pref_working_capacity_values"
-        app:key="working_capacity"
+        app:key="@string/pref_id_working_capacity"
         app:negativeButtonText="@null"
         app:positiveButtonText="@null"
         app:title="@string/pref_working_capacity_title"
         app:useSimpleSummaryProvider="true" />
 
     <SeekBarPreference
-        app:key="buffertime"
+        app:key="@string/pref_id_buffertime"
         app:title="@string/pref_buffer_time_title"
         app:summary="summary"
         android:max="100"
@@ -26,13 +26,13 @@
         app:defaultValue="20" />
 
     <EditTextPreference
-        app:key="weighting_importance"
+        app:key="@string/pref_id_weighting_importance"
         app:title="@string/pref_weighting_importance_title"
         app:useSimpleSummaryProvider="true"
         app:defaultValue="1.0" />
 
     <EditTextPreference
-        app:key="weighting_urgency"
+        app:key="@string/pref_id_weighting_urgency"
         app:title="@string/pref_weighting_urgency_title"
         app:useSimpleSummaryProvider="true"
         app:defaultValue="1.0" />

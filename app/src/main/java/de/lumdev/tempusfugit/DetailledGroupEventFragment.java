@@ -119,6 +119,7 @@ public class DetailledGroupEventFragment extends Fragment {
         View includedGroupCard = getActivity().findViewById(R.id.detail_groupEvent_include_group_card);
         TextView name = includedGroupCard.findViewById(R.id.rVCard_groupEventName);
         TextView description = includedGroupCard.findViewById(R.id.rVCard_groupEventDescription);
+        TextView progressText = includedGroupCard.findViewById(R.id.rVCard_groupEvent_progressText);
         ProgressBar progress = includedGroupCard.findViewById(R.id.rVCard_groupEventProgress);
         ImageView icon = includedGroupCard.findViewById(R.id.rVCard_groupEventIcon);
         CardView container = includedGroupCard.findViewById(R.id.cardView_groupEvent);
@@ -131,8 +132,13 @@ public class DetailledGroupEventFragment extends Fragment {
                 //update UI
                 name.setText(groupEvent.name);
                 description.setText(groupEvent.description);
+                progressText.setText(String.valueOf(groupEvent.progress));
                 progress.setProgress(groupEvent.progress);
                 setIcon(groupEvent.icon, icon);
+                //set colors
+                name.setTextColor(groupEvent.textColor);
+                description.setTextColor(groupEvent.textColor);
+                progressText.setTextColor(groupEvent.textColor);
                 container.setCardBackgroundColor(groupEvent.color);
                 container.setOnClickListener(new View.OnClickListener() {
                     @Override
