@@ -9,6 +9,8 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
+import androidx.core.content.ContextCompat;
+import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
@@ -108,6 +110,7 @@ public class EditEventFragment extends Fragment {
         //set inital values
         tV_duration_minutes.setText(String.valueOf(sB_duration_minutes.getProgress()*5));
         tV_duration_hours.setText(String.valueOf(sB_duration_hours.getProgress()));
+        tV_parent_ge.setTextColor(ContextCompat.getColor(getContext(), R.color.onPrimary));
 
         //set listeners
         cV_container_parent_ge.setOnClickListener(new View.OnClickListener() {
@@ -128,7 +131,8 @@ public class EditEventFragment extends Fragment {
                         //update UI with GroupEvent Info
                         cV_container_parent_ge.setCardBackgroundColor(groupEvent.color);
                         tV_parent_ge.setText(groupEvent.name);
-                        setIcon(groupEvent.icon, tV_parent_ge);
+                        tV_parent_ge.setTextColor(groupEvent.textColor);
+                        setIcon(groupEvent.icon, tV_parent_ge, groupEvent.textColor);
                     }
                 });
 
@@ -203,7 +207,8 @@ public class EditEventFragment extends Fragment {
                 //update UI
                 cV_container_parent_ge.setCardBackgroundColor(groupEvent.color);
                 tV_parent_ge.setText(groupEvent.name);
-                setIcon(groupEvent.icon, tV_parent_ge);
+                tV_parent_ge.setTextColor(groupEvent.textColor);
+                setIcon(groupEvent.icon, tV_parent_ge, groupEvent.textColor);
             });
         }
     }
@@ -259,7 +264,7 @@ public class EditEventFragment extends Fragment {
         }
     }
 
-    private void setIcon(int iconId, TextView setIconInThisView){
+    private void setIcon(int iconId, TextView setIconInThisView, int iconColor){
         Context context = getContext();
         IconHelper iconHelper = IconHelper.getInstance(context);
         try{
@@ -287,6 +292,7 @@ public class EditEventFragment extends Fragment {
                 toast("err: Failed to display icon");
             }
         }
+        DrawableCompat.setTint(setIconInThisView.getCompoundDrawables()[2],iconColor);
     }
 
     public static void hideKeyboardFrom(Context context, View view) {

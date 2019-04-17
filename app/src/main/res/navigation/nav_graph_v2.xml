@@ -178,4 +178,16 @@
         android:id="@+id/settings_plan_dest"
         android:name="de.lumdev.tempusfugit.settings.SettingsPlanningPrefsFragment"
         android:label="SettingsPlanningPrefsFragment" />
+    <fragment
+        android:id="@+id/ovrw_arch_ge_dest"
+        android:name="de.lumdev.tempusfugit.OverviewArchivedGroupEventFragment"
+        android:label="OverviewArchivedGroupEventFragment" >
+        <action
+            android:id="@+id/action_ovrw_arch_ge_dest_to_edt_ge_dest"
+            app:destination="@id/edt_ge_dest" >
+            <argument
+                android:name="groupEventId"
+                android:defaultValue="-1" />
+        </action>
+    </fragment>
 </navigation>

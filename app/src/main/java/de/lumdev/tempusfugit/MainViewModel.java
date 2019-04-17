@@ -21,6 +21,7 @@ public class MainViewModel extends AndroidViewModel {
     private final LiveData<PagedList<GroupEvent>> allGroupEvents;
     private final LiveData<PagedList<Event>> allEvents;
     private final LiveData<PagedList<Event>> allNonArchivedEvents;
+    private final LiveData<PagedList<GroupEvent>> allNonArchivedGroupEvents;
 
     public MainViewModel(Application application){
         super(application);
@@ -29,6 +30,7 @@ public class MainViewModel extends AndroidViewModel {
         allGroupEvents = dataRepository.getAllGroupEvents();
         allEvents = dataRepository.getAllEvents();
         allNonArchivedEvents = dataRepository.getAllNonArchivedEvents();
+        allNonArchivedGroupEvents = dataRepository.getAllNonArchivedGroupEvents();
     }
 
     //get List of all GroupEvents
@@ -39,6 +41,14 @@ public class MainViewModel extends AndroidViewModel {
 
     //get List of all Visible Events
     LiveData<PagedList<Event>> getAllNonArchivedEvents(){ return allNonArchivedEvents; };
+
+    //get List of all Visible GroupEvents
+    LiveData<PagedList<GroupEvent>> getAllNonArchivedGroupEvents(){ return allNonArchivedGroupEvents; };
+
+    //return either all archived (true) or all non-archived (false) groupEvents
+//    LiveData<PagedList<GroupEvent>> getArchiveToggledGroupEvents(boolean archived){
+//
+//    }
 
     //get List of all Events of specific GroupEvent
     LiveData<PagedList<Event>> getAllEventsOfGroup(int groupEventId){
@@ -82,9 +92,14 @@ public class MainViewModel extends AndroidViewModel {
 //        calculateToDoDateOfEvents();
     }
 
-    //update visibility of event in db
-    void setEventVisibility(int eventId, boolean visible){
-        dataRepository.setEventArchivedState(eventId, visible);
+    //update archived state of event in db
+    void setEventArchivedState(int eventId, boolean archived){
+        dataRepository.setEventArchivedState(eventId, archived);
+    }
+
+    //update archived state of groupEvent in db
+    void setGroupEventArchivedState(int groupEventId, boolean archived){
+        dataRepository.setGroupEventArchivedState(groupEventId, archived);
     }
 
     //update done state of event in db

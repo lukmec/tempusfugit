@@ -30,6 +30,7 @@ public class GroupEvent {
 
     public int color;
 
+    @ColumnInfo(name = "text_color")
     public int textColor;
 
     public int icon;
@@ -55,13 +56,13 @@ public class GroupEvent {
         this.progress = 0;
     }
 
-    public GroupEvent(String name, String description, int color, int icon, int parentId){
+    public GroupEvent(String name, String description, int color, int textColor, int icon, int parentId){
         this.name = name;
         this.description = description;
         this.creationDate = OffsetDateTime.ofInstant(Instant.now(), ZoneOffset.systemDefault());
         this.color = color;
 //        this.textColor = 0xFF000000; //0 (hex) == 0 (dec) (color is black)
-        this.textColor = 0xFFFFFFFF; // (color is white)
+        this.textColor = textColor;
 //        Log.d("--->", String.valueOf(MaterialColorHelper.getTextColor(color, MaterialColorHelper.RETURN_COLOR)));
 //        this.textColor = MaterialColorHelper.getTextColor(color, MaterialColorHelper.RETURN_COLOR);
         this.icon = icon;

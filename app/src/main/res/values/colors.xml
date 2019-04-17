@@ -48,5 +48,10 @@
     <color name="onBackground">#000000</color>
     <color name="onError">#FFFFFF</color>
 
+    <!--Colors for special purpose-->
+    <color name="doneEventCard">#e8eaf6</color>    <!--equals primaryLight50-->
+    <color name="fab">#ffffff</color>    <!--equals white-->
+    <color name="fab_archive">#b53f51</color>    <!--equals primary_triadic_2-->
+
 
 </resources>

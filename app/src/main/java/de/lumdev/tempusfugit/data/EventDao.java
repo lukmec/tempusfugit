@@ -42,7 +42,7 @@ public interface EventDao {
     @Query("SELECT * FROM event WHERE id = :id")
     LiveData<Event> getEvent(int id);
 
-    @Query("SELECT * FROM event WHERE toDoDay = :toDoDay ORDER BY toDoDay DESC")
+    @Query("SELECT * FROM event WHERE toDoDay = :toDoDay AND archived = 0 ORDER BY toDoDay DESC")
     DataSource.Factory<Integer, Event> getEventsByToDoDay(int toDoDay);
 
     @Query("SELECT * FROM event WHERE parent_id = :parent_id AND archived = :archived ORDER BY priority DESC")

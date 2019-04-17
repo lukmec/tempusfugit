@@ -15,6 +15,7 @@ import java.util.ArrayList;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
+import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.navigation.Navigation;
 import androidx.paging.PagedListAdapter;
 import androidx.recyclerview.widget.DiffUtil;
@@ -82,13 +83,14 @@ public class GroupEventAdapter extends PagedListAdapter<GroupEvent, GroupEventAd
 //            holder.bindTo(groupEvent);
             holder.name.setText(groupEvent.name);
             holder.description.setText(groupEvent.description);
-            holder.progressText.setText(String.valueOf(groupEvent.progress));
+            holder.progressText.setText(context.getResources().getString(R.string.label_cV_groupevent_progress_text, groupEvent.progress));
             holder.progress.setProgress(groupEvent.progress);
-            setIcon(holder, groupEvent.icon);
+            setIcon(holder, groupEvent.icon, groupEvent.textColor);
             //set colors
             holder.name.setTextColor(groupEvent.textColor);
             holder.description.setTextColor(groupEvent.textColor);
             holder.progressText.setTextColor(groupEvent.textColor);
+            holder.progress.getProgressDrawable().setTint(groupEvent.textColor);
             holder.container.setCardBackgroundColor(groupEvent.color);
 //            holder.container.setOnClickListener(editGroupEventOnClickListener);
             holder.container.setOnLongClickListener(new View.OnLongClickListener() {
@@ -121,7 +123,7 @@ public class GroupEventAdapter extends PagedListAdapter<GroupEvent, GroupEventAd
 
 
 
-    private void setIcon(GroupEventAdapter.GroupEventViewHolder holder, int iconId){
+    private void setIcon(GroupEventAdapter.GroupEventViewHolder holder, int iconId, int iconColor){
         try{
             //IconPicker allows "0" as ID, but .setImageRessource justs sets no icon for ID=0, instead of throwing exception
             //--> Raising custom Exception, when ID=0 in order to let the IconHelper display correct Icon
@@ -142,6 +144,7 @@ public class GroupEventAdapter extends PagedListAdapter<GroupEvent, GroupEventAd
                 Toast.makeText(context, "err: Failed to display icon", Toast.LENGTH_SHORT).show();
             }
         }
+        DrawableCompat.setTint(holder.icon.getDrawable(),iconColor);
     }
 
 

@@ -27,6 +27,7 @@ public class DataRepository {
     private LiveData<PagedList<GroupEvent>> allGroupEvents;
     private LiveData<PagedList<Event>> allEvents;
     private LiveData<PagedList<Event>> allNonArchivedEvents;
+    private LiveData<PagedList<GroupEvent>> allNonArchivedGroupEvents;
 
     private static DataRepository ourInstance;
     public static DataRepository getInstance(Application application) {
@@ -45,6 +46,7 @@ public class DataRepository {
 //        allEvents = myEventDao.getAllEvents(); //old implementation without factory
         allEvents = new LivePagedListBuilder<>(myEventDao.getAllEvents(),20).build();
         allNonArchivedEvents = new LivePagedListBuilder<>(myEventDao.getEventsByArchiveState(false),20).build();
+        allNonArchivedGroupEvents = new LivePagedListBuilder<>(myGroupEventDao.getGroupEventsByArchiveState(false),20).build();
     }
 
     public LiveData<PagedList<GroupEvent>> getAllGroupEvents(){
@@ -56,6 +58,9 @@ public class DataRepository {
     public LiveData<PagedList<Event>> getAllNonArchivedEvents(){
         return allNonArchivedEvents;
     }
+    public LiveData<PagedList<GroupEvent>> getAllNonArchivedGroupEvents(){
+        return allNonArchivedGroupEvents;
+    }
     // List<Event> getEventsInListByPriority() --> see below for implementation in Async Task
     public LiveData<PagedList<Event>> getAllEventsOfGroup(int groupEventId, boolean archived){
         return new LivePagedListBuilder<>(myEventDao.getEventsOfParent(groupEventId, archived),20).build();
@@ -64,20 +69,13 @@ public class DataRepository {
         return new LivePagedListBuilder<>(myEventDao.getEventsByToDoDay(toDoDay),20).build();
     }
 
-    /**
-     * Get GroupEvent of specified ID
-     * @param groupEventId
-     * @return GroupEvent of specified ID or null
-     */
+
+//     Get GroupEvent of specified ID
     public LiveData<GroupEvent> getGroupEvent(int groupEventId){
         return myGroupEventDao.getGroupEvent(groupEventId);
     }
 
-    /**
-     * Get GroupEvent of specified ID
-     * @param eventId
-     * @return GroupEvent of specified ID or null
-     */
+//     Get GroupEvent of specified ID
     public LiveData<Event> getEvent(int eventId){
         return myEventDao.getEvent(eventId);
     }
@@ -163,6 +161,27 @@ public class DataRepository {
         @Override
         protected Void doInBackground(Void ... params) {
             mAsyncTaskDao.setArchiveState(mEventId, mArchived);
+            return null;
+        }
+    }
+
+    //--------update GroupEvent Visibility--------
+    public void setGroupEventArchivedState(int groupEventId, boolean archived){
+        new setGroupEventArchivedStateAsyncTask(myGroupEventDao, groupEventId, archived).execute();
+//        Log.d("---->", "Group Event "+groupEventId+" is now archived.");
+    }
+    private static class setGroupEventArchivedStateAsyncTask extends AsyncTask<Void, Void, Void> {
+        private GroupEventDao mAsyncTaskDao;
+        private int mGroupEventId;
+        private boolean mArchived;
+        setGroupEventArchivedStateAsyncTask(GroupEventDao dao, int groupEventId, boolean archived) {
+            mAsyncTaskDao = dao;
+            mGroupEventId = groupEventId;
+            mArchived = archived;
+        }
+        @Override
+        protected Void doInBackground(Void ... params) {
+            mAsyncTaskDao.setArchiveState(mGroupEventId, mArchived);
             return null;
         }
     }

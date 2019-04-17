@@ -7,6 +7,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
+import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProviders;
@@ -132,13 +133,14 @@ public class DetailledGroupEventFragment extends Fragment {
                 //update UI
                 name.setText(groupEvent.name);
                 description.setText(groupEvent.description);
-                progressText.setText(String.valueOf(groupEvent.progress));
+                progressText.setText(getResources().getString(R.string.label_cV_groupevent_progress_text, groupEvent.progress));
                 progress.setProgress(groupEvent.progress);
-                setIcon(groupEvent.icon, icon);
+                setIcon(groupEvent.icon, icon, groupEvent.textColor);
                 //set colors
                 name.setTextColor(groupEvent.textColor);
                 description.setTextColor(groupEvent.textColor);
                 progressText.setTextColor(groupEvent.textColor);
+                progress.getProgressDrawable().setTint(groupEvent.textColor);
                 container.setCardBackgroundColor(groupEvent.color);
                 container.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -195,7 +197,7 @@ public class DetailledGroupEventFragment extends Fragment {
         NavHostFragment.findNavController(this).navigate(R.id.action_dtl_ge_dest_to_edt_e_dest);
     }
 
-    private void setIcon(int iconId, ImageView setIconInThisView){
+    private void setIcon(int iconId, ImageView setIconInThisView, int iconColor){
         Context context = getContext();
         IconHelper iconHelper = IconHelper.getInstance(context);
         try{
@@ -218,5 +220,6 @@ public class DetailledGroupEventFragment extends Fragment {
                 Toast.makeText(context, "err: Failed to display icon", Toast.LENGTH_SHORT).show();
             }
         }
+        DrawableCompat.setTint(setIconInThisView.getDrawable(),iconColor);
     }
 }

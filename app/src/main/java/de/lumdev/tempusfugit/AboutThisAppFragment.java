@@ -46,7 +46,7 @@ public class AboutThisAppFragment extends Fragment implements OnBackPressedCallb
         //setting icon for navigating back in toolbar
         AppCompatActivity activity = (AppCompatActivity) getActivity();
         toolbar = activity.findViewById(R.id.toolbar_main);
-        toolbar.setTitle(R.string.toolbar_settings_about_app);
+        toolbar.setTitle(R.string.toolbar_label_about_app);
         toolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp);
         toolbar.setNavigationContentDescription(R.string.toolbar_settings_navigation_description);
         toolbar.setNavigationOnClickListener((View v) -> {

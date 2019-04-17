@@ -30,7 +30,8 @@ public interface GroupEventDao {
 //    LiveData<List<GroupEvent>> getAllGroupEvents();
 
     @Query("SELECT * FROM group_event WHERE archived= :archived ORDER BY id ASC")
-    LiveData<List<GroupEvent>> getGroupEventsByArchiveState(boolean archived);
+//    LiveData<List<GroupEvent>> getGroupEventsByArchiveState(boolean archived);
+    DataSource.Factory<Integer, GroupEvent> getGroupEventsByArchiveState(boolean archived);
 
     @Query("SELECT * FROM group_event WHERE id = :id")
     LiveData<GroupEvent> getGroupEvent(int id);

@@ -27,7 +27,8 @@ public class SelectGroupEventDialogFragment extends DialogFragment {
         viewModel = ViewModelProviders.of(this).get(MainViewModel.class);
 
         GroupEventAdapter adapter = new GroupEventAdapter(getContext()); //previous getActivity()
-        viewModel.getAllGroupEvents().observe(this, adapter::submitList);
+//        viewModel.getAllGroupEvents().observe(this, adapter::submitList);
+        viewModel.getAllNonArchivedGroupEvents().observe(this, adapter::submitList);
 
         RecyclerView mRecyclerView = new RecyclerView(getContext());
         // you can use LayoutInflater.from(getContext()).inflate(...) if you have xml layout

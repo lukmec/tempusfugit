@@ -76,7 +76,10 @@ public class OverviewGroupEventFragment extends Fragment {
         //bind recyclerView to DataModel
         RecyclerView recyclerView = rootView.findViewById(R.id.recycler_groupEvents);
         GroupEventAdapter adapter = new GroupEventAdapter(getActivity());
-        viewModel.getAllGroupEvents().observe(this, adapter::submitList);
+
+//        viewModel.getAllGroupEvents().observe(this, adapter::submitList);
+        viewModel.getAllNonArchivedGroupEvents().observe(this, adapter::submitList);
+
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         //prevent short blinking of recyclerview, when data updates

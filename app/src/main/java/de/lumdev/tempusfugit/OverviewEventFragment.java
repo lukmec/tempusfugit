@@ -83,7 +83,10 @@ public class OverviewEventFragment extends Fragment {
         //bind recyclerView to DataModel
         RecyclerView recyclerView = rootView.findViewById(R.id.recycler_events);
         EventAdapter adapter = new EventAdapter(getActivity());
-        viewModel.getAllEvents().observe(this, adapter::submitList);
+
+//        viewModel.getAllEvents().observe(this, adapter::submitList);
+        viewModel.getAllNonArchivedEvents().observe(this, adapter::submitList);
+
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         //prevent short blinking of recyclerview, when data updates

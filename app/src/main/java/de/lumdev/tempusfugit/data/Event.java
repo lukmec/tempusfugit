@@ -50,6 +50,7 @@ public class Event {
 
     public int color;
 
+    @ColumnInfo(name = "text_color")
     public int textColor;
 
     public int icon;

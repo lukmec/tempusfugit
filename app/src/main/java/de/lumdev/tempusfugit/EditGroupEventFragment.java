@@ -3,17 +3,12 @@ package de.lumdev.tempusfugit;
 
 import android.app.Activity;
 import android.content.Context;
-import android.graphics.Color;
-import android.graphics.PorterDuff;
-import android.graphics.PorterDuffColorFilter;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.content.ContextCompat;
-import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProviders;
@@ -22,7 +17,6 @@ import de.lumdev.tempusfugit.data.GroupEvent;
 import de.lumdev.tempusfugit.util.MaterialColorHelper;
 import petrov.kristiyan.colorpicker.ColorPicker;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -48,11 +42,18 @@ public class EditGroupEventFragment extends Fragment implements IconDialog.Callb
 
     private MainViewModel viewModel;
     private TabLayout tabLayout;
-    private FloatingActionButton fab;
+    private FloatingActionButton fabMain;
+    private FloatingActionButton fabArchive;
     private View.OnClickListener newGroupEventOnClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
             createOrUpdateGroupEvent(v);
+        }
+    };
+    private View.OnClickListener archiveGroupEventOnClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            setArchiveStateOfGroupEvent(v);
         }
     };
     private EditText eT_name;
@@ -72,6 +73,7 @@ public class EditGroupEventFragment extends Fragment implements IconDialog.Callb
         }
     };
     private int pickedColor;
+    private int pickedTextColor;
     private Icon[] preselectedIcons;
     private int pickedIconId;
     private boolean iconPicked;
@@ -101,17 +103,20 @@ public class EditGroupEventFragment extends Fragment implements IconDialog.Callb
         toolbar.setTitle(R.string.dest_edit_group_event);
 //        tabLayout = getActivity().findViewById(R.id.tabLayout_main);
 //        tabLayout.setVisibility(View.GONE); //hide navigation from user while editing group event
-        fab = rootView.findViewById(R.id.fab_edt_ge);
-//        fab.show();
+        fabMain = rootView.findViewById(R.id.fab_edt_ge);
+        fabArchive = rootView.findViewById(R.id.fab_arch_ge);
+//        fabMain.show();
         eT_name = rootView.findViewById(R.id.eT_newGE_name);
         eT_description = rootView.findViewById(R.id.eT_newGE_description);
         btn_color = rootView.findViewById(R.id.btn_newGE_color);
         btn_icon = rootView.findViewById(R.id.btn_nGE_icon);
         pickedColor = 0;
+        pickedTextColor = 0;
         preselectedIcons = null;
         iconPicked = false;
         //set onClickListeners
-        fab.setOnClickListener(newGroupEventOnClickListener);
+        fabMain.setOnClickListener(newGroupEventOnClickListener);
+        fabArchive.setOnClickListener(archiveGroupEventOnClickListener);
         btn_color.setOnClickListener(selectColorOnClickListener);
         btn_icon.setOnClickListener(selectIconOnClickListener);
 
@@ -141,9 +146,12 @@ public class EditGroupEventFragment extends Fragment implements IconDialog.Callb
                 eT_description.setText(ge.description);
                 pickedColor = ge.color;
                 btn_color.setBackgroundColor(pickedColor);
+                pickedTextColor = ge.textColor;
+                btn_color.setTextColor(pickedTextColor);
                 pickedIconId = ge.icon;
                 iconPicked = true;
-                setIcon(pickedIconId, groupEventToEdit.textColor);
+                setIcon(pickedIconId, ge.textColor);
+                if (ge.archived) fabArchive.setImageResource(R.drawable.ic_unarchive_white_24dp);
             });
 //            //set values in views
 //            if (groupEvent != null && groupEvent.getValue() != null) {
@@ -154,13 +162,16 @@ public class EditGroupEventFragment extends Fragment implements IconDialog.Callb
 //            }else{
 //                toast("err: Could not find GroupEvent.");
 //            }
+        }else{ //meaning groupEventId == -1
+            //disable possibility to archived group event while in creation of new
+            fabArchive.hide();
         }
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        fab.setImageResource(R.drawable.ic_check_black_24dp);
+        fabMain.setImageResource(R.drawable.ic_check_black_24dp);
     }
 
     public void createOrUpdateGroupEvent(View v){
@@ -172,20 +183,35 @@ public class EditGroupEventFragment extends Fragment implements IconDialog.Callb
                 groupEventToEdit.name = eT_name.getText().toString();
                 groupEventToEdit.description = eT_description.getText().toString();
                 groupEventToEdit.color = pickedColor;
+                groupEventToEdit.textColor = pickedTextColor;
                 groupEventToEdit.icon = pickedIconId;
 
                 viewModel.updateGroupEvent(groupEventToEdit);
             }else {
 //            GroupEvent gEvent = new GroupEvent(eT_name.getText().toString(), eT_description.getText().toString());
-                GroupEvent gEvent = new GroupEvent(eT_name.getText().toString(), eT_description.getText().toString(), pickedColor, pickedIconId, -1);
+                GroupEvent gEvent = new GroupEvent(eT_name.getText().toString(), eT_description.getText().toString(), pickedColor, pickedTextColor, pickedIconId, -1);
                 viewModel.insertGroupEvent(gEvent);
             }
-            fab.hide();
+            fabMain.hide();
             hideKeyboardFrom(v.getContext(), v);
             NavHostFragment.findNavController(this).navigateUp();
         }else{
             //displaying error messages to user is done in this.isValidInput()
 //            toast(getString(R.string.err_invalid_input));
+        }
+    }
+
+    private void setArchiveStateOfGroupEvent(View v){
+        if (groupEventId != -1){
+            if (!groupEventToEdit.archived) {
+                viewModel.setGroupEventArchivedState(groupEventId, true);
+                fabArchive.setImageResource(R.drawable.ic_unarchive_white_24dp);
+            }
+            if (groupEventToEdit.archived) {
+                viewModel.setGroupEventArchivedState(groupEventId, false);
+                fabArchive.setImageResource(R.drawable.ic_archive_white_24dp);
+            }
+//            NavHostFragment.findNavController(this).navigateUp();
         }
     }
 
@@ -199,9 +225,9 @@ public class EditGroupEventFragment extends Fragment implements IconDialog.Callb
                 pickedColor = color;
 
 //                Log.d("--->", String.valueOf(MaterialColorHelper.getTextColor(color, MaterialColorHelper.RETURN_FLAG)));
-                int textColor = MaterialColorHelper.getTextColor(color, MaterialColorHelper.RETURN_COLOR);
-                btn_color.setTextColor(textColor);
-                setIconTint(textColor);
+                pickedTextColor = MaterialColorHelper.getTextColor(color, MaterialColorHelper.RETURN_COLOR);
+                btn_color.setTextColor(pickedTextColor);
+//                DrawableCompat.setTint(btn_icon.getDrawable(),pickedTextColor);
 
                 btn_color.setBackgroundColor(color);
             }
@@ -255,11 +281,7 @@ public class EditGroupEventFragment extends Fragment implements IconDialog.Callb
 //        setIconTint(ContextCompat.getColor(getContext(), R.color.tf_white));
     }
 
-    private void setIconTint(int color){
-        DrawableCompat.setTint(btn_icon.getDrawable(),color);
-    }
-
-    private void setIcon(int iconId, int textColor){
+    private void setIcon(int iconId, int iconColor){
         Context context = getContext();
         IconHelper iconHelper = IconHelper.getInstance(context);
         try{
@@ -286,7 +308,7 @@ public class EditGroupEventFragment extends Fragment implements IconDialog.Callb
                 Toast.makeText(context, "err: Failed to display icon", Toast.LENGTH_SHORT).show();
             }
         }
-        setIconTint(textColor);
+//        DrawableCompat.setTint(btn_icon.getDrawable(),iconColor);
     }
 
     private boolean isValidInput(){

@@ -1,6 +1,7 @@
 package de.lumdev.tempusfugit;
 
 import android.content.Context;
+import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.util.Log;
@@ -17,6 +18,7 @@ import java.util.ArrayList;
 import androidx.annotation.ColorInt;
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
+import androidx.core.content.ContextCompat;
 import androidx.paging.PagedListAdapter;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
@@ -79,14 +81,26 @@ public class EventAdapter extends PagedListAdapter<Event, EventAdapter.EventView
         Event event = getItem(position);
         if (event != null) {
             holder.name.setText(event.name);
-            holder.prio.setText(String.valueOf(event.priority));
-            holder.tododay.setText(String.valueOf(event.toDoDay));
+            holder.prio.setText(context.getResources().getString(R.string.label_cV_event_priority,event.priority));
+            holder.tododay.setText(context.getResources().getString(R.string.label_cV_event_tododay,event.toDoDay));
             //set colors
             holder.name.setTextColor(event.textColor);
             holder.prio.setTextColor(event.textColor);
-            holder.prio.setTextColor(event.textColor);
+            holder.tododay.setTextColor(event.textColor);
             holder.container.setCardBackgroundColor(event.color);
-            setDone(holder, event.done, event.color);
+            setDone(holder, event.done, event.color,event.textColor);
+            //set colorStateList of check box (set checbox color appropriate to element's color) //see https://stackoverflow.com/questions/34340256/how-to-change-checkbox-checked-color-programmatically
+            ColorStateList colorStateList = new ColorStateList(
+                    new int[][] {
+                            new int[] { -android.R.attr.state_checked }, // unchecked
+                            new int[] {  android.R.attr.state_checked }  // checked
+                    },
+                    new int[] {
+//                            ContextCompat.getColor(context, R.color.primaryLight50),
+                            event.textColor,
+                            event.color
+                    });
+            holder.done.setButtonTintList(colorStateList);
 
 //            holder.done.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
 //                @Override
@@ -119,7 +133,7 @@ public class EventAdapter extends PagedListAdapter<Event, EventAdapter.EventView
                         checked = true;
                     }
 //                    Log.d("-->", "Checkbox (at pos: "+position+") now: "+checked);
-                    setDone(holder, checked, event.color);
+                    setDone(holder, checked, event.color, event.textColor);
                     //save changed (event is now done true/false) in db via observer
                     notifyObserversEventDone(event, checked);
                 }
@@ -141,21 +155,30 @@ public class EventAdapter extends PagedListAdapter<Event, EventAdapter.EventView
         }
     }
 
-    private void setDone(EventAdapter.EventViewHolder holder, boolean done, int color){
+    private void setDone(EventAdapter.EventViewHolder holder, boolean done, int color, int textColor){
         //--- changed background color (grey out, if done=true)
         int new_color;
+        int new_textColor;
         if (done){
-            //darken background
-            new_color = MaterialColorHelper.changeColorSaturation(color, 0.0f);
-            new_color = MaterialColorHelper.changeColorBrightness(new_color, 0.85f);
+//            //darken background (reducing saturation and increasing brightness)
+//            new_color = MaterialColorHelper.changeColorSaturation(color, 0.0f);
+//            new_color = MaterialColorHelper.changeColorBrightness(new_color, 0.85f);
+            //set background with static color tone (e.g. grey)
+            new_color = ContextCompat.getColor(context, R.color.doneEventCard);
+            //set color of text to static color
+            new_textColor = MaterialColorHelper.changeColorSaturation(color, 0.0f);
+            new_textColor = MaterialColorHelper.changeColorBrightness(new_textColor, 0.5f);
+//            new_textColor = ContextCompat.getColor(context, R.color.primaryLight200));
         }else{
 //            //lighten up background
 //            new_color = changeColorSaturation(color, 1.3f);
 //            new_color = changeColorBrightness(new_color, 1.1f);
             //if not done, then color of card should equal persisted color of event
             new_color = color;
+            new_textColor = textColor;
         }
         holder.container.setCardBackgroundColor(new_color);
+        holder.name.setTextColor(new_textColor);
         //--- change font (stike through text); according to: https://inducesmile.com/android-tips/android-how-to-strike-through-or-cross-out-a-text-in-android/ and https://stackoverflow.com/questions/9786544/creating-a-strikethrough-text
         if (done) {
 //            holder.name.setText(holder.name.getText(), TextView.BufferType.SPANNABLE);

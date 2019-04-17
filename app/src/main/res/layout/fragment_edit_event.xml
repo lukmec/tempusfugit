@@ -54,10 +54,10 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:drawableEnd="@drawable/ic_directions_car_black_24dp"
+                    android:drawableEnd="@drawable/ic_directions_car_white_24dp"
                     android:drawablePadding="@dimen/large_padding"
                     android:padding="@dimen/large_padding"
-                    android:text="@string/btn_parentGroupEvent" />
+                    android:text="@string/btn_parentGroupEvent"/>
 
             </androidx.cardview.widget.CardView>
 
@@ -324,7 +324,7 @@
         android:layout_margin="@dimen/fab_margin_small"
         android:clickable="true"
         android:focusable="true"
-        app:backgroundTint="@color/colorAccent"
+        app:backgroundTint="@color/fab"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:srcCompat="@drawable/ic_add_black_24dp" />

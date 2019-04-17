@@ -58,11 +58,23 @@ public abstract class LocalRoomDatabase extends RoomDatabase {
                     super.onCreate(db);
 
                     //create Trigger in SQLite DB, which contain part of business logic
-                    // 1) --> set color of event, when color of parent group_event changes
+                    // 1.1) --> set color of event, when color of parent group_event changes
                     db.execSQL("CREATE TRIGGER group_event_color_change AFTER UPDATE OF color ON group_event BEGIN UPDATE event SET color = new.color WHERE event.parent_id = new.id; END;");
-                    // 2) --> set color of event, when new event is added, or when event is updated
+                    // 1.2) --> set textColor of event, when textColor of parent group_event changes
+                    db.execSQL("CREATE TRIGGER group_event_textcolor_change AFTER UPDATE OF text_color ON group_event BEGIN UPDATE event SET text_color = new.text_color WHERE event.parent_id = new.id; END;");
+                    // 1.3) --> set icon of event, when icon of parent group_event changes
+                    db.execSQL("CREATE TRIGGER group_event_icon_change AFTER UPDATE OF icon ON group_event BEGIN UPDATE event SET icon = new.icon WHERE event.parent_id = new.id; END;");
+                    // 1.4) --> set archive state of event, when archive state of parent group_event changes
+                    db.execSQL("CREATE TRIGGER group_event_archived_change AFTER UPDATE OF archived ON group_event BEGIN UPDATE event SET archived = new.archived WHERE event.parent_id = new.id; END;");
+                    // 2.1) --> set color of event, when new event is added, or when event is updated
                     db.execSQL("CREATE TRIGGER set_event_color_on_insert AFTER INSERT ON event BEGIN UPDATE event SET color = (SELECT color FROM group_event WHERE event.parent_id = group_event.id) WHERE EXISTS (SELECT color FROM group_event WHERE event.parent_id = group_event.id); END;");
                     db.execSQL("CREATE TRIGGER set_event_color_on_update AFTER UPDATE OF parent_id ON event BEGIN UPDATE event SET color = (SELECT color FROM group_event WHERE event.parent_id = group_event.id) WHERE EXISTS (SELECT color FROM group_event WHERE event.parent_id = group_event.id); END;");
+                    // 2.2) --> set textColor of event, when new event is added, or when event is updated
+                    db.execSQL("CREATE TRIGGER set_event_textcolor_on_insert AFTER INSERT ON event BEGIN UPDATE event SET text_color = (SELECT text_color FROM group_event WHERE event.parent_id = group_event.id) WHERE EXISTS (SELECT text_color FROM group_event WHERE event.parent_id = group_event.id); END;");
+                    db.execSQL("CREATE TRIGGER set_event_textcolor_on_update AFTER UPDATE OF parent_id ON event BEGIN UPDATE event SET text_color = (SELECT text_color FROM group_event WHERE event.parent_id = group_event.id) WHERE EXISTS (SELECT text_color FROM group_event WHERE event.parent_id = group_event.id); END;");
+                    // 2.3) --> set icon of event, when new event is added, or when event is updated
+                    db.execSQL("CREATE TRIGGER set_event_icon_on_insert AFTER INSERT ON event BEGIN UPDATE event SET icon = (SELECT icon FROM group_event WHERE event.parent_id = group_event.id) WHERE EXISTS (SELECT icon FROM group_event WHERE event.parent_id = group_event.id); END;");
+                    db.execSQL("CREATE TRIGGER set_event_icon_on_update AFTER UPDATE OF parent_id ON event BEGIN UPDATE event SET icon = (SELECT icon FROM group_event WHERE event.parent_id = group_event.id) WHERE EXISTS (SELECT icon FROM group_event WHERE event.parent_id = group_event.id); END;");
                     // 3) --> calculate priority when importance or urgency changes
                     db.execSQL("CREATE TRIGGER event_calc_priority_after_importance_change AFTER UPDATE OF importance ON event BEGIN UPDATE event SET priority = new.importance + new.urgency WHERE event.id = new.id; END;");
                     db.execSQL("CREATE TRIGGER event_calc_priority_after_urgency_change AFTER UPDATE OF urgency ON event BEGIN UPDATE event SET priority = new.importance + new.urgency WHERE event.id = new.id; END;");
@@ -92,11 +104,18 @@ public abstract class LocalRoomDatabase extends RoomDatabase {
             gEDao.deleteAll();
             eDao.deleteAll();
 
+            //get Colors
+            int organge = context.getResources().getColor(R.color.groupEvent_orange);
+            int blue = context.getResources().getColor(R.color.groupEvent_blue);
+            int red = context.getResources().getColor(R.color.groupEvent_red);
+            int green = context.getResources().getColor(R.color.groupEvent_green);
+            int black = context.getResources().getColor(R.color.tf_black);
+
             //Create Test Data
-            GroupEvent gE1 = new GroupEvent("Telematikprojekt", "Meine Aufgaben des Telematikprojektes", context.getResources().getColor(R.color.groupEvent_orange), R.drawable.ic_edit_black_24dp, -1);
-            GroupEvent gE2 = new GroupEvent("Einkaufen", "Meine Einkaufsliste", context.getResources().getColor(R.color.groupEvent_blue), R.drawable.ic_shopping_cart_black_24dp, -1);
-            GroupEvent gE3 = new GroupEvent("Sport", "geplante Trainingseinheiten", context.getResources().getColor(R.color.groupEvent_red), R.drawable.ic_fitness_center_black_24dp, -1);
-            GroupEvent gE4 = new GroupEvent("Autoreparatur", "Muss ich noch vor nächstem TÜV überprüfen", context.getResources().getColor(R.color.groupEvent_green), R.drawable.ic_directions_car_black_24dp, -1);
+            GroupEvent gE1 = new GroupEvent("Telematikprojekt", "Meine Aufgaben des Telematikprojektes", organge, black, R.drawable.ic_edit_black_24dp, -1);
+            GroupEvent gE2 = new GroupEvent("Einkaufen", "Meine Einkaufsliste", blue, black, R.drawable.ic_shopping_cart_black_24dp, -1);
+            GroupEvent gE3 = new GroupEvent("Sport", "geplante Trainingseinheiten", red, black, R.drawable.ic_fitness_center_black_24dp, -1);
+            GroupEvent gE4 = new GroupEvent("Autoreparatur", "Muss ich noch vor nächstem TÜV überprüfen", green, black, R.drawable.ic_directions_car_black_24dp, -1);
             gEDao.insert(gE1);
             gEDao.insert(gE2);
             gEDao.insert(gE3);

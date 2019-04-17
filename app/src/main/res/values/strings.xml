@@ -8,6 +8,7 @@
 
     <!--Navigation Destinations-->
     <string name="dest_overview_group_event">Group Tasks</string>
+    <string name="dest_overview_archived_group_event">Archived Group Tasks</string>
     <string name="dest_overview_event">Current Tasks</string>
     <string name="dest_overview_todo_event">Do Today</string>
     <string name="dest_detailled_group_event">Detailled Group</string>
@@ -17,6 +18,7 @@
     <!--Options Menu-->
     <string name="menu_label_settings">Settings</string>
     <string name="menu_label_aboutApp">About this App</string>
+    <string name="menu_label_archived_group_event">View Archived Groups</string>
 
     <!--Select Group Event Dialog Fragment-->
     <string name="title_dialog_select_parent_group_event">Select a parent group:</string>
@@ -32,7 +34,7 @@
     <string name="label_settings_planning_preferences">Planning Preferences</string>
 
     <!--About App-->
-    <string name="toolbar_settings_about_app">About this App</string>
+    <string name="toolbar_label_about_app">About this App</string>
     <string name="label_about_author_title">Author</string>
     <string name="label_about_author_content">This android app was created by Lukas Mechura from November 2018 to February 2019.</string>
     <string name="label_about_contact_title">Contact</string>
@@ -41,6 +43,9 @@
     <string name="label_about_license_content">MIT LICENSE \nCopyright 2019 Lukas Mechura \n\nPermission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions: \n\nThe above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software. \n\nTHE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.</string>
     <string name="label_about_3rd_party_title">Third-Party Components</string>
     <string name="label_about_3rd_party_content">This app uses the following third-party software-components: \n\n\t(<b>1</b>) ColorPicker library of kristiyanP \n\t(published under MIT license) \n\n\t(<b>2</b>) Material Icon Picker Dialog by maltaisn \n\t(published under Apache 2.0 license)</string>
+
+    <!--OverviewArchived GroupEvents-->
+    <string name="toolbar_label_archived_group_event">Archived Group Events</string>
 
     <!--EditGroupEvent-->
     <string name="hint_groupEventName">Group Title</string>
@@ -88,9 +93,10 @@
     <string name="placeholder_test">[test]</string>
 
     <!--Labels for Recycler Cards-->
-    <string name="label_cV_event_tododay">Day:</string>
-    <string name="label_cV_event_priority">Prio:</string>
-    <string name="label_cV_groupevent_progress_text">%</string>
+    <string name="label_cV_event_tododay">Day: %1$d</string>
+    <string name="label_cV_event_priority">Prio: %1$.1f</string>
+    <string name="label_cV_groupevent_progress_text">%1$d%%</string>  <!-- see https://stackoverflow.com/questions/4414389/android-xml-percent-symbol-->
+    <string name="content_description_cV_icon">Icon for Element</string>
 
 
     <!--Settings IDs-->
@@ -119,13 +125,13 @@
     <string name="toolbar_settings_title">Settings</string>
     <string name="toolbar_settings_navigation_description">Go to previous page.</string>
 
-    <!-- Example General settings -->
+    <!-- General settings -->
     <string name="pref_page_general">General</string>
     <string name="pref_user_name_title">Your Name</string>
     <string name="pref_default_user_name">John Smith</string>
     <string name="pref_elements_deletable_title">Elements deletable</string>
 
-    <!-- Example settings for Planning Preferences -->
+    <!-- settings for Planning Preferences -->
     <string name="pref_page_planning_preferences">Planning Preferences</string>
     <string name="pref_working_capacity_title">Working Capacity per day</string>
     <string-array name="pref_working_capacity_entries">
@@ -185,9 +191,5 @@
         <item>7</item>
         <item>30</item>
     </string-array>
-
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-
 
 </resources>
