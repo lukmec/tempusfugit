@@ -206,10 +206,12 @@ public class EditGroupEventFragment extends Fragment implements IconDialog.Callb
             if (!groupEventToEdit.archived) {
                 viewModel.setGroupEventArchivedState(groupEventId, true);
                 fabArchive.setImageResource(R.drawable.ic_unarchive_white_24dp);
+                toast(getString(R.string.toast_element_archived, getString(R.string.group_event)));
             }
             if (groupEventToEdit.archived) {
                 viewModel.setGroupEventArchivedState(groupEventId, false);
                 fabArchive.setImageResource(R.drawable.ic_archive_white_24dp);
+                toast(getString(R.string.toast_element_unarchived, getString(R.string.group_event)));
             }
 //            NavHostFragment.findNavController(this).navigateUp();
         }

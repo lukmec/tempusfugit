@@ -68,4 +68,37 @@
     <string name="pref_select_calendar_title">Kalender auswählen</string>
     <string name="pref_show_notification_title">Dauerhafte Benachrichtigung anzeigen</string>
     <string name="pref_time_clean_list_title">Leere Aufgabenübersicht</string>
+    <string name="tab_label_group_todo_overview">To Do</string>
+    <string name="toolbar_label_about_app">Über diese App</string>
+    <string name="toolbar_label_archived_group_event">Archivierte gruppen</string>
+    <string name="label_cV_event_tododay">Tag: %1$d</string>
+    <string name="label_cV_event_priority">Prio: %1$.1f</string>
+    <string name="content_description_cV_icon">Icon für Element</string>
+    <string name="toolbar_settings_navigation_description">Zurück auf vorherige Seite.</string>
+    <string name="toolbar_label_archived_event">Archivierte Aufgaben</string>
+    <string name="toast_element_archived">%1$s archiviert.</string>
+    <string name="toast_element_unarchived">%1$s wiederhergestellt.</string>
+    <string name="label_cV_groupevent_progress_text">%1$d%%</string>
+    <string-array name="pref_working_capacity_entries">
+        <item>0 Stunden</item>
+        <item>1 Stunde</item>
+        <item>2 Stunden</item>
+        <item>3 Stunden</item>
+        <item>4 Stunden</item>
+        <item>5 Stunden</item>
+        <item>6 Stunden</item>
+        <item>7 Stunden</item>
+        <item>8 Stunden</item>
+        <item>9 Stunden</item>
+        <item>10 Stunden</item>
+        <item>11 Stunden</item>
+        <item>12 Stunden</item>
+    </string-array>
+    <string-array name="pref_time_clean_list_entries">
+        <item>jeden Tag</item>
+        <item>nach 2 Tagen</item>
+        <item>nach 3 Tagen</item>
+        <item>wöchentlich</item>
+        <item>monatlich</item>
+    </string-array>
 </resources>

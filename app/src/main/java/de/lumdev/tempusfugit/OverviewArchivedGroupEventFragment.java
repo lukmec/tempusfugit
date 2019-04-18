@@ -61,7 +61,7 @@ public class OverviewArchivedGroupEventFragment extends Fragment implements OnBa
         RecyclerView recyclerView = rootView.findViewById(R.id.recycler_archived_groupEvents);
         GroupEventAdapter adapter = new GroupEventAdapter(getActivity());
 
-        viewModel.getAllGroupEvents().observe(this, adapter::submitList);
+        viewModel.getGroupEventsByArchiveState(true).observe(this, adapter::submitList);
 //        viewModel.getAllNonArchivedGroupEvents().observe(this, adapter::submitList);
 
         recyclerView.setAdapter(adapter);
@@ -82,6 +82,9 @@ public class OverviewArchivedGroupEventFragment extends Fragment implements OnBa
             }
             @Override
             public void onLongClickGroupEvent(GroupEvent groupEvent) {
+                OverviewArchivedGroupEventFragmentDirections.ActionOvrwArchGeDestToEdtGeDest action = OverviewArchivedGroupEventFragmentDirections.actionOvrwArchGeDestToEdtGeDest();
+                action.setGroupEventId(groupEvent.id);
+                NavHostFragment.findNavController(getParentFragment()).navigate(action);
             }
         });
 

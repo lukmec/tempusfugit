@@ -10,6 +10,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
+import androidx.core.graphics.ColorUtils;
 import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
@@ -119,6 +120,8 @@ public class DetailledGroupEventFragment extends Fragment {
         this.onSetEventOverviewValues();
     }
 
+//    private getSelectedGroupEvent()
+
     private void onSetCardViewValues(){
         //get Layout Views
         View includedGroupCard = getActivity().findViewById(R.id.detail_groupEvent_include_group_card);
@@ -151,7 +154,8 @@ public class DetailledGroupEventFragment extends Fragment {
 //            progressBarDrawable.mutate();
                 Drawable backgroundDrawable = progressBarDrawable.getDrawable(0); //id 1 is in my custom prog-bar for the secondary progress
                 Drawable progressDrawable = progressBarDrawable.getDrawable(2);
-                backgroundDrawable.setColorFilter(MaterialColorHelper.getContrastVersionForColor(groupEvent.textColor), PorterDuff.Mode.SRC_IN);
+                backgroundDrawable.setColorFilter(ColorUtils.setAlphaComponent(groupEvent.textColor, 90), PorterDuff.Mode.SRC_IN);
+//                backgroundDrawable.setColorFilter(MaterialColorHelper.setAlphaToColor(groupEvent.textColor, 90), PorterDuff.Mode.SRC_IN);
                 progressDrawable.setColorFilter(groupEvent.textColor, PorterDuff.Mode.SRC_IN);
 
                 container.setCardBackgroundColor(groupEvent.color);

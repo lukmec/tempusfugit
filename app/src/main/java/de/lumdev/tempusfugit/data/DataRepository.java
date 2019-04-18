@@ -68,6 +68,12 @@ public class DataRepository {
     public LiveData<PagedList<Event>> getEventsOfToDoDay(int toDoDay){
         return new LivePagedListBuilder<>(myEventDao.getEventsByToDoDay(toDoDay),20).build();
     }
+    public LiveData<PagedList<GroupEvent>> getGroupEventsByArchiveState(boolean archived){
+        return new LivePagedListBuilder<>(myGroupEventDao.getGroupEventsByArchiveState(archived), 20).build();
+    }
+    public LiveData<PagedList<Event>> getEventsByArchiveState(boolean archived){
+        return new LivePagedListBuilder<>(myEventDao.getEventsByArchiveState(archived), 20).build();
+    }
 
 
 //     Get GroupEvent of specified ID

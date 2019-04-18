@@ -46,9 +46,14 @@ public class MainViewModel extends AndroidViewModel {
     LiveData<PagedList<GroupEvent>> getAllNonArchivedGroupEvents(){ return allNonArchivedGroupEvents; };
 
     //return either all archived (true) or all non-archived (false) groupEvents
-//    LiveData<PagedList<GroupEvent>> getArchiveToggledGroupEvents(boolean archived){
-//
-//    }
+    LiveData<PagedList<GroupEvent>> getGroupEventsByArchiveState(boolean archived){
+        return dataRepository.getGroupEventsByArchiveState(archived);
+    }
+
+    //return either all archived (true) or all non-archived (false) groupEvents
+    LiveData<PagedList<Event>> getEventsByArchiveState(boolean archived){
+        return dataRepository.getEventsByArchiveState(archived);
+    }
 
     //get List of all Events of specific GroupEvent
     LiveData<PagedList<Event>> getAllEventsOfGroup(int groupEventId){

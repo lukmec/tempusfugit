@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import androidx.annotation.ColorInt;
+import androidx.core.graphics.ColorUtils;
 import androidx.room.ColumnInfo;
 
 public class MaterialColorHelper {
@@ -348,5 +349,14 @@ public class MaterialColorHelper {
         }
         hsv[1] = hsv[1] * 0.2f;
         return Color.HSVToColor(hsv);
+    }
+    //set alpha value of color (alpha from 0 to 255)
+    //similar to ColorUtils.setAlphaComponent()
+    @ColorInt
+    public static int setAlphaToColor(@ColorInt int color, int alpha) {
+        int red = Color.red(color);
+        int green = Color.green(color);
+        int blue = Color.blue(color);
+        return Color.argb(alpha, red, green, blue);
     }
 }

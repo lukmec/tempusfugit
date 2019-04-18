@@ -27,6 +27,7 @@ import java.util.ArrayList;
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.core.content.ContextCompat;
+import androidx.core.graphics.ColorUtils;
 import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.navigation.Navigation;
 import androidx.paging.PagedListAdapter;
@@ -110,7 +111,8 @@ public class GroupEventAdapter extends PagedListAdapter<GroupEvent, GroupEventAd
 //            progressBarDrawable.mutate();
             Drawable backgroundDrawable = progressBarDrawable.getDrawable(0); //id 1 is in my custom prog-bar for the secondary progress
             Drawable progressDrawable = progressBarDrawable.getDrawable(2);
-            backgroundDrawable.setColorFilter(MaterialColorHelper.getContrastVersionForColor(groupEvent.textColor), PorterDuff.Mode.SRC_IN);
+            backgroundDrawable.setColorFilter(ColorUtils.setAlphaComponent(groupEvent.textColor, 90), PorterDuff.Mode.SRC_IN);
+//            backgroundDrawable.setColorFilter(MaterialColorHelper.setAlphaToColor(groupEvent.textColor, 90), PorterDuff.Mode.SRC_IN);
             progressDrawable.setColorFilter(groupEvent.textColor, PorterDuff.Mode.SRC_IN);
 
             holder.container.setCardBackgroundColor(groupEvent.color);
