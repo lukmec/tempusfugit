@@ -1,12 +1,14 @@
 package de.lumdev.tempusfugit.util;
 
 import android.graphics.Color;
+import android.graphics.ColorFilter;
 import android.util.SparseArray;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
 import androidx.annotation.ColorInt;
+import androidx.room.ColumnInfo;
 
 public class MaterialColorHelper {
 
@@ -322,6 +324,29 @@ public class MaterialColorHelper {
         float[] hsv = new float[3];
         Color.colorToHSV(color, hsv);
         hsv[1] *= factor;
+        return Color.HSVToColor(hsv);
+    }
+    //Invert a given color
+    //Source: https://stackoverflow.com/questions/4672271/reverse-opposing-colors
+    @ColorInt
+    public static int getComplementaryColor(@ColorInt int colorToInvert) {
+        float[] hsv = new float[3];
+        Color.RGBToHSV(Color.red(colorToInvert), Color.green(colorToInvert),
+                Color.blue(colorToInvert), hsv);
+        hsv[0] = (hsv[0] + 180) % 360;
+        return Color.HSVToColor(hsv);
+    }
+    @ColorInt
+    public static int getContrastVersionForColor(@ColorInt int color) {
+        float[] hsv = new float[3];
+        Color.RGBToHSV(Color.red(color), Color.green(color), Color.blue(color),
+                hsv);
+        if (hsv[2] < 0.5) {
+            hsv[2] = 0.7f;
+        } else {
+            hsv[2] = 0.3f;
+        }
+        hsv[1] = hsv[1] * 0.2f;
         return Color.HSVToColor(hsv);
     }
 }

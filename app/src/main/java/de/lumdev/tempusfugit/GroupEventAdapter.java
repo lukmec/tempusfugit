@@ -1,6 +1,17 @@
 package de.lumdev.tempusfugit;
 
 import android.content.Context;
+import android.content.res.ColorStateList;
+import android.content.res.Resources;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.ClipDrawable;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.LayerDrawable;
+import android.graphics.drawable.ShapeDrawable;
+import android.graphics.drawable.shapes.RoundRectShape;
+import android.util.DisplayMetrics;
+import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +26,7 @@ import java.util.ArrayList;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
+import androidx.core.content.ContextCompat;
 import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.navigation.Navigation;
 import androidx.paging.PagedListAdapter;
@@ -23,6 +35,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import de.lumdev.tempusfugit.data.GroupEvent;
 import de.lumdev.tempusfugit.util.GroupEventObservable;
 import de.lumdev.tempusfugit.util.GroupEventObserver;
+import de.lumdev.tempusfugit.util.MaterialColorHelper;
 
 public class GroupEventAdapter extends PagedListAdapter<GroupEvent, GroupEventAdapter.GroupEventViewHolder> implements GroupEventObservable {
 
@@ -90,7 +103,16 @@ public class GroupEventAdapter extends PagedListAdapter<GroupEvent, GroupEventAd
             holder.name.setTextColor(groupEvent.textColor);
             holder.description.setTextColor(groupEvent.textColor);
             holder.progressText.setTextColor(groupEvent.textColor);
-            holder.progress.getProgressDrawable().setTint(groupEvent.textColor);
+
+//            holder.progress.getProgressDrawable().setTint(groupEvent.textColor);
+            //Source: https://stackoverflow.com/questions/10951978/change-progressbar-color-through-code-only-in-android
+            LayerDrawable progressBarDrawable = (LayerDrawable) holder.progress.getProgressDrawable();
+//            progressBarDrawable.mutate();
+            Drawable backgroundDrawable = progressBarDrawable.getDrawable(0); //id 1 is in my custom prog-bar for the secondary progress
+            Drawable progressDrawable = progressBarDrawable.getDrawable(2);
+            backgroundDrawable.setColorFilter(MaterialColorHelper.getContrastVersionForColor(groupEvent.textColor), PorterDuff.Mode.SRC_IN);
+            progressDrawable.setColorFilter(groupEvent.textColor, PorterDuff.Mode.SRC_IN);
+
             holder.container.setCardBackgroundColor(groupEvent.color);
 //            holder.container.setOnClickListener(editGroupEventOnClickListener);
             holder.container.setOnLongClickListener(new View.OnLongClickListener() {
@@ -120,7 +142,6 @@ public class GroupEventAdapter extends PagedListAdapter<GroupEvent, GroupEventAd
             holder.clear();
         }
     }
-
 
 
     private void setIcon(GroupEventAdapter.GroupEventViewHolder holder, int iconId, int iconColor){

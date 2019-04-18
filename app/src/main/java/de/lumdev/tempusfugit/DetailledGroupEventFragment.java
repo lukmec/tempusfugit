@@ -2,6 +2,9 @@ package de.lumdev.tempusfugit;
 
 
 import android.content.Context;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.LayerDrawable;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -28,6 +31,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.widget.Toolbar;
+import de.lumdev.tempusfugit.util.MaterialColorHelper;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
@@ -140,7 +144,16 @@ public class DetailledGroupEventFragment extends Fragment {
                 name.setTextColor(groupEvent.textColor);
                 description.setTextColor(groupEvent.textColor);
                 progressText.setTextColor(groupEvent.textColor);
-                progress.getProgressDrawable().setTint(groupEvent.textColor);
+
+//                progress.getProgressDrawable().setTint(groupEvent.textColor);
+                //Source: https://stackoverflow.com/questions/10951978/change-progressbar-color-through-code-only-in-android
+                LayerDrawable progressBarDrawable = (LayerDrawable) progress.getProgressDrawable();
+//            progressBarDrawable.mutate();
+                Drawable backgroundDrawable = progressBarDrawable.getDrawable(0); //id 1 is in my custom prog-bar for the secondary progress
+                Drawable progressDrawable = progressBarDrawable.getDrawable(2);
+                backgroundDrawable.setColorFilter(MaterialColorHelper.getContrastVersionForColor(groupEvent.textColor), PorterDuff.Mode.SRC_IN);
+                progressDrawable.setColorFilter(groupEvent.textColor, PorterDuff.Mode.SRC_IN);
+
                 container.setCardBackgroundColor(groupEvent.color);
                 container.setOnClickListener(new View.OnClickListener() {
                     @Override

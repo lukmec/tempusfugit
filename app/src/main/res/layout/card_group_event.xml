@@ -61,9 +61,29 @@
                 app:layout_constraintStart_toEndOf="@+id/rVCard_groupEventIcon"
                 app:layout_constraintTop_toBottomOf="@+id/rVCard_groupEventName" />
 
+            <!--<ProgressBar-->
+                <!--android:id="@+id/rVCard_groupEventProgress"-->
+                <!--style="@android:style/Widget.ProgressBar.Horizontal"-->
+                <!--android:progressDrawable="@drawable/custom_progressbar_horizontal"-->
+                <!--android:layout_width="0dp"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_marginStart="@dimen/normal_padding"-->
+                <!--android:layout_marginTop="@dimen/normal_padding"-->
+                <!--android:layout_marginEnd="@dimen/normal_padding"-->
+                <!--android:layout_marginBottom="@dimen/normal_padding"-->
+                <!--android:max="100"-->
+                <!--android:progress="0"-->
+                <!--android:progressTint="@color/colorAccent"-->
+                <!--app:layout_constraintBottom_toBottomOf="parent"-->
+                <!--app:layout_constraintEnd_toEndOf="parent"-->
+                <!--app:layout_constraintStart_toStartOf="parent"-->
+                <!--app:layout_constraintTop_toBottomOf="@+id/rVCard_groupEventDescription"-->
+                <!--android:scaleY="0.15"/>-->
+
             <ProgressBar
                 android:id="@+id/rVCard_groupEventProgress"
-                style="?android:attr/progressBarStyleHorizontal"
+                style="@style/CustomProgressBarHorizontal"
+                android:theme="@style/CustomProgressBarHorizontal"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/normal_padding"
@@ -76,7 +96,8 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/rVCard_groupEventDescription" />
+                app:layout_constraintTop_toBottomOf="@+id/rVCard_groupEventDescription"
+                android:scaleY="0.15"/>
 
             <TextView
                 android:id="@+id/rVCard_groupEvent_progressText"
