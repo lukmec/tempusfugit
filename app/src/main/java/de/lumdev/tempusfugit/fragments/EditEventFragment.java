@@ -1,18 +1,23 @@
-package de.lumdev.tempusfugit;
+package de.lumdev.tempusfugit.fragments;
 
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.SharedPreferences;
+import android.content.res.ColorStateList;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.cardview.widget.CardView;
 import androidx.core.content.ContextCompat;
 import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,6 +38,10 @@ import org.threeten.bp.Duration;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.fragment.NavHostFragment;
+import androidx.preference.PreferenceManager;
+import de.lumdev.tempusfugit.fragments.EditEventFragmentArgs;
+import de.lumdev.tempusfugit.MainViewModel;
+import de.lumdev.tempusfugit.R;
 import de.lumdev.tempusfugit.data.Event;
 import de.lumdev.tempusfugit.data.GroupEvent;
 import de.lumdev.tempusfugit.data.QuickDirtyDataHolder;
@@ -45,11 +54,25 @@ public class EditEventFragment extends Fragment {
 
     private MainViewModel viewModel;
     private TabLayout tabLayout;
-    private FloatingActionButton fab;
+    private FloatingActionButton fabMain;
+    private FloatingActionButton fabArchive;
+    private FloatingActionButton fabDelete;
     private View.OnClickListener createOrEditEventOnClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
             createOrUpdateEvent(v);
+        }
+    };
+    private View.OnClickListener archiveEventOnClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            setArchiveStateOfEvent(v);
+        }
+    };
+    private View.OnClickListener deleteEventOnClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            deleteEvent(v);
         }
     };
 
@@ -90,9 +113,13 @@ public class EditEventFragment extends Fragment {
         toolbar.setTitle(R.string.dest_edit_event);
 //        tabLayout = getActivity().findViewById(R.id.tabLayout_main);
 //        tabLayout.setVisibility(View.GONE); //hide navigation from user while editing group event
-        fab = rootView.findViewById(R.id.fab_edt_e);
-//        fab.show();
-        fab.setOnClickListener(createOrEditEventOnClickListener);
+        fabMain = rootView.findViewById(R.id.fab_edt_e);
+        fabArchive = rootView.findViewById(R.id.fab_arch_e);
+        fabDelete = rootView.findViewById(R.id.fab_del_e);
+//        fabMain.show();
+        fabMain.setOnClickListener(createOrEditEventOnClickListener);
+        fabArchive.setOnClickListener(archiveEventOnClickListener);
+        fabDelete.setOnClickListener(deleteEventOnClickListener);
 
         //get Views related to event
         eT_name = rootView.findViewById(R.id.eT_edit_E_name);
@@ -179,8 +206,33 @@ public class EditEventFragment extends Fragment {
             newParentGroupEventId = givenParentGroupEventId;
         }
 
+        //try to get defaultParentGroupEvent
+        if(newParentGroupEventId == -1){
+            //meaning parentGroupEvent is not explicitly given --> select default groupEvent from Preferences (if set there)
+            SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity() /* Activity context */);
+            String defaultGroupEventName = sharedPreferences.getString(getString(R.string.pref_id_default_group_event_name), "no groupEvent set");
+            int defaultGroupEventId = sharedPreferences.getInt(getString(R.string.pref_id_default_group_event_id), -1);
+//            Log.d("--->", defaultGroupEventName);
+//            Log.d("--->", ""+defaultGroupEventId);
+            //set parentGroupEventId in UI to default from SharedPreferences (if it exists)
+            if(defaultGroupEventId != -1){
+                newParentGroupEventId = defaultGroupEventId;
+            }
+        }
+
+        //set values of fields, according to provided groupEvent
+        if (newParentGroupEventId != -1){
+            LiveData<GroupEvent> selectedGroupEvent = viewModel.getGroupEvent(newParentGroupEventId);
+            selectedGroupEvent.observe(this, groupEvent -> {
+                //update UI
+                cV_container_parent_ge.setCardBackgroundColor(groupEvent.color);
+                tV_parent_ge.setText(groupEvent.name);
+                tV_parent_ge.setTextColor(groupEvent.textColor);
+                setIcon(groupEvent.icon, tV_parent_ge, groupEvent.textColor);
+            });
+        }
         //set values of fields, according to provided event
-        if (givenEventId != -1 && givenParentGroupEventId != -1) {
+        if (givenEventId != -1) {
             //retrieve groupEvent
             LiveData<Event> selectedEvent = viewModel.getEvent(givenEventId);
             selectedEvent.observe(this, event -> {
@@ -201,27 +253,34 @@ public class EditEventFragment extends Fragment {
                 sB_duration_minutes.setProgress(Math.round(minutes/5f));
                 if (hours <= 12) sB_duration_hours.setProgress((int)hours);
 
+                if (! event.archived){
+                    fabDelete.hide();
+                }
+                if (event.archived){
+                    boolean elementsDeletable = PreferenceManager.getDefaultSharedPreferences(getContext()).getBoolean(getContext().getResources().getString(R.string.pref_id_elements_deletable), true);
+                    if (elementsDeletable) {
+                        fabDelete.show();
+                    }
+                    fabArchive.setImageResource(R.drawable.ic_unarchive_white_24dp);
+                    fabArchive.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.fab_unarchive)));
+                }
             });
-            LiveData<GroupEvent> selectedGroupEvent = viewModel.getGroupEvent(givenParentGroupEventId);
-            selectedGroupEvent.observe(this, groupEvent -> {
-                //update UI
-                cV_container_parent_ge.setCardBackgroundColor(groupEvent.color);
-                tV_parent_ge.setText(groupEvent.name);
-                tV_parent_ge.setTextColor(groupEvent.textColor);
-                setIcon(groupEvent.icon, tV_parent_ge, groupEvent.textColor);
-            });
+        }else{ //meaning eventId == -1 (Event not created yet)
+            //disable possibility to archived group event while in creation of new
+            fabArchive.hide();
         }
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        fab.setImageResource(R.drawable.ic_check_black_24dp);
+        fabMain.setImageResource(R.drawable.ic_check_black_24dp);
     }
 
     public void createOrUpdateEvent(View v) {
         if (isValidInput()) {
             if (givenEventId != -1){
+                //update event
                 eventToEdit.name = eT_name.getText().toString();
                 eventToEdit.description = eT_description.getText().toString();
                 eventToEdit.parentId = this.newParentGroupEventId;
@@ -230,10 +289,12 @@ public class EditEventFragment extends Fragment {
                 eventToEdit.duration = Duration.ofMinutes(sB_duration_minutes.getProgress()*5).plusHours(sB_duration_hours.getProgress());
                 viewModel.updateEvent(eventToEdit);
             }else {
+                //insert new event
                 Event event = new Event(eT_name.getText().toString(), eT_description.getText().toString(), this.newParentGroupEventId, sB_importance.getProgress(), sB_urgency.getProgress(), Duration.ofMinutes(sB_duration_minutes.getProgress()*5).plusHours(sB_duration_hours.getProgress()));
                 viewModel.insertEvent(event);
             }
-            fab.hide();
+            viewModel.calculateToDoDateOfEvents(getContext()); //re calculate List of events that have to be today (and which have to be done later)
+            fabMain.hide();
             hideKeyboardFrom(v.getContext(), v);
             NavHostFragment.findNavController(this).navigateUp();
         }else{
@@ -262,6 +323,51 @@ public class EditEventFragment extends Fragment {
         if (this.getContext() != null) {
             Toast.makeText(getContext(), textToToast, Toast.LENGTH_SHORT).show();
         }
+    }
+
+    private void setArchiveStateOfEvent(View v){
+        if (eventToEdit != null){
+            if (!eventToEdit.archived) {
+                viewModel.setEventArchivedState(eventToEdit.id, true);
+                fabArchive.setImageResource(R.drawable.ic_unarchive_white_24dp);
+                fabArchive.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.fab_unarchive)));
+                toast(getString(R.string.toast_element_archived, getString(R.string.event)));
+            }
+            if (eventToEdit.archived) {
+                viewModel.setEventArchivedState(eventToEdit.id, false);
+                fabArchive.setImageResource(R.drawable.ic_archive_white_24dp);
+                fabArchive.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.fab_archive)));
+                toast(getString(R.string.toast_element_unarchived, getString(R.string.event)));
+            }
+//            NavHostFragment.findNavController(this).navigateUp();
+        }
+    }
+
+    private void deleteEvent(View v){
+        if (eventToEdit != null){
+
+                //show dialog for checking whether user is sure
+                AlertDialog.Builder builder = new AlertDialog.Builder(this.getActivity());
+                builder.setMessage(getString(R.string.dialog_delete_question, getString(R.string.event)));
+                builder.setPositiveButton(R.string.dialog_delete_yes, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        // User clicked YES button (event shall be deleted)
+                        NavHostFragment.findNavController(getParentFragment()).navigateUp(); //navigate up, in order to prevent from displaying page, where shown data is deleted
+                        viewModel.deleteEvent(eventToEdit.id); //delete actual data (after navigating to a page, where data isn't needed any more)
+                        toast(getString(R.string.toast_element_deleted, getString(R.string.event)));
+                    }
+                });
+                builder.setNegativeButton(R.string.dialog_delete_cancel, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        // User cancelled the dialog
+                    }
+                });
+
+                AlertDialog dialog = builder.create();
+                dialog.show();
+
+            }
+//            NavHostFragment.findNavController(this).navigateUp();
     }
 
     private void setIcon(int iconId, TextView setIconInThisView, int iconColor){

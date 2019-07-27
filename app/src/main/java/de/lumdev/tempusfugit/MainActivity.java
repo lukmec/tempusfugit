@@ -13,7 +13,9 @@ import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.NavigationUI;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
+import androidx.preference.PreferenceManager;
 import androidx.viewpager.widget.ViewPager;
+import de.lumdev.tempusfugit.settings.SettingsPersonalizationFragment;
 //import android.support.v7.widget.Toolbar;
 
 import android.content.Intent;
@@ -73,6 +75,12 @@ public class MainActivity extends AppCompatActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        //start or ensure that CleanTaskListWorker is enqued in WorkManager
+        CleanTaskListWorker.enqueueSelf(this, Integer.valueOf(
+                (String) PreferenceManager.getDefaultSharedPreferences(this)
+                        .getString(getResources().getString(R.string.pref_id_time_clean_list), "-1")
+        ));
 
         //find and store NavController
         NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment);

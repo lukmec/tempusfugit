@@ -60,7 +60,7 @@ public class EventAdapter extends PagedListAdapter<Event, EventAdapter.EventView
     IconHelper iconHelper;
     private ArrayList<EventObserver> eventObservers;
 
-    protected EventAdapter(Context context) {
+    public EventAdapter(Context context) {
 //        mInflater = LayoutInflater.from(context);
         super(DIFF_CALLBACK);
         this.context = context;

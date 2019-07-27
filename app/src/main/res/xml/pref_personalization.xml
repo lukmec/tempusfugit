@@ -29,7 +29,7 @@
             app:title="@string/pref_show_notification_title" />
 
         <ListPreference
-            app:defaultValue="1"
+            app:defaultValue="-1"
             app:key="@string/pref_id_time_clean_list"
             app:entries="@array/pref_time_clean_list_entries"
             app:entryValues="@array/pref_time_clean_list_values"

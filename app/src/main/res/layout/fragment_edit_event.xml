@@ -22,6 +22,7 @@
                 android:ems="10"
                 android:hint="@string/hint_eventName"
                 android:inputType="textPersonName"
+                android:singleLine="false"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -34,6 +35,7 @@
                 android:ems="10"
                 android:hint="@string/hint_eventDescription"
                 android:inputType="textPersonName"
+                android:singleLine="false"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/eT_edit_E_name" />
@@ -328,5 +330,36 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:srcCompat="@drawable/ic_add_black_24dp" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab_arch_e"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/fab_margin_small"
+        android:layout_marginBottom="@dimen/normal_padding"
+        android:clickable="true"
+        android:focusable="true"
+        app:backgroundTint="@color/fab_archive"
+        app:fabCustomSize="@dimen/fab_size_secondary"
+        app:layout_constraintBottom_toTopOf="@+id/fab_edt_e"
+        app:layout_constraintEnd_toEndOf="@+id/fab_edt_e"
+        app:layout_constraintStart_toStartOf="@+id/fab_edt_e"
+        app:srcCompat="@drawable/ic_archive_white_24dp" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab_del_e"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/fab_margin_small"
+        android:layout_marginBottom="@dimen/normal_padding"
+        android:clickable="true"
+        android:focusable="true"
+        android:visibility="gone"
+        app:backgroundTint="@color/fab_archive"
+        app:fabCustomSize="@dimen/fab_size_secondary"
+        app:layout_constraintBottom_toTopOf="@+id/fab_arch_e"
+        app:layout_constraintEnd_toEndOf="@+id/fab_arch_e"
+        app:layout_constraintStart_toStartOf="@+id/fab_arch_e"
+        app:srcCompat="@drawable/ic_delete_forever_white_24dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

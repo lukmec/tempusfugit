@@ -25,6 +25,9 @@ public interface GroupEventDao {
     @Query("DELETE FROM group_event")
     void deleteAll();
 
+    @Query("DELETE FROM group_event WHERE id = :id")
+    void deleteById(int id);
+
     @Query("SELECT * FROM group_event ORDER BY id ASC")
     DataSource.Factory<Integer, GroupEvent> getAllGroupEvents();
 //    LiveData<List<GroupEvent>> getAllGroupEvents();

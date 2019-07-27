@@ -1,18 +1,25 @@
-package de.lumdev.tempusfugit;
+package de.lumdev.tempusfugit.fragments;
 
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.res.ColorStateList;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.fragment.NavHostFragment;
+import androidx.preference.PreferenceManager;
+import de.lumdev.tempusfugit.fragments.EditGroupEventFragmentArgs;
+import de.lumdev.tempusfugit.MainViewModel;
+import de.lumdev.tempusfugit.R;
 import de.lumdev.tempusfugit.data.GroupEvent;
 import de.lumdev.tempusfugit.util.MaterialColorHelper;
 import petrov.kristiyan.colorpicker.ColorPicker;
@@ -44,6 +51,7 @@ public class EditGroupEventFragment extends Fragment implements IconDialog.Callb
     private TabLayout tabLayout;
     private FloatingActionButton fabMain;
     private FloatingActionButton fabArchive;
+    private FloatingActionButton fabDelete;
     private View.OnClickListener newGroupEventOnClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
@@ -70,6 +78,12 @@ public class EditGroupEventFragment extends Fragment implements IconDialog.Callb
         @Override
         public void onClick(View v) {
             selectIcon(v);
+        }
+    };
+    private View.OnClickListener deleteGroupEventOnClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            deleteGroupEvent(v);
         }
     };
     private int pickedColor;
@@ -105,6 +119,7 @@ public class EditGroupEventFragment extends Fragment implements IconDialog.Callb
 //        tabLayout.setVisibility(View.GONE); //hide navigation from user while editing group event
         fabMain = rootView.findViewById(R.id.fab_edt_ge);
         fabArchive = rootView.findViewById(R.id.fab_arch_ge);
+        fabDelete = rootView.findViewById(R.id.fab_del_ge);
 //        fabMain.show();
         eT_name = rootView.findViewById(R.id.eT_newGE_name);
         eT_description = rootView.findViewById(R.id.eT_newGE_description);
@@ -117,6 +132,7 @@ public class EditGroupEventFragment extends Fragment implements IconDialog.Callb
         //set onClickListeners
         fabMain.setOnClickListener(newGroupEventOnClickListener);
         fabArchive.setOnClickListener(archiveGroupEventOnClickListener);
+        fabDelete.setOnClickListener(deleteGroupEventOnClickListener);
         btn_color.setOnClickListener(selectColorOnClickListener);
         btn_icon.setOnClickListener(selectIconOnClickListener);
 
@@ -151,7 +167,18 @@ public class EditGroupEventFragment extends Fragment implements IconDialog.Callb
                 pickedIconId = ge.icon;
                 iconPicked = true;
                 setIcon(pickedIconId, ge.textColor);
-                if (ge.archived) fabArchive.setImageResource(R.drawable.ic_unarchive_white_24dp);
+
+                if (! ge.archived){
+                    fabDelete.hide();
+                }
+                if (ge.archived){
+                    boolean elementsDeletable = PreferenceManager.getDefaultSharedPreferences(getContext()).getBoolean(getContext().getResources().getString(R.string.pref_id_elements_deletable), true);
+                    if (elementsDeletable) {
+                        fabDelete.show();
+                    }
+                    fabArchive.setImageResource(R.drawable.ic_unarchive_white_24dp);
+                    fabArchive.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.fab_unarchive)));
+                }
             });
 //            //set values in views
 //            if (groupEvent != null && groupEvent.getValue() != null) {
@@ -206,15 +233,44 @@ public class EditGroupEventFragment extends Fragment implements IconDialog.Callb
             if (!groupEventToEdit.archived) {
                 viewModel.setGroupEventArchivedState(groupEventId, true);
                 fabArchive.setImageResource(R.drawable.ic_unarchive_white_24dp);
+                fabArchive.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.fab_unarchive)));
                 toast(getString(R.string.toast_element_archived, getString(R.string.group_event)));
             }
             if (groupEventToEdit.archived) {
                 viewModel.setGroupEventArchivedState(groupEventId, false);
                 fabArchive.setImageResource(R.drawable.ic_archive_white_24dp);
+                fabArchive.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.fab_archive)));
                 toast(getString(R.string.toast_element_unarchived, getString(R.string.group_event)));
             }
 //            NavHostFragment.findNavController(this).navigateUp();
         }
+    }
+
+    private void deleteGroupEvent(View v){
+        if (groupEventId != -1){
+
+            //show dialog for checking whether user is sure
+            AlertDialog.Builder builder = new AlertDialog.Builder(this.getActivity());
+            builder.setMessage(getString(R.string.dialog_delete_question, getString(R.string.group_event)) + getString(R.string.dialog_delete_hint_corresponding_elements));
+            builder.setPositiveButton(R.string.dialog_delete_yes, new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int id) {
+                    // User clicked YES button
+                    NavHostFragment.findNavController(getParentFragment()).navigateUp(); //navigate up, in order to prevent from displaying page, where shown data is deleted
+                    viewModel.deleteGroupEvent(groupEventId); //delete actual data (after navigating to a page, where data isn't needed any more)
+                    toast(getString(R.string.toast_element_deleted, getString(R.string.group_event)));
+                }
+            });
+            builder.setNegativeButton(R.string.dialog_delete_cancel, new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int id) {
+                    // User cancelled the dialog
+                }
+            });
+
+            AlertDialog dialog = builder.create();
+            dialog.show();
+
+        }
+//            NavHostFragment.findNavController(this).navigateUp();
     }
 
     public void selectColor(View v){
@@ -260,7 +316,7 @@ public class EditGroupEventFragment extends Fragment implements IconDialog.Callb
                 .setSelectedIcons(preselectedIcons)
 //        .setMaxSelection(1, false) //default value is 1 --> user can only select 1 icon
                 .setShowSelectButton(false)
-                //ATTENTION: Search is only provided in english, french, portuguese
+                //ATTENTION: Search is only provided in english, french, portuguese (now also in german!!)
                 .setSearchEnabled(IconDialog.VISIBILITY_ALWAYS, Locale.getDefault())
                 .setTitle(IconDialog.VISIBILITY_NEVER, getString(R.string.iconpicker_select_icon))
                 .setTargetFragment(EditGroupEventFragment.this, 0);

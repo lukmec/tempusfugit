@@ -1,4 +1,4 @@
-package de.lumdev.tempusfugit;
+package de.lumdev.tempusfugit.fragments;
 
 
 import android.content.Context;
@@ -19,6 +19,11 @@ import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import de.lumdev.tempusfugit.fragments.DetailledGroupEventFragmentArgs;
+import de.lumdev.tempusfugit.fragments.DetailledGroupEventFragmentDirections;
+import de.lumdev.tempusfugit.EventAdapter;
+import de.lumdev.tempusfugit.MainViewModel;
+import de.lumdev.tempusfugit.R;
 import de.lumdev.tempusfugit.data.Event;
 import de.lumdev.tempusfugit.data.GroupEvent;
 import de.lumdev.tempusfugit.util.EventObserver;
@@ -32,7 +37,6 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.widget.Toolbar;
-import de.lumdev.tempusfugit.util.MaterialColorHelper;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
@@ -190,7 +194,7 @@ public class DetailledGroupEventFragment extends Fragment {
         adapter.registerObserver(new EventObserver() {
             @Override
             public void onEventDone(Event event, boolean newDoneState) {
-                viewModel.setEventDone(event.id, event.parentId, newDoneState);
+                viewModel.setEventDone(event.id, newDoneState);
             }
             @Override
             public void onActionEditEvent(Event event){
@@ -211,7 +215,17 @@ public class DetailledGroupEventFragment extends Fragment {
 
     public void createNewEvent(View v) {
         fab.hide();
-        NavHostFragment.findNavController(this).navigate(R.id.action_dtl_ge_dest_to_edt_e_dest);
+
+        if (selectedGroupEventId != -1) {
+            //if groupEventId is set, go into event edit mode with preselcted GroupEvent
+            DetailledGroupEventFragmentDirections.ActionDtlGeDestToEdtEDest action = DetailledGroupEventFragmentDirections.actionDtlGeDestToEdtEDest();
+//            action.setEventId(-1); //not needed, since -1 is default for eventId
+            action.setParentGroupEvent(selectedGroupEventId);
+            NavHostFragment.findNavController(getParentFragment()).navigate(action);
+        }else{
+            //if group event not set, go into edit mode without addional info
+            NavHostFragment.findNavController(this).navigate(R.id.action_dtl_ge_dest_to_edt_e_dest);
+        }
     }
 
     private void setIcon(int iconId, ImageView setIconInThisView, int iconColor){

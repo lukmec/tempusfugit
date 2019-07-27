@@ -74,7 +74,7 @@ public class GroupEventAdapter extends PagedListAdapter<GroupEvent, GroupEventAd
     IconHelper iconHelper;
     private ArrayList<GroupEventObserver> groupEventObservers;
 
-    protected GroupEventAdapter(Context context) {
+    public GroupEventAdapter(Context context) {
 //        mInflater = LayoutInflater.from(context);
         super(DIFF_CALLBACK);
         this.context = context;

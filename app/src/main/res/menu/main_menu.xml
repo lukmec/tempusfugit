@@ -11,6 +11,10 @@
         android:icon="@drawable/ic_archive_white_24dp"
         android:title="@string/menu_label_archived_group_event" />
     <item
+        android:id="@+id/ovrw_arch_e_dest"
+        android:icon="@drawable/ic_archive_white_24dp"
+        android:title="@string/menu_label_archived_event" />
+    <item
         android:id="@+id/abt_app_dest"
         android:icon="@drawable/ic_info_outline_black_24dp"
         android:title="@string/menu_label_aboutApp" />

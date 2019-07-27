@@ -8,7 +8,7 @@
 
     <fragment
         android:id="@+id/ovrvw_ge_dest"
-        android:name="de.lumdev.tempusfugit.OverviewGroupEventFragment"
+        android:name="de.lumdev.tempusfugit.fragments.OverviewGroupEventFragment"
         android:label="OvrVwGEFragm"
         tools:layout="@layout/fragment_overview_group_event" >
         <action
@@ -28,7 +28,7 @@
     </fragment>
     <fragment
         android:id="@+id/edt_ge_dest"
-        android:name="de.lumdev.tempusfugit.EditGroupEventFragment"
+        android:name="de.lumdev.tempusfugit.fragments.EditGroupEventFragment"
         android:label="EdtGEFragm"
         tools:layout="@layout/fragment_edit_group_event">
         <argument
@@ -38,7 +38,7 @@
     </fragment>
     <fragment
         android:id="@+id/ovrvw_e_dest"
-        android:name="de.lumdev.tempusfugit.OverviewEventFragment"
+        android:name="de.lumdev.tempusfugit.fragments.OverviewEventFragment"
         android:label="OvrVwEFragm"
         tools:layout="@layout/fragment_overview_event" >
         <action
@@ -54,7 +54,7 @@
     </fragment>
     <fragment
         android:id="@+id/edt_e_dest"
-        android:name="de.lumdev.tempusfugit.EditEventFragment"
+        android:name="de.lumdev.tempusfugit.fragments.EditEventFragment"
         android:label="EdtEFragm"
         tools:layout="@layout/fragment_edit_event" >
         <argument
@@ -68,7 +68,7 @@
     </fragment>
     <fragment
         android:id="@+id/dtl_ge_dest"
-        android:name="de.lumdev.tempusfugit.DetailledGroupEventFragment"
+        android:name="de.lumdev.tempusfugit.fragments.DetailledGroupEventFragment"
         android:label="DtlGEFragm"
         tools:layout="@layout/fragment_detailled_group_event" >
         <action
@@ -95,7 +95,7 @@
     </fragment>
     <fragment
         android:id="@+id/slct_ge_dest"
-        android:name="de.lumdev.tempusfugit.SelectGroupEventDialogFragment"
+        android:name="de.lumdev.tempusfugit.fragments.SelectGroupEventDialogFragment"
         android:label="SlctGEDiagFragm"
         tools:layout="@layout/fragment_overview_group_event" >
         <action
@@ -110,7 +110,7 @@
     </fragment>
     <fragment
         android:id="@+id/abt_app_dest"
-        android:name="de.lumdev.tempusfugit.AboutThisAppFragment"
+        android:name="de.lumdev.tempusfugit.fragments.AboutThisAppFragment"
         android:label="AbtAppFragm"
         tools:layout="@layout/fragment_about_this_app" />
     <fragment

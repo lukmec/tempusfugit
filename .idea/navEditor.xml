@@ -616,13 +616,34 @@
                       </LayoutPositions>
                     </value>
                   </entry>
+                  <entry key="ovrw_arch_e_dest">
+                    <value>
+                      <LayoutPositions>
+                        <option name="myPosition">
+                          <Point>
+                            <option name="x" value="389" />
+                            <option name="y" value="975" />
+                          </Point>
+                        </option>
+                        <option name="myPositions">
+                          <map>
+                            <entry key="action_ovrw_arch_e_dest_to_edt_e_dest">
+                              <value>
+                                <LayoutPositions />
+                              </value>
+                            </entry>
+                          </map>
+                        </option>
+                      </LayoutPositions>
+                    </value>
+                  </entry>
                   <entry key="ovrw_arch_ge_dest">
                     <value>
                       <LayoutPositions>
                         <option name="myPosition">
                           <Point>
-                            <option name="x" value="-13" />
-                            <option name="y" value="-94" />
+                            <option name="x" value="356" />
+                            <option name="y" value="-365" />
                           </Point>
                         </option>
                         <option name="myPositions">

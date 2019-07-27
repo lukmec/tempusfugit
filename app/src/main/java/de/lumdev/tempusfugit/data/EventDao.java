@@ -29,6 +29,9 @@ public interface EventDao {
     @Query("DELETE FROM event")
     void deleteAll();
 
+    @Query("DELETE FROM event WHERE id = :id")
+    void deleteById(int id);
+
     @Query("SELECT * FROM event ORDER BY toDoDay, priority DESC")
     DataSource.Factory<Integer, Event> getAllEvents();
 //    LiveData<List<Event>> getAllEvents();
@@ -60,5 +63,8 @@ public interface EventDao {
 
     @Query("UPDATE event SET toDoDay = :toDoDay WHERE id = :id")
     void setToDoDay(int id, int toDoDay);
+
+    @Query("UPDATE event SET archived = 1 WHERE done = 1 AND archived = 0")
+    void setDoneEventsArchived();
 
 }

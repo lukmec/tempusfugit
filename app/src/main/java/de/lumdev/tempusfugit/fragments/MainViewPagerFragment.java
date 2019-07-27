@@ -1,9 +1,11 @@
-package de.lumdev.tempusfugit;
+package de.lumdev.tempusfugit.fragments;
 
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
+import de.lumdev.tempusfugit.MainPagerAdapter;
+import de.lumdev.tempusfugit.R;
 
 import android.view.LayoutInflater;
 import android.view.View;

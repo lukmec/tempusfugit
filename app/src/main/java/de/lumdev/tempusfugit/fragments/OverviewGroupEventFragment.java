@@ -1,13 +1,16 @@
-package de.lumdev.tempusfugit;
+package de.lumdev.tempusfugit.fragments;
 
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
-import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import de.lumdev.tempusfugit.GroupEventAdapter;
+import de.lumdev.tempusfugit.MainViewModel;
+import de.lumdev.tempusfugit.fragments.MainViewPagerFragmentDirections;
+import de.lumdev.tempusfugit.R;
 import de.lumdev.tempusfugit.data.GroupEvent;
 import de.lumdev.tempusfugit.util.GroupEventObserver;
 

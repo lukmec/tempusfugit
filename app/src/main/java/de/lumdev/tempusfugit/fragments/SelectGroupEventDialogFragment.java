@@ -1,4 +1,4 @@
-package de.lumdev.tempusfugit;
+package de.lumdev.tempusfugit.fragments;
 
 import android.app.Dialog;
 import android.os.Bundle;
@@ -10,6 +10,9 @@ import androidx.fragment.app.DialogFragment;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import de.lumdev.tempusfugit.GroupEventAdapter;
+import de.lumdev.tempusfugit.MainViewModel;
+import de.lumdev.tempusfugit.R;
 import de.lumdev.tempusfugit.data.GroupEvent;
 import de.lumdev.tempusfugit.data.QuickDirtyDataHolder;
 import de.lumdev.tempusfugit.util.GroupEventObserver;

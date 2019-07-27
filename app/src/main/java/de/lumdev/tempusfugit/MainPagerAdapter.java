@@ -1,10 +1,6 @@
 package de.lumdev.tempusfugit;
 
 import android.content.Context;
-import android.graphics.drawable.Drawable;
-import android.text.Spannable;
-import android.text.SpannableString;
-import android.text.style.ImageSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
@@ -16,6 +12,8 @@ import java.util.List;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
+import de.lumdev.tempusfugit.fragments.OverviewEventFragment;
+import de.lumdev.tempusfugit.fragments.OverviewToDoEventFragment;
 
 //Source: https://www.androidhive.info/2015/09/android-material-design-working-with-tabs/
 public class MainPagerAdapter extends FragmentPagerAdapter {

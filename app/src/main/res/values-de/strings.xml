@@ -58,7 +58,7 @@
     <string name="pref_elements_deletable_title">Elemente löschbar</string>
     <string name="pref_page_planning_preferences">Planungspräferenzen</string>
     <string name="pref_working_capacity_title">Arbeitskapazität pro Tag</string>
-    <string name="pref_buffer_time_title">Pufferzeit (in %)</string>
+    <string name="pref_buffer_time_title">Pufferzeit</string>
     <string name="pref_weighting_importance_title">Gewichtung Wichtigkeit</string>
     <string name="pref_weighting_urgency_title">Gewichtung Dringlichkeit</string>
     <string name="pref_cat_pers_export">Aufgaben exportieren</string>
@@ -70,7 +70,7 @@
     <string name="pref_time_clean_list_title">Leere Aufgabenübersicht</string>
     <string name="tab_label_group_todo_overview">To Do</string>
     <string name="toolbar_label_about_app">Über diese App</string>
-    <string name="toolbar_label_archived_group_event">Archivierte gruppen</string>
+    <string name="toolbar_label_archived_group_event">Archivierte Gruppen</string>
     <string name="label_cV_event_tododay">Tag: %1$d</string>
     <string name="label_cV_event_priority">Prio: %1$.1f</string>
     <string name="content_description_cV_icon">Icon für Element</string>
@@ -95,10 +95,21 @@
         <item>12 Stunden</item>
     </string-array>
     <string-array name="pref_time_clean_list_entries">
+        <item>niemals</item>
+        <item>zweimal am Tag</item>
         <item>jeden Tag</item>
         <item>nach 2 Tagen</item>
         <item>nach 3 Tagen</item>
         <item>wöchentlich</item>
         <item>monatlich</item>
     </string-array>
+    <string name="menu_label_archived_group_event">Archivierte Gruppen</string>
+    <string name="dialog_delete_question">Soll diese %1$S permanent gelöscht werden?</string>
+    <string name="dialog_delete_yes">Ja, löschen</string>
+    <string name="toast_element_deleted">%1$s gelöscht.</string>
+    <string name="dialog_delete_cancel">Abbruch</string>
+    <string name="menu_label_archived_event">Archivierte Aufgaben</string>
+    <string name="dialog_delete_hint_corresponding_elements">Alle verbundenen Elemente werden auch gelöscht.</string>
+    <string name="pref_default_group_event">Standard Aufgaben-Gruppe</string>
+    <string name="pref_default_group_event_none_selected">keine Gruppe ausgewählt</string>
 </resources>

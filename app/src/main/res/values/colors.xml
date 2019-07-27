@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
+    <!--Good Color Calculator for matching colors: https://www.sessions.edu/color-calculator/-->
+
     <!--Colors work in progress)-->
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
@@ -52,6 +55,7 @@
     <color name="doneEventCard">#e8eaf6</color>    <!--equals primaryLight50-->
     <color name="fab">#ffffff</color>    <!--equals white-->
     <color name="fab_archive">#b53f51</color>    <!--equals primary_triadic_2-->
+    <color name="fab_unarchive">#51b53f</color>        <!--complemantary color to fab_archive-->
 
 
 </resources>

@@ -15,4 +15,11 @@
         app:key="@string/pref_id_elements_deletable"
         app:title="@string/pref_elements_deletable_title" />
 
+    <Preference
+        app:key="@string/pref_id_default_group_event"
+        app:defaultValue="@string/pref_default_group_event_none_selected"
+        app:singleLine="true"
+        app:title="@string/pref_default_group_event"
+        app:useSimpleSummaryProvider="true" />
+
 </androidx.preference.PreferenceScreen>

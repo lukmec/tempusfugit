@@ -7,6 +7,8 @@ import android.util.Log;
 
 import org.threeten.bp.Duration;
 
+import java.util.ArrayList;
+
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.paging.PagedList;
@@ -34,87 +36,115 @@ public class MainViewModel extends AndroidViewModel {
     }
 
     //get List of all GroupEvents
-    LiveData<PagedList<GroupEvent>> getAllGroupEvents(){ return allGroupEvents; };
+    public LiveData<PagedList<GroupEvent>> getAllGroupEvents(){ return allGroupEvents; };
 
     //get List of all Events
-    LiveData<PagedList<Event>> getAllEvents(){ return allEvents; };
+    public LiveData<PagedList<Event>> getAllEvents(){ return allEvents; };
 
     //get List of all Visible Events
-    LiveData<PagedList<Event>> getAllNonArchivedEvents(){ return allNonArchivedEvents; };
+    public LiveData<PagedList<Event>> getAllNonArchivedEvents(){ return allNonArchivedEvents; };
 
     //get List of all Visible GroupEvents
-    LiveData<PagedList<GroupEvent>> getAllNonArchivedGroupEvents(){ return allNonArchivedGroupEvents; };
+    public LiveData<PagedList<GroupEvent>> getAllNonArchivedGroupEvents(){ return allNonArchivedGroupEvents; };
 
     //return either all archived (true) or all non-archived (false) groupEvents
-    LiveData<PagedList<GroupEvent>> getGroupEventsByArchiveState(boolean archived){
+    public LiveData<PagedList<GroupEvent>> getGroupEventsByArchiveState(boolean archived){
         return dataRepository.getGroupEventsByArchiveState(archived);
     }
 
     //return either all archived (true) or all non-archived (false) groupEvents
-    LiveData<PagedList<Event>> getEventsByArchiveState(boolean archived){
+    public LiveData<PagedList<Event>> getEventsByArchiveState(boolean archived){
         return dataRepository.getEventsByArchiveState(archived);
     }
 
     //get List of all Events of specific GroupEvent
-    LiveData<PagedList<Event>> getAllEventsOfGroup(int groupEventId){
+    public LiveData<PagedList<Event>> getAllEventsOfGroup(int groupEventId){
         return dataRepository.getAllEventsOfGroup(groupEventId, false);
     };
 
     //get List of all Events of specific toDoDay
-    LiveData<PagedList<Event>> getAllEventsOfToDoDay(int toDoDay){
+    public LiveData<PagedList<Event>> getAllEventsOfToDoDay(int toDoDay){
         return dataRepository.getEventsOfToDoDay(toDoDay);
     };
 
+//    private ArrayList<Integer> eventsWithNotificationToShow = new ArrayList<>();
+//    private ArrayList<Integer> eventsWithDismissedNotification = new ArrayList<>();
+//    public ArrayList<Integer> getEventIdsForNotificationForToDoDayZero(int maxNotificationsToShow){
+//        if (eventsWithNotificationToShow.isEmpty()){
+//            for (int i=0; i<dataRepository.getEventsOfToDoDay(0).getValue().size() && i<maxNotificationsToShow;i++){
+//                int eventId = dataRepository.getEventsOfToDoDay(0).getValue().get(i).id;
+//                if (!eventsWithDismissedNotification.contains(eventId)) {
+//                    eventsWithNotificationToShow.add(eventId);
+//                }
+//            }
+//        }
+//        return eventsWithNotificationToShow;
+//    }
+//    public void setEventNotificationDismissed(int event_id){
+//        eventsWithDismissedNotification.add(event_id);
+//        eventsWithNotificationToShow.clear();
+//    }
+
     //get single Group Event
-    LiveData<GroupEvent> getGroupEvent(int groupEventId){
+    public LiveData<GroupEvent> getGroupEvent(int groupEventId){
         return dataRepository.getGroupEvent(groupEventId);
     }
 
     //get single Event
-    LiveData<Event> getEvent(int eventId){
+    public LiveData<Event> getEvent(int eventId){
         return dataRepository.getEvent(eventId);
     }
 
     //insert new Group Event to db
-    void insertGroupEvent(GroupEvent groupEvent){
+    public void insertGroupEvent(GroupEvent groupEvent){
         dataRepository.insertGroupEvent(groupEvent);
     }
 
     //update Group Event in db
-    void updateGroupEvent(GroupEvent groupEvent){
+    public void updateGroupEvent(GroupEvent groupEvent){
         dataRepository.updateGroupEvent(groupEvent);
     }
 
     //insert new Event to db
-    void insertEvent(Event event){
+    public void insertEvent(Event event){
         dataRepository.insertEvent(event);
 //        calculateToDoDateOfEvents();
     }
 
     //update Event in db
-    void updateEvent(Event event){
+    public void updateEvent(Event event){
         dataRepository.updateEvent(event);
 //        calculateToDoDateOfEvents();
     }
 
     //update archived state of event in db
-    void setEventArchivedState(int eventId, boolean archived){
+    public void setEventArchivedState(int eventId, boolean archived){
         dataRepository.setEventArchivedState(eventId, archived);
     }
 
     //update archived state of groupEvent in db
-    void setGroupEventArchivedState(int groupEventId, boolean archived){
+    public void setGroupEventArchivedState(int groupEventId, boolean archived){
         dataRepository.setGroupEventArchivedState(groupEventId, archived);
     }
 
     //update done state of event in db
-    void setEventDone(int eventId, int groupEventId, boolean done){
+    public void setEventDone(int eventId, boolean done){
         dataRepository.setEventDone(eventId, done);
 //        dataRepository.calculateGroupEventProgress(groupEventId); //---> not needed anymore, because Database Trigger handels calculation of progress
 //        Log.d("-->", "ViewModel.setEventDone("+done+")");
     }
 
-    void calculateToDoDateOfEvents(Context context){
+    //delete Event permanently in db
+    public void deleteEvent(int eventId){
+        dataRepository.deleteEventById(eventId);
+    }
+
+    //delete GroupEvent permanently in db
+    public void deleteGroupEvent(int groupEventId){
+        dataRepository.deleteGroupEventById(groupEventId);
+    }
+
+    public void calculateToDoDateOfEvents(Context context){
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context /* Activity context */);
         String wrkCapaHrsStr = sharedPreferences.getString(context.getResources().getString(R.string.pref_id_working_capacity), "4");
 //        String buffertimePercStr = sharedPreferences.getString(context.getResources().getString(R.string.pref_id_buffertime), "0");
@@ -127,6 +157,10 @@ public class MainViewModel extends AndroidViewModel {
         Duration wrkCapaPerDay = Duration.ofMinutes(totalCapaMinPerDay);
         dataRepository.calculateToDoDateOfEvents(wrkCapaPerDay);
 
+    }
+
+    public void setDoneEventsArchived(){
+        dataRepository.setDoneEventsArchived();
     }
 
 }

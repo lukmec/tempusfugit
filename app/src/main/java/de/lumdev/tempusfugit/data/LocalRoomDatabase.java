@@ -78,9 +78,11 @@ public abstract class LocalRoomDatabase extends RoomDatabase {
                     // 3) --> calculate priority when importance or urgency changes
                     db.execSQL("CREATE TRIGGER event_calc_priority_after_importance_change AFTER UPDATE OF importance ON event BEGIN UPDATE event SET priority = new.importance + new.urgency WHERE event.id = new.id; END;");
                     db.execSQL("CREATE TRIGGER event_calc_priority_after_urgency_change AFTER UPDATE OF urgency ON event BEGIN UPDATE event SET priority = new.importance + new.urgency WHERE event.id = new.id; END;");
-                    // 4) --> calculate group_event progress when new event is added, or when event is set to done
-                    db.execSQL("CREATE TRIGGER group_event_calc_progress_on_insert AFTER INSERT ON event BEGIN UPDATE group_event SET progress = round((SELECT count(event.id) FROM event WHERE event.parent_id = new.parent_id AND event.done ='1')/((SELECT count(event.id) FROM event WHERE event.parent_id = new.parent_id)*1.0)*100) WHERE id = new.parent_id; END;");
-                    db.execSQL("CREATE TRIGGER group_event_calc_progress_on_update AFTER UPDATE OF done ON event BEGIN UPDATE group_event SET progress = round((SELECT count(event.id) FROM event WHERE event.parent_id = new.parent_id AND event.done ='1')/((SELECT count(event.id) FROM event WHERE event.parent_id = new.parent_id)*1.0)*100) WHERE id = new.parent_id; END;");
+                    // 4) --> calculate group_event progress when new event is added, or when event is set to done (only consider events, that are not archived)
+                    db.execSQL("CREATE TRIGGER group_event_calc_progress_on_insert AFTER INSERT ON event BEGIN UPDATE group_event SET progress = round((SELECT count(event.id) FROM event WHERE event.parent_id = new.parent_id AND event.done ='1' AND event.archived = '0')/((SELECT count(event.id) FROM event WHERE event.parent_id = new.parent_id AND event.archived = '0')*1.0)*100) WHERE id = new.parent_id; END;");
+                    db.execSQL("CREATE TRIGGER group_event_calc_progress_on_update AFTER UPDATE OF done ON event BEGIN UPDATE group_event SET progress = round((SELECT count(event.id) FROM event WHERE event.parent_id = new.parent_id AND event.done ='1' AND event.archived = '0')/((SELECT count(event.id) FROM event WHERE event.parent_id = new.parent_id AND event.archived = '0')*1.0)*100) WHERE id = new.parent_id; END;");
+                    // 5) --> delete all corresponding events, when a groupEvent is deleted
+                    db.execSQL("CREATE TRIGGER delete_events_on_group_event_deletion AFTER DELETE ON group_event BEGIN DELETE FROM event WHERE event.parent_id = old.id; END;");
 
                     //populate when db is created (db is created with installation; reinstall app to recreate db)
                     new PopulateDbAsync(INSTANCE).execute();

@@ -1,4 +1,4 @@
-package de.lumdev.tempusfugit;
+package de.lumdev.tempusfugit.fragments;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -13,15 +13,19 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import de.lumdev.tempusfugit.data.GroupEvent;
-import de.lumdev.tempusfugit.util.GroupEventObserver;
+import de.lumdev.tempusfugit.EventAdapter;
+import de.lumdev.tempusfugit.MainViewModel;
+import de.lumdev.tempusfugit.fragments.OverviewArchivedEventFragmentDirections;
+import de.lumdev.tempusfugit.R;
+import de.lumdev.tempusfugit.data.Event;
+import de.lumdev.tempusfugit.util.EventObserver;
 
-public class OverviewArchivedGroupEventFragment extends Fragment implements OnBackPressedCallback {
+public class OverviewArchivedEventFragment extends Fragment implements OnBackPressedCallback {
 
     private MainViewModel viewModel;
     private Toolbar toolbar;
 
-    public OverviewArchivedGroupEventFragment() {
+    public OverviewArchivedEventFragment() {
         // Required empty public constructor
     }
 
@@ -30,8 +34,8 @@ public class OverviewArchivedGroupEventFragment extends Fragment implements OnBa
      * this fragment using the provided parameters.
      * @return A new instance of fragment OverviewGroupEventFragment.
      */
-    public static OverviewArchivedGroupEventFragment newInstance() {
-        OverviewArchivedGroupEventFragment fragment = new OverviewArchivedGroupEventFragment();
+    public static OverviewArchivedEventFragment newInstance() {
+        OverviewArchivedEventFragment fragment = new OverviewArchivedEventFragment();
         return fragment;
     }
 
@@ -44,7 +48,7 @@ public class OverviewArchivedGroupEventFragment extends Fragment implements OnBa
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        final View rootView = inflater.inflate(R.layout.fragment_overview_archived_group_event, container, false);
+        final View rootView = inflater.inflate(R.layout.fragment_overview_archived_event, container, false);
 
         //get Views
         toolbar = getActivity().findViewById(R.id.toolbar_main);
@@ -58,10 +62,10 @@ public class OverviewArchivedGroupEventFragment extends Fragment implements OnBa
 
 
         //bind recyclerView to DataModel
-        RecyclerView recyclerView = rootView.findViewById(R.id.recycler_archived_groupEvents);
-        GroupEventAdapter adapter = new GroupEventAdapter(getActivity());
+        RecyclerView recyclerView = rootView.findViewById(R.id.recycler_archived_events);
+        EventAdapter adapter = new EventAdapter(getActivity());
 
-        viewModel.getGroupEventsByArchiveState(true).observe(this, adapter::submitList);
+        viewModel.getEventsByArchiveState(true).observe(this, adapter::submitList);
 //        viewModel.getAllNonArchivedGroupEvents().observe(this, adapter::submitList);
 
         recyclerView.setAdapter(adapter);
@@ -71,19 +75,19 @@ public class OverviewArchivedGroupEventFragment extends Fragment implements OnBa
         recyclerView.getItemAnimator().setChangeDuration(0);
 
         //regsiter observer, that observes/ listens to click events on the list items
-        adapter.registerObserver(new GroupEventObserver() {
+        adapter.registerObserver(new EventObserver() {
             @Override
-            public void onClickGroupEvent(GroupEvent groupEvent) {
-//                OverviewGroupEventFragmentDirections.ActionOvrvwGeDestToDtlGeDest action = OverviewGroupEventFragmentDirections.actionOvrvwGeDestToDtlGeDest();
-//                MainViewPagerFragmentDirections.ActionMvpDestToDtlGeDest action = MainViewPagerFragmentDirections.actionMvpDestToDtlGeDest();
-                OverviewArchivedGroupEventFragmentDirections.ActionOvrwArchGeDestToEdtGeDest action = OverviewArchivedGroupEventFragmentDirections.actionOvrwArchGeDestToEdtGeDest();
-                action.setGroupEventId(groupEvent.id);
+            public void onEventDone(Event event, boolean done) {
+                OverviewArchivedEventFragmentDirections.ActionOvrwArchEDestToEdtEDest action = OverviewArchivedEventFragmentDirections.actionOvrwArchEDestToEdtEDest();
+                action.setEventId(event.id);
+                action.setParentGroupEvent(event.parentId);
                 NavHostFragment.findNavController(getParentFragment()).navigate(action);
             }
             @Override
-            public void onLongClickGroupEvent(GroupEvent groupEvent) {
-                OverviewArchivedGroupEventFragmentDirections.ActionOvrwArchGeDestToEdtGeDest action = OverviewArchivedGroupEventFragmentDirections.actionOvrwArchGeDestToEdtGeDest();
-                action.setGroupEventId(groupEvent.id);
+            public void onActionEditEvent(Event event) {
+                OverviewArchivedEventFragmentDirections.ActionOvrwArchEDestToEdtEDest action = OverviewArchivedEventFragmentDirections.actionOvrwArchEDestToEdtEDest();
+                action.setEventId(event.id);
+                action.setParentGroupEvent(event.parentId);
                 NavHostFragment.findNavController(getParentFragment()).navigate(action);
             }
         });

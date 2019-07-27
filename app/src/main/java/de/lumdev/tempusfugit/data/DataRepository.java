@@ -118,6 +118,24 @@ public class DataRepository {
         }
     }
 
+    //--------delete GroupEvent--------
+    public void deleteGroupEventById(int groupEventId){
+        new deleteGroupEventByIdAsyncTask(myGroupEventDao, groupEventId).execute();
+    }
+    private static class deleteGroupEventByIdAsyncTask extends AsyncTask<Void, Void, Void> {
+        private GroupEventDao mAsyncTaskDao;
+        private int mGroupEventId;
+        deleteGroupEventByIdAsyncTask(GroupEventDao dao, int id) {
+            mAsyncTaskDao = dao;
+            mGroupEventId = id;
+        }
+        @Override
+        protected Void doInBackground(Void ... params) {
+            mAsyncTaskDao.deleteById(mGroupEventId);
+            return null;
+        }
+    }
+
     //--------insert new Event--------
     public void insertEvent(Event event){
         new insertEventAsyncTask(myEventDao).execute(event);
@@ -147,6 +165,24 @@ public class DataRepository {
         @Override
         protected Void doInBackground(final Event... params) {
             mAsyncTaskDao.update(params[0]);
+            return null;
+        }
+    }
+
+    //--------delete GroupEvent--------
+    public void deleteEventById(int eventId){
+        new deleteEventByIdAsyncTask(myEventDao, eventId).execute();
+    }
+    private static class deleteEventByIdAsyncTask extends AsyncTask<Void, Void, Void> {
+        private EventDao mAsyncTaskDao;
+        private int mEventId;
+        deleteEventByIdAsyncTask(EventDao dao, int id) {
+            mAsyncTaskDao = dao;
+            mEventId = id;
+        }
+        @Override
+        protected Void doInBackground(Void ... params) {
+            mAsyncTaskDao.deleteById(mEventId);
             return null;
         }
     }
@@ -273,6 +309,22 @@ public class DataRepository {
 //            return mEventAsyncTaskDao.getAllEventsInListByPriority();
 //        }
 //    }
+
+    //--------set all done Events to archived state--------
+    public void setDoneEventsArchived(){
+        new setDoneEventsArchivedAsyncTask(myEventDao).execute();
+    }
+    private static class setDoneEventsArchivedAsyncTask extends AsyncTask<Void, Void, Void> {
+        private EventDao mEventAsyncTaskDao;
+        setDoneEventsArchivedAsyncTask(EventDao eventDao) {
+            mEventAsyncTaskDao = eventDao;
+        }
+        @Override
+        protected Void doInBackground(Void ... params) {
+            mEventAsyncTaskDao.setDoneEventsArchived();
+            return null;
+        }
+    }
 
     private static class setToDoDateOfEventsAsyncTask extends AsyncTask<Void, Void, Void> {
         private EventDao mEventAsyncTaskDao;
