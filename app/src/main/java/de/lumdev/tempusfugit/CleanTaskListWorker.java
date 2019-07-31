@@ -1,7 +1,9 @@
 package de.lumdev.tempusfugit;
 
 import android.app.Application;
+import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 
 import java.util.concurrent.TimeUnit;
@@ -12,7 +14,6 @@ import androidx.work.PeriodicWorkRequest;
 import androidx.work.WorkManager;
 import androidx.work.Worker;
 import androidx.work.WorkerParameters;
-import de.lumdev.tempusfugit.data.DataRepository;
 
 public class CleanTaskListWorker extends Worker {
 
@@ -49,8 +50,16 @@ public class CleanTaskListWorker extends Worker {
         viewModel.setDoneEventsArchived();
         viewModel.calculateToDoDateOfEvents(getApplicationContext());
 
-//        DataRepository dataRepo = DataRepository.getInstance((Application) getApplicationContext());
-//        dataRepo.setDoneEventsArchived();
+        //send broadcast for service to periodically clear list of events to ignore (hoping to avoid a endlessly growing arraylist)
+            //when done events are archived by this worker, they dont show up on daily todolist, therefore will also be never again get a notif for them
+        Intent intent = new Intent();
+        intent.setAction(PermanentNotificationService.ACTION_CLEAR_EVENTS_TO_IGNORE_LIST);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 0, intent, PendingIntent.FLAG_CANCEL_CURRENT);
+        try{
+            pendingIntent.send();
+        }catch (PendingIntent.CanceledException e){
+            Log.d("TF_Perso_Settings", "PendingIntent.CanceledException raised. Sending request to clear EventsToIgnoreList not successfull.");
+        }
 
         // Indicate whether the task finished successfully with the Result
         return Result.success();

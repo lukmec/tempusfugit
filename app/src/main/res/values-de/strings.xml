@@ -66,7 +66,7 @@
     <string name="pref_page_personalization">Personalisierung</string>
     <string name="pref_save_to_calendar_title">Aufgaben in Kalender speichern</string>
     <string name="pref_select_calendar_title">Kalender auswählen</string>
-    <string name="pref_show_notification_title">Dauerhafte Benachrichtigung anzeigen</string>
+    <string name="pref_show_notification_title">Dauerhafte Benachrichtigungen anzeigen</string>
     <string name="pref_time_clean_list_title">Leere Aufgabenübersicht</string>
     <string name="tab_label_group_todo_overview">To Do</string>
     <string name="toolbar_label_about_app">Über diese App</string>
@@ -112,4 +112,5 @@
     <string name="dialog_delete_hint_corresponding_elements">Alle verbundenen Elemente werden auch gelöscht.</string>
     <string name="pref_default_group_event">Standard Aufgaben-Gruppe</string>
     <string name="pref_default_group_event_none_selected">keine Gruppe ausgewählt</string>
+    <string name="pref_number_of_notifications_title">Anzahl der anzuzeigenden Benachrichtigungen</string>
 </resources>

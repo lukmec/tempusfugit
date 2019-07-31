@@ -3,25 +3,25 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <PreferenceCategory
-        app:key="@string/pref_id_pref_cat_pers_export"
-        app:title="@string/pref_cat_pers_export">
+    <!--<PreferenceCategory-->
+        <!--app:key="@string/pref_id_pref_cat_pers_export"-->
+        <!--app:title="@string/pref_cat_pers_export">-->
 
-        <SwitchPreferenceCompat
-            app:defaultValue="false"
-            app:key="@string/pref_id_save_to_calendar"
-            app:title="@string/pref_save_to_calendar_title" />
+        <!--<SwitchPreferenceCompat-->
+            <!--app:defaultValue="false"-->
+            <!--app:key="@string/pref_id_save_to_calendar"-->
+            <!--app:title="@string/pref_save_to_calendar_title" />-->
 
-        <Preference
-            app:key="@string/pref_id_calendar"
-            app:dependency="@string/pref_id_save_to_calendar"
-            app:title="@string/pref_select_calendar_title"/>
+        <!--<Preference-->
+            <!--app:key="@string/pref_id_calendar"-->
+            <!--app:dependency="@string/pref_id_save_to_calendar"-->
+            <!--app:title="@string/pref_select_calendar_title"/>-->
 
-    </PreferenceCategory>
+    <!--</PreferenceCategory>-->
 
-    <PreferenceCategory
-        app:key="@string/pref_id_pref_cat_pers_other"
-        app:title="@string/pref_cat_pers_other">
+    <!--<PreferenceCategory-->
+        <!--app:key="@string/pref_id_pref_cat_pers_other"-->
+        <!--app:title="@string/pref_cat_pers_other">-->
 
         <SwitchPreferenceCompat
             app:defaultValue="false"
@@ -29,14 +29,23 @@
             app:title="@string/pref_show_notification_title" />
 
         <ListPreference
-            app:defaultValue="-1"
+            app:defaultValue="3"
+            app:dependency="@string/pref_id_show_notification"
+            app:key="@string/pref_id_number_of_notifications"
+            app:entries="@array/pref_number_of_notifications_entries"
+            app:entryValues="@array/pref_number_of_notifications_values"
+            app:title="@string/pref_number_of_notifications_title"
+            app:useSimpleSummaryProvider="true" />
+
+        <ListPreference
+            app:defaultValue="24"
             app:key="@string/pref_id_time_clean_list"
             app:entries="@array/pref_time_clean_list_entries"
             app:entryValues="@array/pref_time_clean_list_values"
             app:title="@string/pref_time_clean_list_title"
             app:useSimpleSummaryProvider="true" />
 
-    </PreferenceCategory>
+    <!--</PreferenceCategory>-->
 
 
 </androidx.preference.PreferenceScreen>

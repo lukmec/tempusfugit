@@ -140,8 +140,19 @@ public class MainViewModel extends AndroidViewModel {
     }
 
     //delete GroupEvent permanently in db
-    public void deleteGroupEvent(int groupEventId){
+    public void deleteGroupEvent(int groupEventId, Context context){
         dataRepository.deleteGroupEventById(groupEventId);
+        //check if, group that was deleted is set as default group in settings
+        //if so, change default setting to "not set" (meaning no group selected; id = -1)
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context /* Activity context */);
+//        String defaultGroupEventName = sharedPreferences.getString(context.getString(R.string.pref_id_default_group_event_name), context.getString(R.string.pref_default_group_event_none_selected));
+        int defaultGroupEventId = sharedPreferences.getInt(context.getString(R.string.pref_id_default_group_event_id), -1);
+        if (defaultGroupEventId == groupEventId){
+            PreferenceManager.getDefaultSharedPreferences(context).edit()
+                    .putInt(context.getString(R.string.pref_id_default_group_event_id), -1)
+                    .putString(context.getString(R.string.pref_id_default_group_event_name), context.getString(R.string.pref_default_group_event_none_selected))
+                    .apply();
+        }
     }
 
     public void calculateToDoDateOfEvents(Context context){

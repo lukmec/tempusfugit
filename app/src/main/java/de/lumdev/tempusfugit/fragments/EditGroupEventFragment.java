@@ -15,6 +15,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.preference.PreferenceManager;
 import de.lumdev.tempusfugit.fragments.EditGroupEventFragmentArgs;
@@ -221,7 +222,15 @@ public class EditGroupEventFragment extends Fragment implements IconDialog.Callb
             }
             fabMain.hide();
             hideKeyboardFrom(v.getContext(), v);
-            NavHostFragment.findNavController(this).navigateUp();
+
+            NavController navCtrl = NavHostFragment.findNavController(getParentFragment());
+            navCtrl.navigateUp();
+            //catching special case, for archiving group:
+            //if fragment before editing was detailled_ge_dest, then navigate up to mvp_dest (in order to avoid displaying a detailled GE Overview with no events)
+            //all events are also set archived and the detailled overview only queries events that, are not archived (ViewModel method only allows to query either only archived or only not archived events)
+            if (navCtrl.getCurrentDestination().getId() == R.id.dtl_ge_dest) {
+                navCtrl.popBackStack(R.id.mvp_dest, false);
+            }
         }else{
             //displaying error messages to user is done in this.isValidInput()
 //            toast(getString(R.string.err_invalid_input));
@@ -243,6 +252,7 @@ public class EditGroupEventFragment extends Fragment implements IconDialog.Callb
                 toast(getString(R.string.toast_element_unarchived, getString(R.string.group_event)));
             }
 //            NavHostFragment.findNavController(this).navigateUp();
+
         }
     }
 
@@ -255,8 +265,16 @@ public class EditGroupEventFragment extends Fragment implements IconDialog.Callb
             builder.setPositiveButton(R.string.dialog_delete_yes, new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int id) {
                     // User clicked YES button
-                    NavHostFragment.findNavController(getParentFragment()).navigateUp(); //navigate up, in order to prevent from displaying page, where shown data is deleted
-                    viewModel.deleteGroupEvent(groupEventId); //delete actual data (after navigating to a page, where data isn't needed any more)
+                    //navigate up, in order to prevent from displaying page, where shown data is deleted
+                    //Attention: if navigated back to "Detailed Group Event", app will also crash because binding data from group to view is kind of rigid, and tries to display data from deletd group
+                        //Solution: not navigating up (could navigate back to detailled view); instead always navigate back to group overview
+                    NavController navCtrl = NavHostFragment.findNavController(getParentFragment());
+                    navCtrl.navigateUp();
+                    if (navCtrl.getCurrentDestination().getId() == R.id.dtl_ge_dest) {
+                        navCtrl.popBackStack(R.id.mvp_dest, false);
+                    }
+
+                    viewModel.deleteGroupEvent(groupEventId, getContext()); //delete actual data (after navigating to a page, where data isn't needed any more)
                     toast(getString(R.string.toast_element_deleted, getString(R.string.group_event)));
                 }
             });

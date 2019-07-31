@@ -132,6 +132,7 @@
     <string name="pref_id_calendar" translatable="false">calendar</string>
     <string name="pref_id_pref_cat_pers_other" translatable="false">pref_cat_pers_other</string>
     <string name="pref_id_show_notification" translatable="false">show_notification</string>
+    <string name="pref_id_number_of_notifications" translatable="false">pref_id_number_of_notifications_title</string>
     <string name="pref_id_time_clean_list" translatable="false">time_clean_list</string>
 
 
@@ -191,7 +192,24 @@
     <string name="pref_page_personalization">Personalization</string>
     <string name="pref_save_to_calendar_title">Save Tasks to calendar</string>
     <string name="pref_select_calendar_title">Select Calendar</string>
-    <string name="pref_show_notification_title">Show permanent notification</string>
+    <string name="pref_show_notification_title">Show permanent notifications</string>
+    <string name="pref_number_of_notifications_title">Number of notifications to show</string>
+    <string-array name="pref_number_of_notifications_entries">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+    </string-array>
+    <string-array name="pref_number_of_notifications_values">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+    </string-array>
     <string name="pref_time_clean_list_title">Clean task list</string>
     <string-array name="pref_time_clean_list_entries">
         <item>never</item>

@@ -2,6 +2,7 @@ package de.lumdev.tempusfugit.settings;
 
 import android.app.Application;
 import android.app.Notification;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -50,6 +51,29 @@ public class SettingsPersonalizationFragment extends SettingsTemplateFragment {
                 return true;
             });
         }
+
+        //Handling setting number of Notifications
+        ListPreference numberNotificationsList = findPreference(getString(R.string.pref_id_number_of_notifications));
+        if (numberNotificationsList != null){
+            numberNotificationsList.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+                @Override
+                public boolean onPreferenceChange(Preference preference, Object newValue) {
+                    numberNotificationsList.setValue((String) newValue);
+                    //send broadcast for service to receive number of notifications to show
+                    Intent intent = new Intent();
+                    intent.putExtra(PermanentNotificationService.EXTRA_NUMBER_OF_NOTIFICATIONS_TO_SHOW, Integer.valueOf((String)newValue)); // Attention: Adding an extra always requires App to be re-installed!! (extra do't work properly otherwise)
+                    intent.setAction(PermanentNotificationService.ACTION_SET_NUMBER_OF_NOTIFICATIONS_TO_SHOW);
+                    PendingIntent pendingIntent = PendingIntent.getBroadcast(getContext(), 0, intent, PendingIntent.FLAG_CANCEL_CURRENT);
+                    try{
+                        pendingIntent.send();
+                    }catch (PendingIntent.CanceledException e){
+                        Log.d("TF_Perso_Settings", "PendingIntent.CanceledException raised. Sending new number of notifications to show not successfull.");
+                    }
+                    return false;
+                }
+            });
+        }
+
         //Handling Clearing of Task List
         ListPreference timeCleanList = findPreference(getString(R.string.pref_id_time_clean_list));
         if (timeCleanList != null){

@@ -210,7 +210,7 @@ public class EditEventFragment extends Fragment {
         if(newParentGroupEventId == -1){
             //meaning parentGroupEvent is not explicitly given --> select default groupEvent from Preferences (if set there)
             SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity() /* Activity context */);
-            String defaultGroupEventName = sharedPreferences.getString(getString(R.string.pref_id_default_group_event_name), "no groupEvent set");
+            String defaultGroupEventName = sharedPreferences.getString(getString(R.string.pref_id_default_group_event_name), getString(R.string.pref_default_group_event_none_selected));
             int defaultGroupEventId = sharedPreferences.getInt(getString(R.string.pref_id_default_group_event_id), -1);
 //            Log.d("--->", defaultGroupEventName);
 //            Log.d("--->", ""+defaultGroupEventId);

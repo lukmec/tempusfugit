@@ -25,16 +25,16 @@
         app:min="0"
         app:defaultValue="20" />
 
-    <EditTextPreference
-        app:key="@string/pref_id_weighting_importance"
-        app:title="@string/pref_weighting_importance_title"
-        app:useSimpleSummaryProvider="true"
-        app:defaultValue="1.0" />
+    <!--<EditTextPreference-->
+        <!--app:key="@string/pref_id_weighting_importance"-->
+        <!--app:title="@string/pref_weighting_importance_title"-->
+        <!--app:useSimpleSummaryProvider="true"-->
+        <!--app:defaultValue="1.0" />-->
 
-    <EditTextPreference
-        app:key="@string/pref_id_weighting_urgency"
-        app:title="@string/pref_weighting_urgency_title"
-        app:useSimpleSummaryProvider="true"
-        app:defaultValue="1.0" />
+    <!--<EditTextPreference-->
+        <!--app:key="@string/pref_id_weighting_urgency"-->
+        <!--app:title="@string/pref_weighting_urgency_title"-->
+        <!--app:useSimpleSummaryProvider="true"-->
+        <!--app:defaultValue="1.0" />-->
 
 </androidx.preference.PreferenceScreen>

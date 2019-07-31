@@ -11,6 +11,8 @@ import android.graphics.Paint;
 import android.util.Log;
 import android.widget.RemoteViews;
 
+import com.maltaisn.icondialog.IconHelper;
+
 import java.util.ArrayList;
 
 import androidx.core.app.NotificationCompat;
@@ -60,6 +62,26 @@ import de.lumdev.tempusfugit.data.Event;
                 }
             }
         };
+        public static final String ACTION_SET_NUMBER_OF_NOTIFICATIONS_TO_SHOW = "ACTION_SET_NUMBER_OF_NOTIFICATIONS_TO_SHOW";
+        public static final String ACTION_CLEAR_EVENTS_TO_IGNORE_LIST = "ACTION_CLEAR_EVENTS_TO_IGNORE_LIST";
+        public static final String EXTRA_NUMBER_OF_NOTIFICATIONS_TO_SHOW = "EXTRA_NUMBER_OF_NOTIFICATIONS_TO_SHOW";
+        private BroadcastReceiver miscellaneousDataBroadcastReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent)
+            {
+                if (intent.getAction().equals(ACTION_SET_NUMBER_OF_NOTIFICATIONS_TO_SHOW)) {
+                    if (intent.hasExtra(EXTRA_NUMBER_OF_NOTIFICATIONS_TO_SHOW)) {
+//                        Log.d("-->>", "Broadcast reviced: "+intent.getIntExtra(EXTRA_NUMBER_OF_NOTIFICATIONS_TO_SHOW, 3));
+                        setNumberOfTasksWithPermanentNotification(intent.getIntExtra(EXTRA_NUMBER_OF_NOTIFICATIONS_TO_SHOW, 3));
+                        createEventNotifications();
+                    }
+                }
+                if (intent.getAction().equals(ACTION_CLEAR_EVENTS_TO_IGNORE_LIST)) {
+                    eventsToIgnore.clear();
+                    Log.d("TF_PermNotifService", "List of EventsToIgnore cleared successfully (in order to avoid endless growing of list).");
+                }
+            }
+        };
 
     public PermanentNotificationService() {
     }
@@ -76,9 +98,14 @@ import de.lumdev.tempusfugit.data.Event;
             stopSelf();
         }
 
+        //set inital number of notifications to show
+        setNumberOfTasksWithPermanentNotification(Integer.valueOf(sharedPreferences.getString(getApplicationContext().getResources().getString(R.string.pref_id_number_of_notifications), "2")));
+
         viewModel = new MainViewModel(getApplication());
         getApplicationContext().registerReceiver(notificationProcessingBroadcastReceiver, new IntentFilter(ACTION_EVENT_DONE_STATE_CHANGE)); //register BroadcastReciever to be able to respond to clicks on notification
         getApplicationContext().registerReceiver(notificationProcessingBroadcastReceiver, new IntentFilter(ACTION_NOTIFICATION_DISMISSED));
+        getApplicationContext().registerReceiver(miscellaneousDataBroadcastReceiver, new IntentFilter(ACTION_SET_NUMBER_OF_NOTIFICATIONS_TO_SHOW));
+        getApplicationContext().registerReceiver(miscellaneousDataBroadcastReceiver, new IntentFilter(ACTION_CLEAR_EVENTS_TO_IGNORE_LIST));
         createEventNotifications();
 
 //        ArrayList<Integer> testEvents = viewModel.getEventIdsForNotificationForToDoDayZero(3);
@@ -96,19 +123,18 @@ import de.lumdev.tempusfugit.data.Event;
     public void onDestroy() {
         Log.d("TF_PermNotifService", "Service stopped.");
 
-        //make all notifcations disappear
-        if(notificationManager == null){
-            notificationManager = NotificationManagerCompat.from(getApplicationContext());
-        }
-        notificationManager.cancelAll();
+        cancelEventNotifications();
 
         //unregister Receiver for listening to onClickEvents (and dismiss actions) on notifcations
         getApplicationContext().unregisterReceiver(notificationProcessingBroadcastReceiver); //unregister BroadcastReciever to free memory
+        getApplicationContext().unregisterReceiver(miscellaneousDataBroadcastReceiver);
         super.onDestroy();
     }
 
 
     private void createEventNotifications(){
+
+        cancelEventNotifications(); //start fresh
 
         if(notificationManager == null){
             notificationManager = NotificationManagerCompat.from(getApplicationContext());
@@ -119,8 +145,10 @@ import de.lumdev.tempusfugit.data.Event;
 
         viewModel.getAllEventsOfToDoDay(0).observe(this, events -> {
 
-            for (int i=0; i < events.size() && i < numberOfTasksWithPermanentNotification; i++) {
-                Event e = events.get(i);
+            int counter_current_number_of_notifs = 0;
+//            for (int i=0; i < events.size() && i < numberOfTasksWithPermanentNotification; i++) {
+            for (int i=0; i < events.size() && counter_current_number_of_notifs < numberOfTasksWithPermanentNotification; i++) {
+            Event e = events.get(i);
 
                 if (!eventsToIgnore.contains(e.id)) { //ignore specific event (ignore == dont create notification), when in list for ignoredEvents
 
@@ -136,7 +164,7 @@ import de.lumdev.tempusfugit.data.Event;
                     }
                     contentView.setTextViewText(R.id.notif_name, e.name);
 //                    contentView.setTextViewText(R.id.notif_desc, e.description);
-                    contentView.setOnClickPendingIntent(R.id.notif_single_task_relative_layout, getEventDonePendingIntent(getApplicationContext(), i, e.id, !e.done)); //!e.done equals the new desired Done State
+                    contentView.setOnClickPendingIntent(R.id.notif_single_task_relative_layout, getEventDonePendingIntent(getApplicationContext(), counter_current_number_of_notifs, e.id, !e.done)); //!e.done equals the new desired Done State
                     contentView.setImageViewResource(R.id.notif_event_icon, e.icon);
                     //adapt colors
                     contentView.setTextColor(R.id.notif_name, e.textColor);
@@ -145,34 +173,47 @@ import de.lumdev.tempusfugit.data.Event;
                     contentView.setInt(R.id.notif_image_front, "setColorFilter", e.textColor);
                     contentView.setInt(R.id.notif_event_icon, "setColorFilter", e.textColor);
 
-                    NotificationCompat.Builder notificationBuilder = allActiveNotifications.get(i);
+                    NotificationCompat.Builder notificationBuilder = allActiveNotifications.get(counter_current_number_of_notifs);
                     notificationBuilder
                             .setSmallIcon(e.icon)
 //                            .setColor(getResources().getColor(R.color.groupEvent_green))
-//                            .setSmallIcon(R.drawable.ic_star_black_24dp)
+//                            .setSmallIcon(R.drawable.ic_arrow_back_white_24dp)
                             .setCustomContentView(contentView)
-                            .setDeleteIntent(getNotificationDismissedPendingIntent(getApplicationContext(), i, e.id, !e.done))
-                            .setPriority(Notification.PRIORITY_HIGH)
+                            .setDeleteIntent(getNotificationDismissedPendingIntent(getApplicationContext(), counter_current_number_of_notifs, e.id, e.done))
+                            .setPriority(Notification.PRIORITY_DEFAULT)
+//                            .setPriority(NotificationCompat.PRIORITY_MIN)
                             .setCategory(NotificationCompat.CATEGORY_REMINDER)
 //                            .setShowWhen(true)
 //                            .setColorized(true)
 //                            .setVisibility(NotificationCompat.VISIBILITY_SECRET)
+//                            .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
 
                             .setOngoing(!e.done);
 //                                    .setStyle(new NotificationCompat.DecoratedCustomViewStyle())
 //                                    .setCustomBigContentView(notificationLayoutExpanded)
 
-                    notificationManager.notify(i, allActiveNotifications.get(i).build());
-                }else{
-                    //since one event is ignored (no notif for event with specific id shown), create a new "place" (meaning notifBuilder) for next event in ToDoList
-                    allActiveNotifications.add(new NotificationCompat.Builder(getApplicationContext(), PERMANENT_NOTIFICATION_TASKS_CHANNEL));
-                    numberOfTasksWithPermanentNotification++;
+                    notificationManager.notify(i, allActiveNotifications.get(counter_current_number_of_notifs).build()); //important to notify with i (== index of event in list) in order to prevent, that same event-notification is shown multiple times
+                    //increase number of currently shown notifs
+                    counter_current_number_of_notifs++;
+                } else {
+//                    //since one event is ignored (no notif for event with specific id shown), create a new "place" (meaning notifBuilder) for next event in ToDoList
+//                    allActiveNotifications.add(new NotificationCompat.Builder(getApplicationContext(), PERMANENT_NOTIFICATION_TASKS_CHANNEL));
+//                        numberOfTasksWithPermanentNotification++;
                 }
             }
         });
     }
 
-    public void createQuickAccessNotification(String testMsg){
+    private void cancelEventNotifications(){
+        //make all notifcations disappear
+        if(notificationManager == null){
+            notificationManager = NotificationManagerCompat.from(getApplicationContext());
+        }
+        notificationManager.cancelAll();
+        eventsToIgnore.clear();
+    }
+
+    private void createQuickAccessNotification(String testMsg){
         if(notificationManager == null){
             notificationManager = NotificationManagerCompat.from(getApplicationContext());
         }
@@ -182,7 +223,7 @@ import de.lumdev.tempusfugit.data.Event;
         notificationManager.notify(PERMANENT_NOTIFICATION_QUICK_ACCESS, notificationBuilder.build());
     }
 
-    public void setNumberOfTasksWithPermanentNotification(int numberOfTaskToShow){
+    private void setNumberOfTasksWithPermanentNotification(int numberOfTaskToShow){
         numberOfTasksWithPermanentNotification = numberOfTaskToShow;
         allActiveNotifications.clear();
         initListOfActiveNotifications();
