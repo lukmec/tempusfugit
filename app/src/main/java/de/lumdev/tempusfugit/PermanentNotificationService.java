@@ -7,7 +7,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.Icon;
 import android.util.Log;
 import android.widget.RemoteViews;
 
@@ -17,6 +22,7 @@ import java.util.ArrayList;
 
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
+import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.lifecycle.LifecycleService;
 import androidx.preference.PreferenceManager;
 import de.lumdev.tempusfugit.data.Event;
@@ -64,6 +70,7 @@ import de.lumdev.tempusfugit.data.Event;
         };
         public static final String ACTION_SET_NUMBER_OF_NOTIFICATIONS_TO_SHOW = "ACTION_SET_NUMBER_OF_NOTIFICATIONS_TO_SHOW";
         public static final String ACTION_CLEAR_EVENTS_TO_IGNORE_LIST = "ACTION_CLEAR_EVENTS_TO_IGNORE_LIST";
+        public static final String ACTION_RECREATE_NOTIFICATIONS = "ACTION_RECREATE_NOTIFICATIONS";
         public static final String EXTRA_NUMBER_OF_NOTIFICATIONS_TO_SHOW = "EXTRA_NUMBER_OF_NOTIFICATIONS_TO_SHOW";
         private BroadcastReceiver miscellaneousDataBroadcastReceiver = new BroadcastReceiver() {
             @Override
@@ -79,6 +86,10 @@ import de.lumdev.tempusfugit.data.Event;
                 if (intent.getAction().equals(ACTION_CLEAR_EVENTS_TO_IGNORE_LIST)) {
                     eventsToIgnore.clear();
                     Log.d("TF_PermNotifService", "List of EventsToIgnore cleared successfully (in order to avoid endless growing of list).");
+                }
+                if (intent.getAction().equals(ACTION_RECREATE_NOTIFICATIONS)) {
+                    createEventNotifications();
+                    Log.d("TF_PermNotifService", "Service is requested by broadcast to recreate all notifications.");
                 }
             }
         };
@@ -106,6 +117,7 @@ import de.lumdev.tempusfugit.data.Event;
         getApplicationContext().registerReceiver(notificationProcessingBroadcastReceiver, new IntentFilter(ACTION_NOTIFICATION_DISMISSED));
         getApplicationContext().registerReceiver(miscellaneousDataBroadcastReceiver, new IntentFilter(ACTION_SET_NUMBER_OF_NOTIFICATIONS_TO_SHOW));
         getApplicationContext().registerReceiver(miscellaneousDataBroadcastReceiver, new IntentFilter(ACTION_CLEAR_EVENTS_TO_IGNORE_LIST));
+        getApplicationContext().registerReceiver(miscellaneousDataBroadcastReceiver, new IntentFilter(ACTION_RECREATE_NOTIFICATIONS));
         createEventNotifications();
 
 //        ArrayList<Integer> testEvents = viewModel.getEventIdsForNotificationForToDoDayZero(3);
@@ -165,7 +177,15 @@ import de.lumdev.tempusfugit.data.Event;
                     contentView.setTextViewText(R.id.notif_name, e.name);
 //                    contentView.setTextViewText(R.id.notif_desc, e.description);
                     contentView.setOnClickPendingIntent(R.id.notif_single_task_relative_layout, getEventDonePendingIntent(getApplicationContext(), counter_current_number_of_notifs, e.id, !e.done)); //!e.done equals the new desired Done State
-                    contentView.setImageViewResource(R.id.notif_event_icon, e.icon);
+                    //set icon of group event to notification
+                    try{
+                        //setting picture from icondialog id
+//                        Drawable drawable = IconHelper.getInstance(getApplicationContext()).getIcon(e.icon).getDrawable(getApplicationContext());
+                        contentView.setImageViewBitmap(R.id.notif_event_icon, drawableToBitmap(IconHelper.getInstance(getApplicationContext()).getIcon(e.icon).getDrawable(getApplicationContext())));
+                    }catch (Exception exception){
+                        //setting picture from R's resource id
+                        contentView.setImageViewResource(R.id.notif_event_icon, e.icon);
+                    }
                     //adapt colors
                     contentView.setTextColor(R.id.notif_name, e.textColor);
 //                    contentView.setTextColor(R.id.notif_desc, e.textColor);
@@ -175,9 +195,9 @@ import de.lumdev.tempusfugit.data.Event;
 
                     NotificationCompat.Builder notificationBuilder = allActiveNotifications.get(counter_current_number_of_notifs);
                     notificationBuilder
-                            .setSmallIcon(e.icon)
+//                            .setSmallIcon(e.icon)
 //                            .setColor(getResources().getColor(R.color.groupEvent_green))
-//                            .setSmallIcon(R.drawable.ic_arrow_back_white_24dp)
+                            .setSmallIcon(R.drawable.ic_check_circle_white_24dp)
                             .setCustomContentView(contentView)
                             .setDeleteIntent(getNotificationDismissedPendingIntent(getApplicationContext(), counter_current_number_of_notifs, e.id, e.done))
                             .setPriority(Notification.PRIORITY_DEFAULT)
@@ -251,5 +271,27 @@ import de.lumdev.tempusfugit.data.Event;
         intent.setAction(ACTION_NOTIFICATION_DISMISSED);
         return PendingIntent.getBroadcast(context, notif_index, intent, PendingIntent.FLAG_CANCEL_CURRENT); //Attention: Flag_Update_Current needed in order to update Extras of Pending intent, every time user clicks //FLAG_CANCEL_CURRENT for cancelling privious pIntent and creating a new one
         // read more here: https://developer.android.com/reference/android/app/PendingIntent.html#getBroadcast-android.content.Context-int-android.content.Intent-int-
+    }
+
+    public static Bitmap drawableToBitmap (Drawable drawable) {
+        Bitmap bitmap = null;
+
+        if (drawable instanceof BitmapDrawable) {
+            BitmapDrawable bitmapDrawable = (BitmapDrawable) drawable;
+            if(bitmapDrawable.getBitmap() != null) {
+                return bitmapDrawable.getBitmap();
+            }
+        }
+
+        if(drawable.getIntrinsicWidth() <= 0 || drawable.getIntrinsicHeight() <= 0) {
+            bitmap = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888); // Single color bitmap will be created of 1x1 pixel
+        } else {
+            bitmap = Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
+        }
+
+        Canvas canvas = new Canvas(bitmap);
+        drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
+        drawable.draw(canvas);
+        return bitmap;
     }
 }

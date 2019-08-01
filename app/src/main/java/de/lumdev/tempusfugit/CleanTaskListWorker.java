@@ -60,6 +60,15 @@ public class CleanTaskListWorker extends Worker {
         }catch (PendingIntent.CanceledException e){
             Log.d("TF_Perso_Settings", "PendingIntent.CanceledException raised. Sending request to clear EventsToIgnoreList not successfull.");
         }
+        //send broadcast for service to recreate all notifications (if worker set events to archived, service should refresh list of totoevents and decide freshly which events to notify)
+        Intent intent2 = new Intent();
+        intent2.setAction(PermanentNotificationService.ACTION_RECREATE_NOTIFICATIONS);
+        PendingIntent pendingIntent2 = PendingIntent.getBroadcast(getApplicationContext(), 0, intent2, PendingIntent.FLAG_CANCEL_CURRENT);
+        try{
+            pendingIntent2.send();
+        }catch (PendingIntent.CanceledException e){
+            Log.d("TF_Perso_Settings", "PendingIntent.CanceledException raised. Sending request to recreate event notifications not successfull.");
+        }
 
         // Indicate whether the task finished successfully with the Result
         return Result.success();

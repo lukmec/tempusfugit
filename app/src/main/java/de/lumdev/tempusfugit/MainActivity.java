@@ -82,6 +82,10 @@ public class MainActivity extends AppCompatActivity implements
                         .getString(getResources().getString(R.string.pref_id_time_clean_list), "-1")
         ));
 
+        //start my background notification service (on app start)
+//        Log.d("TF_Main_Activity", "App started. Starting TF-Service.");
+        getApplicationContext().startService(new Intent(getApplicationContext(), PermanentNotificationService.class));
+
         //find and store NavController
         NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment);
         this.navCtrlr = navHostFragment.getNavController();
