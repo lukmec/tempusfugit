@@ -52,7 +52,7 @@ public class OverviewArchivedEventFragment extends Fragment implements OnBackPre
 
         //get Views
         toolbar = getActivity().findViewById(R.id.toolbar_main);
-        toolbar.setTitle(R.string.toolbar_label_archived_group_event);
+        toolbar.setTitle(R.string.toolbar_label_archived_event);
         toolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp);
         toolbar.setNavigationContentDescription(R.string.toolbar_settings_navigation_description);
         toolbar.setNavigationOnClickListener((View v) -> {

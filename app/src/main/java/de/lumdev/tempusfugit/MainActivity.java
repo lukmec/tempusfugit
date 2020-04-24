@@ -18,8 +18,11 @@ import androidx.viewpager.widget.ViewPager;
 import de.lumdev.tempusfugit.settings.SettingsPersonalizationFragment;
 //import android.support.v7.widget.Toolbar;
 
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.content.Intent;
 import android.graphics.Typeface;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -75,6 +78,10 @@ public class MainActivity extends AppCompatActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        //create channel for naotifications in Android 8 and above //see: https://developer.android.com/training/notify-user/channels
+            //Creating an existing notification channel with its original values performs no operation, so it's safe to call this code when starting an app.
+        createNotificationChannel();
 
         //start or ensure that CleanTaskListWorker is enqued in WorkManager
         CleanTaskListWorker.enqueueSelf(this, Integer.valueOf(
@@ -179,4 +186,22 @@ public class MainActivity extends AppCompatActivity implements
         this.navCtrlr.navigate(destinationId, args);
         return true;
     }
+
+    //taken from: https://developer.android.com/training/notify-user/channels
+    private void createNotificationChannel() {
+        // Create the NotificationChannel, but only on API 26+ because
+        // the NotificationChannel class is new and not in the support library
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            CharSequence name = getString(R.string.notification_channel_name);
+            String description = getString(R.string.notification_channel_description);
+            int importance = NotificationManager.IMPORTANCE_DEFAULT;
+            NotificationChannel channel = new NotificationChannel(PermanentNotificationService.CHANNEL_ID, name, importance);
+            channel.setDescription(description);
+            // Register the channel with the system; you can't change the importance
+            // or other notification behaviors after this
+            NotificationManager notificationManager = getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(channel);
+        }
+    }
+
 }

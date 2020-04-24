@@ -113,4 +113,6 @@
     <string name="pref_default_group_event">Standard Aufgaben-Gruppe</string>
     <string name="pref_default_group_event_none_selected">keine Gruppe ausgewählt</string>
     <string name="pref_number_of_notifications_title">Anzahl der anzuzeigenden Benachrichtigungen</string>
+    <string name="notification_channel_name">Tempus Fugit</string>
+    <string name="notification_channel_description">Das ist der Benachrichtigungskanal für alle Benachrichtigungen in Tempus Fugit.</string>
 </resources>

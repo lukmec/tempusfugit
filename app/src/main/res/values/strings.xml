@@ -5,6 +5,8 @@
     <string name="title_activity_main">Tempus Fugit</string>
     <string name="group_event">group</string>
     <string name="event">task</string>
+    <string name="notification_channel_name">Tempus Fugit</string>
+    <string name="notification_channel_description">This is the notification channel for all notifications in Tempus Fugit.</string>
 
     <!--Navigation Destinations-->
     <string name="dest_overview_group_event">Group Tasks</string>

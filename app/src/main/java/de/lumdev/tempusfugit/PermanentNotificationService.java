@@ -1,6 +1,8 @@
 package de.lumdev.tempusfugit;
 
 import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -13,6 +15,7 @@ import android.graphics.Paint;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.Icon;
+import android.os.Build;
 import android.util.Log;
 import android.widget.RemoteViews;
 
@@ -41,6 +44,8 @@ import de.lumdev.tempusfugit.data.Event;
         public static final String ACTION_NOTIFICATION_DISMISSED = "Action_Notification_Dismissed";
         public static final String EXTRA_EVENT_ID = "Extra_Event_Id";
         public static final String EXTRA_EVENT_DONE = "Extra_Event_Done";
+        //define Channel_ID for Tempus Fugit Notifications
+        public static final String CHANNEL_ID = "Tempus_Fugit_Notification_Channel";
         private BroadcastReceiver notificationProcessingBroadcastReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent)
@@ -207,11 +212,13 @@ import de.lumdev.tempusfugit.data.Event;
 //                            .setColorized(true)
 //                            .setVisibility(NotificationCompat.VISIBILITY_SECRET)
 //                            .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
-
                             .setOngoing(!e.done);
 //                                    .setStyle(new NotificationCompat.DecoratedCustomViewStyle())
 //                                    .setCustomBigContentView(notificationLayoutExpanded)
-
+                    //set notification channel for andorid version above Android 8 / API 26 - see: https://developer.android.com/training/notify-user/build-notification and https://developer.android.com/training/notify-user/channels
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                        notificationBuilder.setChannelId(CHANNEL_ID);
+                    }
                     notificationManager.notify(i, allActiveNotifications.get(counter_current_number_of_notifs).build()); //important to notify with i (== index of event in list) in order to prevent, that same event-notification is shown multiple times
                     //increase number of currently shown notifs
                     counter_current_number_of_notifs++;
