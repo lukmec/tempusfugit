@@ -32,7 +32,11 @@ public class CleanTaskListWorker extends Worker {
     public static void enqueueSelf(Context context, int cleanEveryXHours) {
         //enque Worker, unless "-1! is set in preferences, meaning worker should not be run
         if (cleanEveryXHours != -1) {
-            WorkManager.getInstance(context).enqueueUniquePeriodicWork(PERIODIC_WORK_REQUEST_CLEAN_TASK_LIST, ExistingPeriodicWorkPolicy.REPLACE,
+//            WorkManager.getInstance(context).enqueue(new PeriodicWorkRequest.Builder(CleanTaskListWorker.class, cleanEveryXHours, TimeUnit.HOURS, 30, TimeUnit.MINUTES).build());
+            //Attention: UniqueWorkPolicy is quite important (having REPLACE results in starting the worker anew whenever the MainActivity starts;
+            // KEEP keeps an existing Worker from previous applications starts alive, and doesn't cause permanent recreations of the worker)
+            //see: https://developer.android.com/topic/libraries/architecture/workmanager/how-to/managing-work#unique-work
+            WorkManager.getInstance(context).enqueueUniquePeriodicWork(PERIODIC_WORK_REQUEST_CLEAN_TASK_LIST, ExistingPeriodicWorkPolicy.KEEP,
                     new PeriodicWorkRequest.Builder(CleanTaskListWorker.class, cleanEveryXHours, TimeUnit.HOURS)
                             .build());
             Log.d("TF_CleanTasksWorker", "Clean Task List Worker enqueued by WorkManager.");

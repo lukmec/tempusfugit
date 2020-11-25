@@ -205,7 +205,7 @@ import de.lumdev.tempusfugit.data.Event;
                             .setSmallIcon(R.drawable.ic_check_circle_white_24dp)
                             .setCustomContentView(contentView)
                             .setDeleteIntent(getNotificationDismissedPendingIntent(getApplicationContext(), counter_current_number_of_notifs, e.id, e.done))
-                            .setPriority(Notification.PRIORITY_DEFAULT)
+                            .setPriority(Notification.PRIORITY_LOW)
 //                            .setPriority(NotificationCompat.PRIORITY_MIN)
                             .setCategory(NotificationCompat.CATEGORY_REMINDER)
 //                            .setShowWhen(true)

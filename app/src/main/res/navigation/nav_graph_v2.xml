@@ -181,7 +181,8 @@
     <fragment
         android:id="@+id/ovrw_arch_ge_dest"
         android:name="de.lumdev.tempusfugit.fragments.OverviewArchivedGroupEventFragment"
-        android:label="OverviewArchivedGroupEventFragment" >
+        android:label="OverviewArchivedGroupEventFragment"
+        tools:layout="@layout/fragment_overview_archived_group_event">
         <action
             android:id="@+id/action_ovrw_arch_ge_dest_to_edt_ge_dest"
             app:destination="@id/edt_ge_dest" >
@@ -193,9 +194,15 @@
     <fragment
         android:id="@+id/ovrw_arch_e_dest"
         android:name="de.lumdev.tempusfugit.fragments.OverviewArchivedEventFragment"
-        android:label="OverviewArchivedEventFragment" >
+        android:label="OverviewArchivedEventFragment"
+        tools:layout="@layout/fragment_overview_archived_event">
         <action
             android:id="@+id/action_ovrw_arch_e_dest_to_edt_e_dest"
             app:destination="@id/edt_e_dest" />
     </fragment>
+    <fragment
+        android:id="@+id/backup_database_dest"
+        android:name="de.lumdev.tempusfugit.fragments.BackupDatabaseFragment"
+        android:label="BackupDatabaseFragment"
+        tools:layout="@layout/fragment_backup_database"/>
 </navigation>

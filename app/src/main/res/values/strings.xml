@@ -22,6 +22,7 @@
     <string name="menu_label_aboutApp">About this App</string>
     <string name="menu_label_archived_group_event">View Archived Groups</string>
     <string name="menu_label_archived_event">View Archived Tasks</string>
+    <string name="menu_label_backup_database">Backup Database</string>
 
     <!--Select Group Event Dialog Fragment-->
     <string name="title_dialog_select_parent_group_event">Select a parent group:</string>
@@ -52,6 +53,14 @@
     <string name="toolbar_label_archived_event">Archived Events</string>
     <string name="toast_element_archived">%1$s archived</string>
     <string name="toast_element_unarchived">%1$s un-archived</string>
+
+    <!--Backup Database-->
+    <string name="toolbar_label_backup_database_event">Backup Database</string>
+    <string name="tV_label_backup_instructions">(1) Click the button to start the backup process.\n(2) Select where to save the backup file.\n\nNote:\n Importing data from backups is not supported currently.\n Exported data is in JSON format but saved as \"html\" to allow quick view of the file in a browser.</string>
+    <string name="tV_label_backup_successful">Backup file created successfully.</string>
+    <string name="tV_label_backup_not_successful">An error occurred. Backup file was not created. (Either FileNotFound or IOException.)</string>
+    <string name="btn_do_backup">Do Backup</string>
+
 
     <!--Delete Element-->
     <string name="dialog_delete_question">Are you sure, you want to permanently delete this %1$s?</string>

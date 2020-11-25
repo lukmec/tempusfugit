@@ -39,6 +39,9 @@ public interface GroupEventDao {
     @Query("SELECT * FROM group_event WHERE id = :id")
     LiveData<GroupEvent> getGroupEvent(int id);
 
+    @Query("SELECT * FROM group_event")
+    List<GroupEvent> getAllGroupEventsForBackup();
+
 //    @Query("SELECT * FROM group_event WHERE parent_id = :parent_id ORDER BY id ASC")
 //    LiveData<List<GroupEvent>> getChildGroupEvents(int parent_id);
 

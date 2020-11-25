@@ -5,9 +5,16 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
+
 import org.threeten.bp.Duration;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
@@ -174,4 +181,78 @@ public class MainViewModel extends AndroidViewModel {
         dataRepository.setDoneEventsArchived();
     }
 
+    private String getEventsAsJson(){
+        String json_string = "";
+//        Gson gson = new Gson();
+//        Event test_event = new Event("Test Event", "Das hat hier eine Beschreibung.", 1);
+//        json_string = gson.toJson(test_event);
+//        for (event : dataRepository.getAllEventsForBackup()) {
+//            json_string = gson
+//        }
+//        try {
+//            List<Event> list = dataRepository.getEventsForBackup();
+//            json_string = gson.toJson(list.get(0));
+////            json_string = gson.toJson(list);
+//        } catch (ExecutionException e) {
+//            e.printStackTrace();
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        }
+
+        GsonBuilder builder = new GsonBuilder();
+        builder.setPrettyPrinting();
+        builder.serializeNulls();
+        try {
+            List<Event> list = dataRepository.getEventsForBackup();
+            json_string = builder.create().toJson(list);
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+//        String event_string = "{ \"archived\": true, \"color\": -12707, \"creationDate\": { \"dateTime\": { \"date\": { \"day\": 1, \"month\": 8, \"year\": 2019 }, \"time\": { \"hour\": 21, \"minute\": 28, \"nano\": 693000000, \"second\": 53 } }, \"offset\": { \"totalSeconds\": 0 } }, \"description\": \" \", \"done\": true, \"doneDateTime\": null, \"dueDate\": null, \"duration\": { \"nanos\": 0, \"seconds\": 3600 }, \"icon\": 2131230845, \"id\": 1, \"importance\": 1.0, \"name\": \"Einleitung schreiben\", \"parentId\": 1, \"priority\": 2.0, \"textColor\": -16777216, \"toDoDay\": 0, \"urgency\": 1.0 }";
+//        Event read_event = new Gson().fromJson(event_string, Event.class);
+//        String event_string_2 = "[{ \"archived\": true, \"color\": -12707, \"creationDate\": { \"dateTime\": { \"date\": { \"day\": 1, \"month\": 8, \"year\": 2019 }, \"time\": { \"hour\": 21, \"minute\": 28, \"nano\": 693000000, \"second\": 53 } }, \"offset\": { \"totalSeconds\": 0 } }, \"description\": \" \", \"done\": true, \"doneDateTime\": null, \"dueDate\": null, \"duration\": { \"nanos\": 0, \"seconds\": 3600 }, \"icon\": 2131230845, \"id\": 1, \"importance\": 1.0, \"name\": \"Einleitung schreiben\", \"parentId\": 1, \"priority\": 2.0, \"textColor\": -16777216, \"toDoDay\": 0, \"urgency\": 1.0 },{ \"archived\": true, \"color\": -12707, \"creationDate\": { \"dateTime\": { \"date\": { \"day\": 1, \"month\": 8, \"year\": 2019 }, \"time\": { \"hour\": 21, \"minute\": 28, \"nano\": 693000000, \"second\": 53 } }, \"offset\": { \"totalSeconds\": 0 } }, \"description\": \" \", \"done\": true, \"doneDateTime\": null, \"dueDate\": null, \"duration\": { \"nanos\": 0, \"seconds\": 3600 }, \"icon\": 2131230845, \"id\": 1, \"importance\": 1.0, \"name\": \"Einleitung schreiben\", \"parentId\": 1, \"priority\": 2.0, \"textColor\": -16777216, \"toDoDay\": 0, \"urgency\": 1.0 }]";
+//        Type listType = new TypeToken<List<Event>>(){}.getType();
+//        List<Event> read_list = new Gson().fromJson(event_string, listType);
+//        try {
+//            List<Event> list = dataRepository.getEventsForBackup();
+////            json_string = list.get(0).creationDate +"  ----  "+read_event.creationDate;
+//            json_string = read_list.toString();
+//        } catch (ExecutionException e) {
+//            e.printStackTrace();
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        }
+//        dataRepository.insertEvent(read_event);
+        return json_string;
+    }
+
+    private String getGroupEventsAsJson() {
+        String json_string = "";
+        GsonBuilder builder = new GsonBuilder();
+        builder.setPrettyPrinting();
+        builder.serializeNulls();
+        try {
+            List<GroupEvent> list = dataRepository.getGroupEventsForBackup();
+            json_string = builder.create().toJson(list);
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        return json_string;
+    }
+
+    public String getDatabaseAsJson(){
+        StringBuilder builder = new StringBuilder();
+        builder.append("{\"events\":");
+        builder.append(getEventsAsJson());
+        builder.append(", \"group_events\":");
+        builder.append(getGroupEventsAsJson());
+        builder.append("}");
+
+        return builder.toString();
+    }
 }

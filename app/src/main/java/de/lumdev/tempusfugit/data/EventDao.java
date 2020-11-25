@@ -36,6 +36,9 @@ public interface EventDao {
     DataSource.Factory<Integer, Event> getAllEvents();
 //    LiveData<List<Event>> getAllEvents();
 
+    @Query("SELECT * FROM event")
+    List<Event> getAllEventsForBackup();
+
     @Query("SELECT * FROM event WHERE archived = 0 ORDER BY priority DESC") //Attention: Boolean in SQLite is stored as integer (0 = false; 1 = true)
     List<Event> getAllEventsInListByPriority();
 

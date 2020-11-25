@@ -55,6 +55,7 @@ public class DataRepository {
     public LiveData<PagedList<Event>> getAllEvents(){
         return allEvents;
     }
+
     public LiveData<PagedList<Event>> getAllNonArchivedEvents(){
         return allNonArchivedEvents;
     }
@@ -62,6 +63,7 @@ public class DataRepository {
         return allNonArchivedGroupEvents;
     }
     // List<Event> getEventsInListByPriority() --> see below for implementation in Async Task
+    // List<Event> getAllEventsForBackup() --> see below for implementation in Async Task
     public LiveData<PagedList<Event>> getAllEventsOfGroup(int groupEventId, boolean archived){
         return new LivePagedListBuilder<>(myEventDao.getEventsOfParent(groupEventId, archived),20).build();
     }
@@ -81,7 +83,7 @@ public class DataRepository {
         return myGroupEventDao.getGroupEvent(groupEventId);
     }
 
-//     Get GroupEvent of specified ID
+//     Get Event of specified ID
     public LiveData<Event> getEvent(int eventId){
         return myEventDao.getEvent(eventId);
     }
@@ -309,6 +311,36 @@ public class DataRepository {
 //            return mEventAsyncTaskDao.getAllEventsInListByPriority();
 //        }
 //    }
+
+    public List<Event> getEventsForBackup() throws ExecutionException, InterruptedException {
+        return new getEventsForBackupAsyncTask(myEventDao).execute().get();
+    }
+    private static class getEventsForBackupAsyncTask extends AsyncTask<Void, Void, List<Event>> {
+        private EventDao mEventAsyncTaskDao;
+        List<Event> a;
+        getEventsForBackupAsyncTask(EventDao eventDao) {
+            mEventAsyncTaskDao = eventDao;
+        }
+        @Override
+        protected List<Event> doInBackground(Void... voids) {
+            return mEventAsyncTaskDao.getAllEventsForBackup();
+        }
+    }
+
+    public List<GroupEvent> getGroupEventsForBackup() throws ExecutionException, InterruptedException {
+        return new getGroupEventsForBackupAsyncTask(myGroupEventDao).execute().get();
+    }
+    private static class getGroupEventsForBackupAsyncTask extends AsyncTask<Void, Void, List<GroupEvent>> {
+        private GroupEventDao mGroupEventAsyncTaskDao;
+        List<GroupEvent> a;
+        getGroupEventsForBackupAsyncTask(GroupEventDao groupEventDao) {
+            mGroupEventAsyncTaskDao = groupEventDao;
+        }
+        @Override
+        protected List<GroupEvent> doInBackground(Void... voids) {
+            return mGroupEventAsyncTaskDao.getAllGroupEventsForBackup();
+        }
+    }
 
     //--------set all done Events to archived state--------
     public void setDoneEventsArchived(){
