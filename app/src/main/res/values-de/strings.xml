@@ -18,7 +18,7 @@
     <string name="label_settings_general_preferences">Allgemeine Einstellungen</string>
     <string name="label_settings_planning_preferences">Planungspräferenzen</string>
     <string name="label_about_author_title">Autor</string>
-    <string name="label_about_author_content">Diese App wurde von Lukas Mechura zwischen November 2018 und Februar 2019 entwickelt.</string>
+    <string name="label_about_author_content">Diese App wurde von Lukas Mechura größtenteils zwischen November 2018 und Februar 2019 entwickelt. Die Entwicklung erfolgt in unreglmäßig Abständen bis heute. Stand: 25. November 2020</string>
     <string name="label_about_contact_title">Kontakt</string>
     <string name="label_about_license_title">Lizenz</string>
     <string name="label_about_3rd_party_title">Drittanbieter Komponenten</string>
@@ -117,8 +117,8 @@
     <string name="notification_channel_description">Das ist der Benachrichtigungskanal für alle Benachrichtigungen in Tempus Fugit.</string>
     <string name="toolbar_label_backup_database_event">Datenbank Backup</string>
     <string name="btn_do_backup">Backup ausführen</string>
-    <string name="menu_label_backup_database">Datenback Backup</string>
-    <string name="tV_label_backup_instructions">(1) Klicke auf den Knopf, um das Backup zu beginnen.\\n(2) Wähle aus, wo das Backup gespeichert werden soll.\\n\\nAchtung:\\nBackups wiederherzustellen ist aktuell nicht möglich.\\nDaten werden im JSON Format exportiert, aber als \\\"html\\\" gespeichert, um schnell im Browser einsehbar zu sein.</string>
+    <string name="menu_label_backup_database">Datenbank Backup</string>
+    <string name="tV_label_backup_instructions">(1) Klicke auf den Knopf, um das Backup zu beginnen.\n(2) Wähle aus, wo das Backup gespeichert werden soll.\n\nAchtung:\nBackups wiederherzustellen ist aktuell nicht möglich.\nDaten werden im JSON Format exportiert, aber als \"html\" gespeichert, um schnell im Browser einsehbar zu sein.</string>
     <string name="tV_label_backup_successful">Backup erfolgreich erstellt.</string>
     <string name="tV_label_backup_not_successful">Es ist ein Fehler aufgetreten. Das Backup konnte nicht erstellt werden. (Entwerder FileNotFound oder IOException.)</string>
 </resources>
