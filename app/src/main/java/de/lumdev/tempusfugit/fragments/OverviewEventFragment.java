@@ -3,6 +3,8 @@ package de.lumdev.tempusfugit.fragments;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.fragment.NavHostFragment;
@@ -70,23 +72,30 @@ public class OverviewEventFragment extends Fragment {
         // Inflate the layout for this fragment
         final View rootView = inflater.inflate(R.layout.fragment_overview_event, container, false);
 
+        // Inflate the layout for this fragment
+        return rootView;
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
         //get Views
-        Toolbar toolbar = getActivity().findViewById(R.id.toolbar_main);
-        toolbar.setTitle(R.string.app_name);
+//        Toolbar toolbar = getActivity().findViewById(R.id.toolbar_main);
+//        toolbar.setTitle(R.string.app_name);
 //        tabLayout = getActivity().findViewById(R.id.tabLayout_main);
 //        tabLayout.setVisibility(View.VISIBLE); //set tabLayout to archived, in order to ensure that user can navigate
 //        fab = getParentFragment().getView().findViewById(R.id.fab_ovrvw_vp);
-        fab = rootView.findViewById(R.id.fab_ovrvw_e);
+        fab = view.findViewById(R.id.fab_ovrvw_e);
         fab.show();
         //set onClickListeners
         fab.setOnClickListener(addEventOnClickListener);
 
         //bind recyclerView to DataModel
-        RecyclerView recyclerView = rootView.findViewById(R.id.recycler_events);
+        RecyclerView recyclerView = view.findViewById(R.id.recycler_events);
         EventAdapter adapter = new EventAdapter(getActivity());
 
 //        viewModel.getAllEvents().observe(this, adapter::submitList);
-        viewModel.getAllNonArchivedEvents().observe(this, adapter::submitList);
+        viewModel.getAllNonArchivedEvents().observe(getViewLifecycleOwner(), adapter::submitList);
 
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -96,7 +105,7 @@ public class OverviewEventFragment extends Fragment {
 //        recyclerView.setNestedScrollingEnabled(false);
 
         //regsiter observer, that observes/ lisens to changes of any events "done" state
-            //if event is done=true or done=false, the info shall be persisted
+        //if event is done=true or done=false, the info shall be persisted
         adapter.registerObserver(new EventObserver() {
             @Override
             public void onEventDone(Event event, boolean newDoneState) {
@@ -120,16 +129,14 @@ public class OverviewEventFragment extends Fragment {
             public void onActionEditEvent(Event event){
                 //navigate to fragment where editing/ creating event is possible
 //            OverviewEventFragmentDirections.ActionOvrvwEDestToEdtEDest action = OverviewEventFragmentDirections.actionOvrvwEDestToEdtEDest();
-            MainViewPagerFragmentDirections.ActionMvpDestToEdtEDest action = MainViewPagerFragmentDirections.actionMvpDestToEdtEDest();
-            action.setEventId(event.id);
-            action.setParentGroupEvent(event.parentId);
-            NavHostFragment.findNavController(getParentFragment()).navigate(action);
+                MainViewPagerFragmentDirections.ActionMvpDestToEdtEDest action = MainViewPagerFragmentDirections.actionMvpDestToEdtEDest();
+                action.setEventId(event.id);
+                action.setParentGroupEvent(event.parentId);
+                NavHostFragment.findNavController(getParentFragment()).navigate(action);
             }
         });
 //        recyclerView.lis
 
-        // Inflate the layout for this fragment
-        return rootView;
     }
 
     @Override

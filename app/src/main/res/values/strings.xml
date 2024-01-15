@@ -40,7 +40,7 @@
     <!--About App-->
     <string name="toolbar_label_about_app">About this App</string>
     <string name="label_about_author_title">Author</string>
-    <string name="label_about_author_content">This android app was created by Lukas Mechura mainly from November 2018 to February 2019. Deveolpment continues in irregular intervals til today. State: 25. November 2020</string>
+    <string name="label_about_author_content">This android app was created by Lukas Mechura mainly from November 2018 to February 2019. Development continues in irregular intervals til today. State: 25. November 2020</string>
     <string name="label_about_contact_title">Contact</string>
     <string name="label_about_contact_content" translatable="false">lume5641@th-wildau.de \nhttps://github.com/lukmec/tempusfugit</string>
     <string name="label_about_license_title">License</string>

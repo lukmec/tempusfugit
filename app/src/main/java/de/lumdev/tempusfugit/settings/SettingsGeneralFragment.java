@@ -25,6 +25,9 @@ public class SettingsGeneralFragment extends SettingsTemplateFragment {
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
         setPreferencesFromResource(R.xml.pref_general, rootKey);
 
+        //set title string for toolbar (toolbar ist setup by SettingsTemplate via onActivityCreated())
+        super.toolbarTitleResId = R.string.pref_page_general;
+
         parentFragmentContext = getContext();
 
         //Handling setting of default GroupEvent
@@ -71,7 +74,6 @@ public class SettingsGeneralFragment extends SettingsTemplateFragment {
             });
         }
 
-        super.setupToolbar(R.string.pref_page_general);
     }
 
     private void saveToSharedPreferences(GroupEvent groupEvent){

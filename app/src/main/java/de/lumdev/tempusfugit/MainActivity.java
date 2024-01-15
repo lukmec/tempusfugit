@@ -91,7 +91,8 @@ public class MainActivity extends AppCompatActivity implements
 
         //start my background notification service (on app start)
 //        Log.d("TF_Main_Activity", "App started. Starting TF-Service.");
-        getApplicationContext().startService(new Intent(getApplicationContext(), PermanentNotificationService.class));
+        //TODO: fix Problem with PermanentNotificationService
+//        getApplicationContext().startService(new Intent(getApplicationContext(), PermanentNotificationService.class));
 
         //find and store NavController
         NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment);
@@ -204,4 +205,9 @@ public class MainActivity extends AppCompatActivity implements
         }
     }
 
+//    @Override
+//    protected void onResume() {
+//        super.onResume();
+//        toolbar.setTitle("heheheh");
+//    }
 }

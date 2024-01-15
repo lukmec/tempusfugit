@@ -4,6 +4,9 @@ package de.lumdev.tempusfugit.fragments;
 import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.fragment.NavHostFragment;
@@ -59,11 +62,23 @@ public class OverviewToDoEventFragment extends Fragment {
         // Inflate the layout for this fragment
         final View rootView = inflater.inflate(R.layout.fragment_overview_to_do_event, container, false);
 
+        return rootView;
+    }
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
 //        //get Views
+//        String toolbar_title = requireActivity().getActionBar().getTitle().toString();
+//        System.out.println("------------- Toolbar Title: "+ toolbar_title);
+
 //        Toolbar toolbar = getActivity().findViewById(R.id.toolbar_main);
 //        toolbar.setTitle(R.string.app_name);
 
-        fab = rootView.findViewById(R.id.fab_ovrvw_todo_e);
+//        Toolbar toolbar = getActivity().findViewById(R.id.toolbar_main);
+//        toolbar.setTitle(R.string.toolbar_label_archived_group_event);
+
+        fab = view.findViewById(R.id.fab_ovrvw_todo_e);
         //set onClickListeners
         fab.setOnClickListener(addEventOnClickListener);
 
@@ -71,9 +86,9 @@ public class OverviewToDoEventFragment extends Fragment {
         viewModel.calculateToDoDateOfEvents(getContext());
 
         //bind recyclerView to DataModel
-        RecyclerView recyclerView = rootView.findViewById(R.id.recycler_todo_events);
+        RecyclerView recyclerView = view.findViewById(R.id.recycler_todo_events);
         EventAdapter adapter = new EventAdapter(getActivity());
-        viewModel.getAllEventsOfToDoDay(0).observe(this, adapter::submitList);
+        viewModel.getAllEventsOfToDoDay(0).observe(getViewLifecycleOwner(), adapter::submitList);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
@@ -114,7 +129,6 @@ public class OverviewToDoEventFragment extends Fragment {
             }
         });
 
-        return rootView;
     }
 
     @Override
@@ -149,6 +163,13 @@ public class OverviewToDoEventFragment extends Fragment {
 //        viewModel.calculateToDoDateOfEvents(getContext());
 
     }
+
+//    @Override
+//    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+//        super.onActivityCreated(savedInstanceState);
+//        Toolbar toolbar = getActivity().findViewById(R.id.toolbar_main);
+//        toolbar.setTitle(R.string.toolbar_label_archived_group_event);
+//    }
 
     @Override
     public void onDestroy()

@@ -140,7 +140,7 @@ public class DetailledGroupEventFragment extends Fragment {
         if (selectedGroupEventId != -1) {
             //retrieve groupEvent
             LiveData<GroupEvent> selectedGroupEvent = viewModel.getGroupEvent(selectedGroupEventId);
-            selectedGroupEvent.observe(this, groupEvent -> {
+            selectedGroupEvent.observe(getViewLifecycleOwner(), groupEvent -> {
                 //update UI
                 name.setText(groupEvent.name);
                 description.setText(groupEvent.description);
@@ -184,7 +184,7 @@ public class DetailledGroupEventFragment extends Fragment {
         EventAdapter adapter = new EventAdapter(getActivity());
         //get Data from ViewModel
 //        viewModel.getAllEvents().observe(this, adapter::submitList);
-        viewModel.getAllEventsOfGroup(selectedGroupEventId).observe(this, adapter::submitList);
+        viewModel.getAllEventsOfGroup(selectedGroupEventId).observe(getViewLifecycleOwner(), adapter::submitList);
 //        recyclerView.swapAdapter(adapter, true);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -242,7 +242,7 @@ public class DetailledGroupEventFragment extends Fragment {
             try {
                 iconHelper.addLoadCallback(new IconHelper.LoadCallback() {
                     @Override
-                    public void onDataLoaded() {
+                    public void onDataLoaded(IconHelper helper) {
                         // This happens on UI thread, and is guaranteed to be called.
                         setIconInThisView.setImageDrawable(iconHelper.getIcon(iconId).getDrawable(context));
                     }

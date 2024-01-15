@@ -2,6 +2,8 @@ package de.lumdev.tempusfugit.fragments;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.fragment.NavHostFragment;
@@ -21,6 +23,8 @@ import androidx.appcompat.widget.Toolbar;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
+
+import java.util.Objects;
 
 
 /**
@@ -65,28 +69,36 @@ public class OverviewGroupEventFragment extends Fragment {
                              Bundle savedInstanceState) {
         final View rootView = inflater.inflate(R.layout.fragment_overview_group_event, container, false);
 
+        // Inflate the layout for this fragment
+        return rootView;
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
         //get Views
-        Toolbar toolbar = getActivity().findViewById(R.id.toolbar_main);
-        toolbar.setTitle(R.string.app_name);
+//        Toolbar toolbar = requireActivity().findViewById(R.id.toolbar_main);
+//        toolbar.setTitle(R.string.app_name);
 //        tabLayout = getActivity().findViewById(R.id.tabLayout_main);
 //        tabLayout.setVisibility(View.VISIBLE); //set tabLayout to archived, in order to ensure that user can navigate
 //        fab = getParentFragment().getView().findViewById(R.id.fab_ovrvw_vp);
-        fab = rootView.findViewById(R.id.fab_ovrvw_ge);
+        fab = view.findViewById(R.id.fab_ovrvw_ge);
         fab.show();
         //set onClickListeners
         fab.setOnClickListener(addGroupEventOnClickListener);
 
         //bind recyclerView to DataModel
-        RecyclerView recyclerView = rootView.findViewById(R.id.recycler_groupEvents);
+        RecyclerView recyclerView = view.findViewById(R.id.recycler_groupEvents);
         GroupEventAdapter adapter = new GroupEventAdapter(getActivity());
 
 //        viewModel.getAllGroupEvents().observe(this, adapter::submitList);
-        viewModel.getAllNonArchivedGroupEvents().observe(this, adapter::submitList);
+        viewModel.getAllNonArchivedGroupEvents().observe(getViewLifecycleOwner(), adapter::submitList);
 
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         //prevent short blinking of recyclerview, when data updates
-            //see https://stackoverflow.com/questions/29331075/recyclerview-blinking-after-notifydatasetchanged
+        //see https://stackoverflow.com/questions/29331075/recyclerview-blinking-after-notifydatasetchanged
         recyclerView.getItemAnimator().setChangeDuration(0);
 
         //regsiter observer, that observes/ listens to click events on the list items
@@ -107,8 +119,6 @@ public class OverviewGroupEventFragment extends Fragment {
             }
         });
 
-        // Inflate the layout for this fragment
-        return rootView;
     }
 
     @Override

@@ -21,6 +21,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 
 import androidx.activity.OnBackPressedCallback;
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
@@ -29,10 +30,12 @@ import androidx.navigation.fragment.NavHostFragment;
 import de.lumdev.tempusfugit.MainViewModel;
 import de.lumdev.tempusfugit.R;
 
-public class BackupDatabaseFragment extends Fragment implements OnBackPressedCallback {
+public class BackupDatabaseFragment extends Fragment {
 
         private MainViewModel viewModel;
         private Toolbar toolbar;
+        private OnBackPressedCallback backPressedCallback;
+
         private TextView backup_tV;
         private Button backup_btn;
         private View.OnClickListener doBackupOnClickListener = new View.OnClickListener() {
@@ -61,6 +64,18 @@ public class BackupDatabaseFragment extends Fragment implements OnBackPressedCal
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
             viewModel = ViewModelProviders.of(this).get(MainViewModel.class);
+            //handle back press
+            backPressedCallback = new OnBackPressedCallback(true) {
+                @Override
+                public void handleOnBackPressed() {
+                    //handle back press here
+                    //use next line if you just need navigate up
+                    assert getParentFragment() != null;
+                    NavHostFragment.findNavController(getParentFragment()).navigateUp();
+                    toolbar.setNavigationIcon(null);
+                    //Log.e(getClass().getSimpleName(), "handleOnBackPressed");
+                }
+            };
         }
 
         @Override
@@ -68,25 +83,22 @@ public class BackupDatabaseFragment extends Fragment implements OnBackPressedCal
                                  Bundle savedInstanceState) {
             final View rootView = inflater.inflate(R.layout.fragment_backup_database, container, false);
 
-            //get Views
-            toolbar = getActivity().findViewById(R.id.toolbar_main);
-            toolbar.setTitle(R.string.toolbar_label_backup_database_event);
-            toolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp);
-            toolbar.setNavigationContentDescription(R.string.toolbar_settings_navigation_description);
-            toolbar.setNavigationOnClickListener((View v) -> {
-                NavHostFragment.findNavController(this).navigateUp();
-                toolbar.setNavigationIcon(null); //disbale icon in toolbar again
-            });
-
-            backup_tV = rootView.findViewById(R.id.tV_label_backup);
-            backup_btn = rootView.findViewById(R.id.btn_do_backup);
-            backup_btn.setOnClickListener(doBackupOnClickListener);
+            //register onBackPressedCallback
+            getActivity().getOnBackPressedDispatcher().addCallback(getViewLifecycleOwner(), backPressedCallback);
 
             // Inflate the layout for this fragment
             return rootView;
         }
 
-        // Request code for creating a PDF document.
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        backup_tV = view.findViewById(R.id.tV_label_backup);
+        backup_btn = view.findViewById(R.id.btn_do_backup);
+        backup_btn.setOnClickListener(doBackupOnClickListener);
+    }
+
+    // Request code for creating a PDF document.
         private static final int CREATE_FILE = 1;
 
         private void createFile(Uri pickerInitialUri) {
@@ -148,20 +160,31 @@ public class BackupDatabaseFragment extends Fragment implements OnBackPressedCal
         @Override
         public void onActivityCreated(@Nullable Bundle savedInstanceState) {
             super.onActivityCreated(savedInstanceState);
-            getActivity().addOnBackPressedCallback(getViewLifecycleOwner(),this);
+//            getActivity().addOnBackPressedCallback(getViewLifecycleOwner(),this);
+            toolbar = getActivity().findViewById(R.id.toolbar_main);
+            toolbar.setTitle(R.string.toolbar_label_backup_database_event);
+            toolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp);
+            toolbar.setNavigationContentDescription(R.string.toolbar_settings_navigation_description);
+            toolbar.setNavigationOnClickListener((View v) -> {
+                NavHostFragment.findNavController(this).navigateUp();
+                toolbar.setNavigationIcon(null); //disbale icon in toolbar again
+            });
         }
-        @Override
-        public boolean handleOnBackPressed() {
-            //Do your job here
-            //use next line if you just need navigate up
-            NavHostFragment.findNavController(this).navigateUp();
-            toolbar.setNavigationIcon(null);
-            //Log.e(getClass().getSimpleName(), "handleOnBackPressed");
-            return true;
-        }
+//        @Override
+//        public boolean handleOnBackPressed() {
+//            //Do your job here
+//            //use next line if you just need navigate up
+//            NavHostFragment.findNavController(this).navigateUp();
+//            toolbar.setNavigationIcon(null);
+//            //Log.e(getClass().getSimpleName(), "handleOnBackPressed");
+//            return true;
+//        }
         @Override
         public void onDestroyView() {
             super.onDestroyView();
-            getActivity().removeOnBackPressedCallback(this);
+//            getActivity().removeOnBackPressedCallback(this);
+            //unregister listener here
+            backPressedCallback.remove();
+
         }
 }

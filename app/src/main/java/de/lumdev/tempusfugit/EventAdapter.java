@@ -1,5 +1,6 @@
 package de.lumdev.tempusfugit;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
@@ -202,6 +203,7 @@ public class EventAdapter extends PagedListAdapter<Event, EventAdapter.EventView
                 public boolean areItemsTheSame(Event oldEvent, Event newEvent) {
                     return oldEvent.id == newEvent.id;
                 }
+                @SuppressLint("DiffUtilEquals")
                 @Override
                 public boolean areContentsTheSame(Event oldEvent,
                                                   Event newEvent) {

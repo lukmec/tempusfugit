@@ -9,6 +9,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
@@ -23,6 +24,7 @@ import com.maltaisn.icondialog.IconHelper;
 
 import java.util.ArrayList;
 
+import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 import androidx.core.graphics.drawable.DrawableCompat;
@@ -30,74 +32,72 @@ import androidx.lifecycle.LifecycleService;
 import androidx.preference.PreferenceManager;
 import de.lumdev.tempusfugit.data.Event;
 
-    public class PermanentNotificationService extends LifecycleService {
+public class PermanentNotificationService extends LifecycleService {
 
-        private int numberOfTasksWithPermanentNotification = 3;
-        public final int PERMANENT_NOTIFICATION_QUICK_ACCESS = 100;
-        private final String PERMANENT_NOTIFICATION_TASKS_CHANNEL = "1";
-        private MainViewModel viewModel;
-        private NotificationManagerCompat notificationManager;
-        private ArrayList<NotificationCompat.Builder> allActiveNotifications = new ArrayList<>();
-        private ArrayList<Integer> eventsToIgnore = new ArrayList<>();
-        //static final vlaues for BroadcastReciever
-        public static final String ACTION_EVENT_DONE_STATE_CHANGE = "Action_Event_Done_State_Change";
-        public static final String ACTION_NOTIFICATION_DISMISSED = "Action_Notification_Dismissed";
-        public static final String EXTRA_EVENT_ID = "Extra_Event_Id";
-        public static final String EXTRA_EVENT_DONE = "Extra_Event_Done";
-        //define Channel_ID for Tempus Fugit Notifications
-        public static final String CHANNEL_ID = "Tempus_Fugit_Notification_Channel";
-        private BroadcastReceiver notificationProcessingBroadcastReceiver = new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent)
-            {
-                if (intent.getAction().equals(ACTION_EVENT_DONE_STATE_CHANGE)) {
-                    // your onClick action is here
-                    if (intent.hasExtra(EXTRA_EVENT_ID) && intent.hasExtra(EXTRA_EVENT_DONE)) {
-                        viewModel.setEventDone(intent.getIntExtra(EXTRA_EVENT_ID, -1), intent.getBooleanExtra(EXTRA_EVENT_DONE, false));
-                        //log info out
+    private int numberOfTasksWithPermanentNotification = 3;
+    public final int PERMANENT_NOTIFICATION_QUICK_ACCESS = 100;
+    private final String PERMANENT_NOTIFICATION_TASKS_CHANNEL = "1";
+    private MainViewModel viewModel;
+    private NotificationManagerCompat notificationManager;
+    private ArrayList<NotificationCompat.Builder> allActiveNotifications = new ArrayList<>();
+    private ArrayList<Integer> eventsToIgnore = new ArrayList<>();
+    //static final vlaues for BroadcastReciever
+    public static final String ACTION_EVENT_DONE_STATE_CHANGE = "Action_Event_Done_State_Change";
+    public static final String ACTION_NOTIFICATION_DISMISSED = "Action_Notification_Dismissed";
+    public static final String EXTRA_EVENT_ID = "Extra_Event_Id";
+    public static final String EXTRA_EVENT_DONE = "Extra_Event_Done";
+    //define Channel_ID for Tempus Fugit Notifications
+    public static final String CHANNEL_ID = "Tempus_Fugit_Notification_Channel";
+    private BroadcastReceiver notificationProcessingBroadcastReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (intent.getAction().equals(ACTION_EVENT_DONE_STATE_CHANGE)) {
+                // your onClick action is here
+                if (intent.hasExtra(EXTRA_EVENT_ID) && intent.hasExtra(EXTRA_EVENT_DONE)) {
+                    viewModel.setEventDone(intent.getIntExtra(EXTRA_EVENT_ID, -1), intent.getBooleanExtra(EXTRA_EVENT_DONE, false));
+                    //log info out
 //                    Toast.makeText(context, "Event updated.", Toast.LENGTH_SHORT).show();
 //                    Log.d("--->", "EventId:"+intent.getIntExtra(EXTRA_EVENT_ID, -1)+"      eventDone: "+intent.getBooleanExtra(EXTRA_EVENT_DONE, false));
-                    }
                 }
-                if (intent.getAction().equals(ACTION_NOTIFICATION_DISMISSED)) {
-                    // your onClick action is here
-                    if (intent.hasExtra(EXTRA_EVENT_ID) && intent.hasExtra(EXTRA_EVENT_DONE)) {
-                        //ignore event to show in notifications //prevent event, that was dismissed from notifiaction to be displayed again
-                        eventsToIgnore.add(intent.getIntExtra(EXTRA_EVENT_ID, -1));
-                        //ATTENTION: "CHEAT-MOVE" --- do random database operation (i.e. re-saving done-state) to trigger change in livData set (without this "triggering" no new event would be loaded)
-                        viewModel.setEventDone(intent.getIntExtra(EXTRA_EVENT_ID, -1), intent.getBooleanExtra(EXTRA_EVENT_DONE, false));
-                        //log info out
+            }
+            if (intent.getAction().equals(ACTION_NOTIFICATION_DISMISSED)) {
+                // your onClick action is here
+                if (intent.hasExtra(EXTRA_EVENT_ID) && intent.hasExtra(EXTRA_EVENT_DONE)) {
+                    //ignore event to show in notifications //prevent event, that was dismissed from notifiaction to be displayed again
+                    eventsToIgnore.add(intent.getIntExtra(EXTRA_EVENT_ID, -1));
+                    //ATTENTION: "CHEAT-MOVE" --- do random database operation (i.e. re-saving done-state) to trigger change in livData set (without this "triggering" no new event would be loaded)
+                    viewModel.setEventDone(intent.getIntExtra(EXTRA_EVENT_ID, -1), intent.getBooleanExtra(EXTRA_EVENT_DONE, false));
+                    //log info out
 //                    Toast.makeText(context, "Event "+ intent.getIntExtra(EXTRA_EVENT_ID, -1) +" dismissed.", Toast.LENGTH_SHORT).show();
 //                    Log.d("--->", "EventId:"+intent.getIntExtra(EXTRA_EVENT_ID, -1)+" dismissed.");
-                    }
                 }
             }
-        };
-        public static final String ACTION_SET_NUMBER_OF_NOTIFICATIONS_TO_SHOW = "ACTION_SET_NUMBER_OF_NOTIFICATIONS_TO_SHOW";
-        public static final String ACTION_CLEAR_EVENTS_TO_IGNORE_LIST = "ACTION_CLEAR_EVENTS_TO_IGNORE_LIST";
-        public static final String ACTION_RECREATE_NOTIFICATIONS = "ACTION_RECREATE_NOTIFICATIONS";
-        public static final String EXTRA_NUMBER_OF_NOTIFICATIONS_TO_SHOW = "EXTRA_NUMBER_OF_NOTIFICATIONS_TO_SHOW";
-        private BroadcastReceiver miscellaneousDataBroadcastReceiver = new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent)
-            {
-                if (intent.getAction().equals(ACTION_SET_NUMBER_OF_NOTIFICATIONS_TO_SHOW)) {
-                    if (intent.hasExtra(EXTRA_NUMBER_OF_NOTIFICATIONS_TO_SHOW)) {
+        }
+    };
+    public static final String ACTION_SET_NUMBER_OF_NOTIFICATIONS_TO_SHOW = "ACTION_SET_NUMBER_OF_NOTIFICATIONS_TO_SHOW";
+    public static final String ACTION_CLEAR_EVENTS_TO_IGNORE_LIST = "ACTION_CLEAR_EVENTS_TO_IGNORE_LIST";
+    public static final String ACTION_RECREATE_NOTIFICATIONS = "ACTION_RECREATE_NOTIFICATIONS";
+    public static final String EXTRA_NUMBER_OF_NOTIFICATIONS_TO_SHOW = "EXTRA_NUMBER_OF_NOTIFICATIONS_TO_SHOW";
+    private BroadcastReceiver miscellaneousDataBroadcastReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (intent.getAction().equals(ACTION_SET_NUMBER_OF_NOTIFICATIONS_TO_SHOW)) {
+                if (intent.hasExtra(EXTRA_NUMBER_OF_NOTIFICATIONS_TO_SHOW)) {
 //                        Log.d("-->>", "Broadcast reviced: "+intent.getIntExtra(EXTRA_NUMBER_OF_NOTIFICATIONS_TO_SHOW, 3));
-                        setNumberOfTasksWithPermanentNotification(intent.getIntExtra(EXTRA_NUMBER_OF_NOTIFICATIONS_TO_SHOW, 3));
-                        createEventNotifications();
-                    }
-                }
-                if (intent.getAction().equals(ACTION_CLEAR_EVENTS_TO_IGNORE_LIST)) {
-                    eventsToIgnore.clear();
-                    Log.d("TF_PermNotifService", "List of EventsToIgnore cleared successfully (in order to avoid endless growing of list).");
-                }
-                if (intent.getAction().equals(ACTION_RECREATE_NOTIFICATIONS)) {
+                    setNumberOfTasksWithPermanentNotification(intent.getIntExtra(EXTRA_NUMBER_OF_NOTIFICATIONS_TO_SHOW, 3));
                     createEventNotifications();
-                    Log.d("TF_PermNotifService", "Service is requested by broadcast to recreate all notifications.");
                 }
             }
-        };
+            if (intent.getAction().equals(ACTION_CLEAR_EVENTS_TO_IGNORE_LIST)) {
+                eventsToIgnore.clear();
+                Log.d("TF_PermNotifService", "List of EventsToIgnore cleared successfully (in order to avoid endless growing of list).");
+            }
+            if (intent.getAction().equals(ACTION_RECREATE_NOTIFICATIONS)) {
+                createEventNotifications();
+                Log.d("TF_PermNotifService", "Service is requested by broadcast to recreate all notifications.");
+            }
+        }
+    };
 
     public PermanentNotificationService() {
     }
@@ -110,7 +110,7 @@ import de.lumdev.tempusfugit.data.Event;
         //check whether service is wanted to start at all
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext() /* Activity context */);
 //        Log.d("---->", "show notif from prefs: "+sharedPreferences.getBoolean(getApplicationContext().getResources().getString(R.string.pref_id_show_notification), false));
-        if (!sharedPreferences.getBoolean(getApplicationContext().getResources().getString(R.string.pref_id_show_notification), false)){
+        if (!sharedPreferences.getBoolean(getApplicationContext().getResources().getString(R.string.pref_id_show_notification), false)) {
             stopSelf();
         }
 
@@ -149,11 +149,11 @@ import de.lumdev.tempusfugit.data.Event;
     }
 
 
-    private void createEventNotifications(){
+    private void createEventNotifications() {
 
         cancelEventNotifications(); //start fresh
 
-        if(notificationManager == null){
+        if (notificationManager == null) {
             notificationManager = NotificationManagerCompat.from(getApplicationContext());
         }
 
@@ -164,8 +164,8 @@ import de.lumdev.tempusfugit.data.Event;
 
             int counter_current_number_of_notifs = 0;
 //            for (int i=0; i < events.size() && i < numberOfTasksWithPermanentNotification; i++) {
-            for (int i=0; i < events.size() && counter_current_number_of_notifs < numberOfTasksWithPermanentNotification; i++) {
-            Event e = events.get(i);
+            for (int i = 0; i < events.size() && counter_current_number_of_notifs < numberOfTasksWithPermanentNotification; i++) {
+                Event e = events.get(i);
 
                 if (!eventsToIgnore.contains(e.id)) { //ignore specific event (ignore == dont create notification), when in list for ignoredEvents
 
@@ -183,11 +183,11 @@ import de.lumdev.tempusfugit.data.Event;
 //                    contentView.setTextViewText(R.id.notif_desc, e.description);
                     contentView.setOnClickPendingIntent(R.id.notif_single_task_relative_layout, getEventDonePendingIntent(getApplicationContext(), counter_current_number_of_notifs, e.id, !e.done)); //!e.done equals the new desired Done State
                     //set icon of group event to notification
-                    try{
+                    try {
                         //setting picture from icondialog id
 //                        Drawable drawable = IconHelper.getInstance(getApplicationContext()).getIcon(e.icon).getDrawable(getApplicationContext());
                         contentView.setImageViewBitmap(R.id.notif_event_icon, drawableToBitmap(IconHelper.getInstance(getApplicationContext()).getIcon(e.icon).getDrawable(getApplicationContext())));
-                    }catch (Exception exception){
+                    } catch (Exception exception) {
                         //setting picture from R's resource id
                         contentView.setImageViewResource(R.id.notif_event_icon, e.icon);
                     }
@@ -219,6 +219,16 @@ import de.lumdev.tempusfugit.data.Event;
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                         notificationBuilder.setChannelId(CHANNEL_ID);
                     }
+                    if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+                        // TODO: Consider calling
+                        //    ActivityCompat#requestPermissions
+                        // here to request the missing permissions, and then overriding
+                        //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                        //                                          int[] grantResults)
+                        // to handle the case where the user grants the permission. See the documentation
+                        // for ActivityCompat#requestPermissions for more details.
+                        return;
+                    }
                     notificationManager.notify(i, allActiveNotifications.get(counter_current_number_of_notifs).build()); //important to notify with i (== index of event in list) in order to prevent, that same event-notification is shown multiple times
                     //increase number of currently shown notifs
                     counter_current_number_of_notifs++;
@@ -231,22 +241,32 @@ import de.lumdev.tempusfugit.data.Event;
         });
     }
 
-    private void cancelEventNotifications(){
+    private void cancelEventNotifications() {
         //make all notifcations disappear
-        if(notificationManager == null){
+        if (notificationManager == null) {
             notificationManager = NotificationManagerCompat.from(getApplicationContext());
         }
         notificationManager.cancelAll();
         eventsToIgnore.clear();
     }
 
-    private void createQuickAccessNotification(String testMsg){
-        if(notificationManager == null){
+    private void createQuickAccessNotification(String testMsg) {
+        if (notificationManager == null) {
             notificationManager = NotificationManagerCompat.from(getApplicationContext());
         }
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(getApplicationContext(), PERMANENT_NOTIFICATION_TASKS_CHANNEL);
         notificationBuilder.setContentTitle(testMsg)
                 .setOngoing(true);
+        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
         notificationManager.notify(PERMANENT_NOTIFICATION_QUICK_ACCESS, notificationBuilder.build());
     }
 
@@ -267,7 +287,7 @@ import de.lumdev.tempusfugit.data.Event;
         intent.putExtra(EXTRA_EVENT_ID, eventId); // Attention: Adding an extra always requires App to be re-installed!! (extra do't work properly otherwise)
         intent.putExtra(EXTRA_EVENT_DONE, eventDone);
         intent.setAction(ACTION_EVENT_DONE_STATE_CHANGE);
-        return PendingIntent.getBroadcast(context, notif_index, intent, PendingIntent.FLAG_CANCEL_CURRENT); //Attention: Flag_Update_Current needed in order to update Extras of Pending intent, every time user clicks //FLAG_CANCEL_CURRENT for cancelling privious pIntent and creating a new one
+        return PendingIntent.getBroadcast(context, notif_index, intent, PendingIntent.FLAG_CANCEL_CURRENT | PendingIntent.FLAG_IMMUTABLE); //Attention: Flag_Update_Current needed in order to update Extras of Pending intent, every time user clicks //FLAG_CANCEL_CURRENT for cancelling privious pIntent and creating a new one
         // read more here: https://developer.android.com/reference/android/app/PendingIntent.html#getBroadcast-android.content.Context-int-android.content.Intent-int-
     }
 
@@ -276,7 +296,7 @@ import de.lumdev.tempusfugit.data.Event;
         intent.putExtra(EXTRA_EVENT_ID, eventId); // Attention: Adding an extra always requires App to be re-installed!! (extra do't work properly otherwise)
         intent.putExtra(EXTRA_EVENT_DONE, eventDone);
         intent.setAction(ACTION_NOTIFICATION_DISMISSED);
-        return PendingIntent.getBroadcast(context, notif_index, intent, PendingIntent.FLAG_CANCEL_CURRENT); //Attention: Flag_Update_Current needed in order to update Extras of Pending intent, every time user clicks //FLAG_CANCEL_CURRENT for cancelling privious pIntent and creating a new one
+        return PendingIntent.getBroadcast(context, notif_index, intent, PendingIntent.FLAG_CANCEL_CURRENT | PendingIntent.FLAG_IMMUTABLE); //Attention: Flag_Update_Current needed in order to update Extras of Pending intent, every time user clicks //FLAG_CANCEL_CURRENT for cancelling privious pIntent and creating a new one
         // read more here: https://developer.android.com/reference/android/app/PendingIntent.html#getBroadcast-android.content.Context-int-android.content.Intent-int-
     }
 

@@ -5,6 +5,7 @@ import android.view.Menu;
 import android.view.View;
 
 import androidx.activity.OnBackPressedCallback;
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -12,10 +13,12 @@ import androidx.navigation.fragment.NavHostFragment;
 import androidx.preference.PreferenceFragmentCompat;
 import de.lumdev.tempusfugit.R;
 
-public class SettingsTemplateFragment extends PreferenceFragmentCompat implements OnBackPressedCallback {
+public class SettingsTemplateFragment extends PreferenceFragmentCompat {
 
     private Toolbar toolbar;
-    private int toolbarTitleResId = 0;
+    protected int toolbarTitleResId = 0;
+
+    private OnBackPressedCallback backPressedCallback;
 
     //this method always has to be implemented by Child-classes
     @Override
@@ -43,6 +46,18 @@ public class SettingsTemplateFragment extends PreferenceFragmentCompat implement
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
+        //handle back press
+        backPressedCallback = new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                //handle back press here
+                //use next line if you just need navigate up
+                assert getParentFragment() != null;
+                NavHostFragment.findNavController(getParentFragment()).navigateUp();
+                toolbar.setNavigationIcon(null);
+                //Log.e(getClass().getSimpleName(), "handleOnBackPressed");
+            }
+        };
     }
     @Override
     public void onPrepareOptionsMenu(Menu menu) {
@@ -56,33 +71,49 @@ public class SettingsTemplateFragment extends PreferenceFragmentCompat implement
         super.onPrepareOptionsMenu(menu);
     }
 
-    // used for handling back press (on physical/ soft button); see: https://stackoverflow.com/questions/51043428/handling-back-button-in-android-navigation-component
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        //register onBackPressedCallback
+        getActivity().getOnBackPressedDispatcher().addCallback(getViewLifecycleOwner(), backPressedCallback);
+        super.onViewCreated(view, savedInstanceState);
+    }
+
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        getActivity().addOnBackPressedCallback(getViewLifecycleOwner(),this);
-    }
-    @Override
-    public boolean handleOnBackPressed() {
-        //Do your job here
-        //use next line if you just need navigate up
-        NavHostFragment.findNavController(this).navigateUp();
-        toolbar.setNavigationIcon(null);
-        //Log.e(getClass().getSimpleName(), "handleOnBackPressed");
-
-        return true;
-    }
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        getActivity().removeOnBackPressedCallback(this);
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
         if (toolbarTitleResId != 0){
             setupToolbar(this.toolbarTitleResId);
         }
     }
+
+    // used for handling back press (on physical/ soft button); see: https://stackoverflow.com/questions/51043428/handling-back-button-in-android-navigation-component
+//    @Override
+//    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+//        super.onActivityCreated(savedInstanceState);
+//    }
+//    @Override
+//    public boolean handleOnBackPressed() {
+//        //Do your job here
+//        //use next line if you just need navigate up
+//        NavHostFragment.findNavController(this).navigateUp();
+//        toolbar.setNavigationIcon(null);
+//        //Log.e(getClass().getSimpleName(), "handleOnBackPressed");
+//
+//        return true;
+//    }
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+//        getActivity().removeOnBackPressedCallback(this);
+        //unregister listener here
+        backPressedCallback.remove();
+    }
+
+//    @Override
+//    public void onResume() {
+//        super.onResume();
+//        if (toolbarTitleResId != 0){
+//            setupToolbar(this.toolbarTitleResId);
+//        }
+//    }
 }

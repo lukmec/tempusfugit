@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.activity.OnBackPressedCallback;
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
@@ -20,10 +21,12 @@ import de.lumdev.tempusfugit.R;
 import de.lumdev.tempusfugit.data.Event;
 import de.lumdev.tempusfugit.util.EventObserver;
 
-public class OverviewArchivedEventFragment extends Fragment implements OnBackPressedCallback {
+public class OverviewArchivedEventFragment extends Fragment {
 
     private MainViewModel viewModel;
     private Toolbar toolbar;
+
+    private OnBackPressedCallback backPressedCallback;
 
     public OverviewArchivedEventFragment() {
         // Required empty public constructor
@@ -43,6 +46,18 @@ public class OverviewArchivedEventFragment extends Fragment implements OnBackPre
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         viewModel = ViewModelProviders.of(this).get(MainViewModel.class);
+        //handle back press
+        backPressedCallback = new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                //handle back press here
+                //use next line if you just need navigate up
+                assert getParentFragment() != null;
+                NavHostFragment.findNavController(getParentFragment()).navigateUp();
+                toolbar.setNavigationIcon(null);
+                //Log.e(getClass().getSimpleName(), "handleOnBackPressed");
+            }
+        };
     }
 
     @Override
@@ -50,22 +65,21 @@ public class OverviewArchivedEventFragment extends Fragment implements OnBackPre
                              Bundle savedInstanceState) {
         final View rootView = inflater.inflate(R.layout.fragment_overview_archived_event, container, false);
 
-        //get Views
-        toolbar = getActivity().findViewById(R.id.toolbar_main);
-        toolbar.setTitle(R.string.toolbar_label_archived_event);
-        toolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp);
-        toolbar.setNavigationContentDescription(R.string.toolbar_settings_navigation_description);
-        toolbar.setNavigationOnClickListener((View v) -> {
-            NavHostFragment.findNavController(this).navigateUp();
-            toolbar.setNavigationIcon(null); //disbale icon in toolbar again
-        });
+        //register onBackPressedCallback
+        getActivity().getOnBackPressedDispatcher().addCallback(getViewLifecycleOwner(), backPressedCallback);
 
+        // Inflate the layout for this fragment
+        return rootView;
+    }
 
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
         //bind recyclerView to DataModel
-        RecyclerView recyclerView = rootView.findViewById(R.id.recycler_archived_events);
+        RecyclerView recyclerView = view.findViewById(R.id.recycler_archived_events);
         EventAdapter adapter = new EventAdapter(getActivity());
 
-        viewModel.getEventsByArchiveState(true).observe(this, adapter::submitList);
+        viewModel.getEventsByArchiveState(true).observe(getViewLifecycleOwner(), adapter::submitList);
 //        viewModel.getAllNonArchivedGroupEvents().observe(this, adapter::submitList);
 
         recyclerView.setAdapter(adapter);
@@ -92,29 +106,38 @@ public class OverviewArchivedEventFragment extends Fragment implements OnBackPre
             }
         });
 
-        // Inflate the layout for this fragment
-        return rootView;
     }
 
     // used for handling back press (on physical/ soft button); see: https://stackoverflow.com/questions/51043428/handling-back-button-in-android-navigation-component
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        getActivity().addOnBackPressedCallback(getViewLifecycleOwner(),this);
+//        getActivity().addOnBackPressedCallback(getViewLifecycleOwner(),this);
+
+        toolbar = getActivity().findViewById(R.id.toolbar_main);
+        toolbar.setTitle(R.string.toolbar_label_archived_event);
+        toolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp);
+        toolbar.setNavigationContentDescription(R.string.toolbar_settings_navigation_description);
+        toolbar.setNavigationOnClickListener((View v) -> {
+            NavHostFragment.findNavController(this).navigateUp();
+            toolbar.setNavigationIcon(null); //disbale icon in toolbar again
+        });
     }
-    @Override
-    public boolean handleOnBackPressed() {
-        //Do your job here
-        //use next line if you just need navigate up
-        NavHostFragment.findNavController(this).navigateUp();
-        toolbar.setNavigationIcon(null);
-        //Log.e(getClass().getSimpleName(), "handleOnBackPressed");
-        return true;
-    }
+//    @Override
+//    public boolean handleOnBackPressed() {
+//        //Do your job here
+//        //use next line if you just need navigate up
+//        NavHostFragment.findNavController(this).navigateUp();
+//        toolbar.setNavigationIcon(null);
+//        //Log.e(getClass().getSimpleName(), "handleOnBackPressed");
+//        return true;
+//    }
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        getActivity().removeOnBackPressedCallback(this);
+//        getActivity().removeOnBackPressedCallback(this);
+        //unregister listener here
+        backPressedCallback.remove();
     }
 
 }

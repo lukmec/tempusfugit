@@ -13,6 +13,7 @@ import android.widget.Toast;
 import java.util.concurrent.TimeUnit;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 import androidx.lifecycle.ViewModelProviders;
@@ -35,6 +36,9 @@ public class SettingsPersonalizationFragment extends SettingsTemplateFragment {
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
         setPreferencesFromResource(R.xml.pref_personalization, rootKey);
+
+        //set title string for toolbar (toolbar ist setup by SettingsTemplate via onActivityCreated())
+        super.toolbarTitleResId = R.string.pref_page_personalization;
 
         //Handling showing permanent notification
         SwitchPreferenceCompat permNotifPref = findPreference(getString(R.string.pref_id_show_notification));
@@ -63,7 +67,7 @@ public class SettingsPersonalizationFragment extends SettingsTemplateFragment {
                     Intent intent = new Intent();
                     intent.putExtra(PermanentNotificationService.EXTRA_NUMBER_OF_NOTIFICATIONS_TO_SHOW, Integer.valueOf((String)newValue)); // Attention: Adding an extra always requires App to be re-installed!! (extra do't work properly otherwise)
                     intent.setAction(PermanentNotificationService.ACTION_SET_NUMBER_OF_NOTIFICATIONS_TO_SHOW);
-                    PendingIntent pendingIntent = PendingIntent.getBroadcast(getContext(), 0, intent, PendingIntent.FLAG_CANCEL_CURRENT);
+                    PendingIntent pendingIntent = PendingIntent.getBroadcast(getContext(), 0, intent, PendingIntent.FLAG_CANCEL_CURRENT | PendingIntent.FLAG_IMMUTABLE);
                     try{
                         pendingIntent.send();
                     }catch (PendingIntent.CanceledException e){
@@ -89,9 +93,14 @@ public class SettingsPersonalizationFragment extends SettingsTemplateFragment {
             });
         }
 
-        super.setupToolbar(R.string.pref_page_personalization);
+//        super.setupToolbar(R.string.pref_page_personalization);
     }
 
+//    @Override
+//    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+//        super.onActivityCreated(savedInstanceState);
+//        super.setupToolbar(R.string.pref_page_personalization);
+//    }
 }
 
 

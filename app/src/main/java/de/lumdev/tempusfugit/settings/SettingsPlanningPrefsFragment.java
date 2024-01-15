@@ -12,7 +12,8 @@ public class SettingsPlanningPrefsFragment extends SettingsTemplateFragment {
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
         setPreferencesFromResource(R.xml.pref_planning_prefs, rootKey);
-        super.setupToolbar(R.string.pref_page_planning_preferences);
+        //set title string for toolbar (toolbar ist setup by SettingsTemplate via onActivityCreated())
+        super.toolbarTitleResId = R.string.pref_page_planning_preferences;
 
         //dynamically set summary for seekbar
         SeekBarPreference buffertimePreference = (SeekBarPreference) findPreference("buffertime");

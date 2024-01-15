@@ -2,6 +2,8 @@ package de.lumdev.tempusfugit.fragments;
 
 import android.os.Bundle;
 
+import androidx.annotation.Nullable;
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
 import de.lumdev.tempusfugit.MainPagerAdapter;
@@ -96,5 +98,12 @@ public class MainViewPagerFragment extends Fragment {
              }
          });
      }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        Toolbar toolbar = getActivity().findViewById(R.id.toolbar_main);
+        toolbar.setTitle(R.string.app_name);
+    }
 
 }

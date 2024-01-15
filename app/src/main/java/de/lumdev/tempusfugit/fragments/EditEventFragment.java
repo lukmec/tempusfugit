@@ -223,7 +223,7 @@ public class EditEventFragment extends Fragment {
         //set values of fields, according to provided groupEvent
         if (newParentGroupEventId != -1){
             LiveData<GroupEvent> selectedGroupEvent = viewModel.getGroupEvent(newParentGroupEventId);
-            selectedGroupEvent.observe(this, groupEvent -> {
+            selectedGroupEvent.observe(getViewLifecycleOwner(), groupEvent -> {
                 //update UI
                 cV_container_parent_ge.setCardBackgroundColor(groupEvent.color);
                 tV_parent_ge.setText(groupEvent.name);
@@ -235,7 +235,7 @@ public class EditEventFragment extends Fragment {
         if (givenEventId != -1) {
             //retrieve groupEvent
             LiveData<Event> selectedEvent = viewModel.getEvent(givenEventId);
-            selectedEvent.observe(this, event -> {
+            selectedEvent.observe(getViewLifecycleOwner(), event -> {
                 //save GroupEvent (as Deepcopy object) for later use
                 eventToEdit = event.deepcopy();
                 //update UI
@@ -386,7 +386,7 @@ public class EditEventFragment extends Fragment {
             try {
                 iconHelper.addLoadCallback(new IconHelper.LoadCallback() {
                     @Override
-                    public void onDataLoaded() {
+                    public void onDataLoaded(IconHelper helper) {
                         // This happens on UI thread, and is guaranteed to be called.
                         Drawable iconDrawable = iconHelper.getIcon(iconId).getDrawable(context);
 //                        setIconInThisView.setCompoundDrawables(null, null, iconDrawable,null);

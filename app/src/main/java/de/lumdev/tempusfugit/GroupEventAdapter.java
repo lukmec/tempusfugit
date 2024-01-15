@@ -158,7 +158,7 @@ public class GroupEventAdapter extends PagedListAdapter<GroupEvent, GroupEventAd
             try {
                 iconHelper.addLoadCallback(new IconHelper.LoadCallback() {
                     @Override
-                    public void onDataLoaded() {
+                    public void onDataLoaded(IconHelper helper) {
                         // This happens on UI thread, and is guaranteed to be called.
                         holder.icon.setImageDrawable(iconHelper.getIcon(iconId).getDrawable(context));
                     }

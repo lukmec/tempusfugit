@@ -155,7 +155,7 @@ public class EditGroupEventFragment extends Fragment implements IconDialog.Callb
         if (groupEventId != -1){
             //retrieve groupEvent
             LiveData<GroupEvent> selectedGroupEvent = viewModel.getGroupEvent(groupEventId);
-            selectedGroupEvent.observe(this, ge -> {
+            selectedGroupEvent.observe(getViewLifecycleOwner(), ge -> {
                 //save GroupEvent (as Deepcopy object) for later use
                 groupEventToEdit = ge.deepcopy();
                 //update UI
@@ -343,7 +343,7 @@ public class EditGroupEventFragment extends Fragment implements IconDialog.Callb
 //                .show(getActivity().getSupportFragmentManager(), "icon_dialog"); //not working but suggestetd in wiki: https://github.com/maltaisn/icondialoglib/wiki/Using-the-dialog
     }
     @Override
-    public void onIconDialogIconsSelected(Icon[] icons) {
+    public void onIconDialogIconsSelected(IconDialog iconDialog, Icon[] icons) {
         //always only take the first picked icon from the dialog (dialog is configured to allow only 1 icon to be selected)
         Icon pickedIcon = icons[0];
         pickedIconId = pickedIcon.getId();
@@ -371,7 +371,7 @@ public class EditGroupEventFragment extends Fragment implements IconDialog.Callb
             try {
                 iconHelper.addLoadCallback(new IconHelper.LoadCallback() {
                     @Override
-                    public void onDataLoaded() {
+                    public void onDataLoaded(IconHelper helper) {
                         // This happens on UI thread, and is guaranteed to be called.
                         Drawable iconDrawable = iconHelper.getIcon(iconId).getDrawable(context);
 //                        iconDrawable.setTint(Color.WHITE);

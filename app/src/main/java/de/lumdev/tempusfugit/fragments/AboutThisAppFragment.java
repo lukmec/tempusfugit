@@ -23,11 +23,13 @@ import com.google.android.material.tabs.TabLayout;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class AboutThisAppFragment extends Fragment implements OnBackPressedCallback {
+public class AboutThisAppFragment extends Fragment {
 
     private TabLayout tabLayout;
     private FloatingActionButton fab;
     private Toolbar toolbar;
+
+    private OnBackPressedCallback backPressedCallback;
 
     public AboutThisAppFragment() {
         // Required empty public constructor
@@ -44,16 +46,8 @@ public class AboutThisAppFragment extends Fragment implements OnBackPressedCallb
 //        fab = getActivity().findViewById(R.id.fab_main);
 //        fab.hide(); //hide FAB on screen
 
-        //setting icon for navigating back in toolbar
-        AppCompatActivity activity = (AppCompatActivity) getActivity();
-        toolbar = activity.findViewById(R.id.toolbar_main);
-        toolbar.setTitle(R.string.toolbar_label_about_app);
-        toolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp);
-        toolbar.setNavigationContentDescription(R.string.toolbar_settings_navigation_description);
-        toolbar.setNavigationOnClickListener((View v) -> {
-            NavHostFragment.findNavController(this).navigateUp();
-            toolbar.setNavigationIcon(null); //disbale icon in toolbar again
-        });
+        //register onBackPressedCallback
+        getActivity().getOnBackPressedDispatcher().addCallback(getViewLifecycleOwner(), backPressedCallback);
 
         return rootView;
     }
@@ -63,6 +57,18 @@ public class AboutThisAppFragment extends Fragment implements OnBackPressedCallb
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
+        //handle back press
+        backPressedCallback = new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                //handle back press here
+                //use next line if you just need navigate up
+                assert getParentFragment() != null;
+                NavHostFragment.findNavController(getParentFragment()).navigateUp();
+                toolbar.setNavigationIcon(null);
+                //Log.e(getClass().getSimpleName(), "handleOnBackPressed");
+            }
+        };
     }
     @Override
     public void onPrepareOptionsMenu(Menu menu) {
@@ -80,21 +86,33 @@ public class AboutThisAppFragment extends Fragment implements OnBackPressedCallb
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        getActivity().addOnBackPressedCallback(getViewLifecycleOwner(),this);
+//        getActivity().addOnBackPressedCallback(getViewLifecycleOwner(),this);
+        //setting icon for navigating back in toolbar
+        AppCompatActivity activity = (AppCompatActivity) getActivity();
+        toolbar = activity.findViewById(R.id.toolbar_main);
+        toolbar.setTitle(R.string.toolbar_label_about_app);
+        toolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp);
+        toolbar.setNavigationContentDescription(R.string.toolbar_settings_navigation_description);
+        toolbar.setNavigationOnClickListener((View v) -> {
+            NavHostFragment.findNavController(this).navigateUp();
+            toolbar.setNavigationIcon(null); //disbale icon in toolbar again
+        });
     }
-    @Override
-    public boolean handleOnBackPressed() {
-        //Do your job here
-        //use next line if you just need navigate up
-        NavHostFragment.findNavController(this).navigateUp();
-        toolbar.setNavigationIcon(null);
-        //Log.e(getClass().getSimpleName(), "handleOnBackPressed");
-        return true;
-    }
+//    @Override
+//    public boolean handleOnBackPressed() {
+//        //Do your job here
+//        //use next line if you just need navigate up
+//        NavHostFragment.findNavController(this).navigateUp();
+//        toolbar.setNavigationIcon(null);
+//        //Log.e(getClass().getSimpleName(), "handleOnBackPressed");
+//        return true;
+//    }
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        getActivity().removeOnBackPressedCallback(this);
+//        getActivity().removeOnBackPressedCallback(this);
+        //unregister listener here
+        backPressedCallback.remove();
     }
 
 }
