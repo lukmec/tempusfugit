@@ -16,11 +16,14 @@ import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.PreferenceManager;
 import androidx.viewpager.widget.ViewPager;
 import de.lumdev.tempusfugit.settings.SettingsPersonalizationFragment;
+import de.raphaelebner.roomdatabasebackup.core.RoomBackup;
 //import android.support.v7.widget.Toolbar;
 
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
@@ -37,6 +40,9 @@ import com.google.android.material.tabs.TabLayout;
 public class MainActivity extends AppCompatActivity implements
         PreferenceFragmentCompat.OnPreferenceStartFragmentCallback {
 
+    public int app_version_code = 0;
+    public String app_version_name = "v0.0.0";
+    public RoomBackup roomBackup;
     private NavController navCtrlr;
     private Toolbar toolbar;
     private FloatingActionButton fab;
@@ -78,6 +84,18 @@ public class MainActivity extends AppCompatActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        //read apps version code and name
+        try {
+            PackageInfo pInfo = getApplicationContext().getPackageManager().getPackageInfo(getApplicationContext().getPackageName(), 0);
+            app_version_code = pInfo.versionCode;
+            app_version_name = pInfo.versionName;
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        //create roomBackup instance
+        roomBackup = new RoomBackup(this);
 
         //create channel for naotifications in Android 8 and above //see: https://developer.android.com/training/notify-user/channels
             //Creating an existing notification channel with its original values performs no operation, so it's safe to call this code when starting an app.
@@ -205,9 +223,4 @@ public class MainActivity extends AppCompatActivity implements
         }
     }
 
-//    @Override
-//    protected void onResume() {
-//        super.onResume();
-//        toolbar.setTitle("heheheh");
-//    }
 }

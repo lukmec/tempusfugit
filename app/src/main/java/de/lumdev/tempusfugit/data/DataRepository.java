@@ -22,6 +22,7 @@ import androidx.paging.PagedList;
 
 public class DataRepository {
 
+    private LocalRoomDatabase db;
     private GroupEventDao myGroupEventDao;
     private EventDao myEventDao;
     private LiveData<PagedList<GroupEvent>> allGroupEvents;
@@ -38,7 +39,7 @@ public class DataRepository {
     }
 
     public DataRepository(Application application){
-        LocalRoomDatabase db = LocalRoomDatabase.getDatabase(application);
+        this.db = LocalRoomDatabase.getDatabase(application);
         myGroupEventDao = db.groupEventDao();
         myEventDao = db.eventDao();
 //        allGroupEvents = myGroupEventDao.getAllGroupEvents(); //old implementation without factory
@@ -48,7 +49,10 @@ public class DataRepository {
         allNonArchivedEvents = new LivePagedListBuilder<>(myEventDao.getEventsByArchiveState(false),20).build();
         allNonArchivedGroupEvents = new LivePagedListBuilder<>(myGroupEventDao.getGroupEventsByArchiveState(false),20).build();
     }
-
+    //getter for RoomDatabase to allow access for BackupTool
+    public LocalRoomDatabase getDatabase(){
+        return this.db;
+    }
     public LiveData<PagedList<GroupEvent>> getAllGroupEvents(){
         return allGroupEvents;
     }

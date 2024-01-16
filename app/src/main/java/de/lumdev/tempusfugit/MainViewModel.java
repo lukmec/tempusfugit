@@ -23,6 +23,7 @@ import androidx.preference.PreferenceManager;
 import de.lumdev.tempusfugit.data.DataRepository;
 import de.lumdev.tempusfugit.data.Event;
 import de.lumdev.tempusfugit.data.GroupEvent;
+import de.lumdev.tempusfugit.data.LocalRoomDatabase;
 
 public class MainViewModel extends AndroidViewModel {
 
@@ -40,6 +41,11 @@ public class MainViewModel extends AndroidViewModel {
         allEvents = dataRepository.getAllEvents();
         allNonArchivedEvents = dataRepository.getAllNonArchivedEvents();
         allNonArchivedGroupEvents = dataRepository.getAllNonArchivedGroupEvents();
+    }
+
+    //getter for RoomDatabase to allow access for BackupTool
+    public LocalRoomDatabase getDatabase(){
+        return dataRepository.getDatabase();
     }
 
     //get List of all GroupEvents

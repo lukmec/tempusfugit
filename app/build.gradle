@@ -11,7 +11,7 @@ android {
         //targetSdkVersion 34 //OLD
         targetSdk 34
         versionCode 2
-        versionName "2.1"
+        versionName "v2.1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -73,6 +73,11 @@ dependencies {
     // (Java only)
     //noinspection GradleDependency
     implementation "androidx.work:work-runtime:$work_version"
+//    implementation ("androidx.work:work-runtime:$work_version") {
+//        exclude group: 'com.google.guava', module: 'listenablefuture' //error solution found here: https://issuetracker.google.com/issues/116154359
+//    }
+    implementation 'com.google.guava:guava:27.0.1-android'
+
 //    implementation "androidx.work:work-runtime:2.1.0"
 //    // Kotlin + coroutines
 //    implementation "androidx.work:work-runtime-ktx:$work_version"
@@ -96,5 +101,10 @@ dependencies {
     implementation 'androidx.recyclerview:recyclerview:1.3.2'
     implementation 'androidx.viewpager:viewpager:1.0.0'
     implementation 'androidx.preference:preference:1.2.1'
+    //Room Database Backup Tool
+    implementation 'de.raphaelebner:roomdatabasebackup:1.0.0-beta13'
+//    implementation ('de.raphaelebner:roomdatabasebackup:1.0.0-beta13') {
+//        exclude group: 'com.google.guava', module: 'listenablefuture' //error solution found here: https://issuetracker.google.com/issues/116154359
+//    }
 }
 

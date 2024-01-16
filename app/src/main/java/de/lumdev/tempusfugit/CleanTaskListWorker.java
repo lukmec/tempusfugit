@@ -58,7 +58,7 @@ public class CleanTaskListWorker extends Worker {
             //when done events are archived by this worker, they dont show up on daily todolist, therefore will also be never again get a notif for them
         Intent intent = new Intent();
         intent.setAction(PermanentNotificationService.ACTION_CLEAR_EVENTS_TO_IGNORE_LIST);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 0, intent, PendingIntent.FLAG_CANCEL_CURRENT);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 0, intent, PendingIntent.FLAG_CANCEL_CURRENT | PendingIntent.FLAG_IMMUTABLE);
         try{
             pendingIntent.send();
         }catch (PendingIntent.CanceledException e){
@@ -67,7 +67,7 @@ public class CleanTaskListWorker extends Worker {
         //send broadcast for service to recreate all notifications (if worker set events to archived, service should refresh list of totoevents and decide freshly which events to notify)
         Intent intent2 = new Intent();
         intent2.setAction(PermanentNotificationService.ACTION_RECREATE_NOTIFICATIONS);
-        PendingIntent pendingIntent2 = PendingIntent.getBroadcast(getApplicationContext(), 0, intent2, PendingIntent.FLAG_CANCEL_CURRENT);
+        PendingIntent pendingIntent2 = PendingIntent.getBroadcast(getApplicationContext(), 0, intent2, PendingIntent.FLAG_CANCEL_CURRENT | PendingIntent.FLAG_IMMUTABLE);
         try{
             pendingIntent2.send();
         }catch (PendingIntent.CanceledException e){

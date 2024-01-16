@@ -40,7 +40,7 @@
     <!--About App-->
     <string name="toolbar_label_about_app">About this App</string>
     <string name="label_about_author_title">Author</string>
-    <string name="label_about_author_content">This android app was created by Lukas Mechura mainly from November 2018 to February 2019. Development continues in irregular intervals til today. State: 25. November 2020</string>
+    <string name="label_about_author_content">This android app was created by Lukas Mechura mainly from November 2018 to February 2019. Development continues in irregular intervals til today. State: 15. January 2024</string>
     <string name="label_about_contact_title">Contact</string>
     <string name="label_about_contact_content" translatable="false">lume5641@th-wildau.de \nhttps://github.com/lukmec/tempusfugit</string>
     <string name="label_about_license_title">License</string>
@@ -57,9 +57,13 @@
     <!--Backup Database-->
     <string name="toolbar_label_backup_database_event">Backup Database</string>
     <string name="tV_label_backup_instructions">(1) Click the button to start the backup process.\n(2) Select where to save the backup file.\n\nNote:\n Importing data from backups is not supported currently.\n Exported data is in JSON format but saved as \"html\" to allow quick view of the file in a browser.</string>
-    <string name="tV_label_backup_successful">Backup file created successfully.</string>
     <string name="tV_label_backup_not_successful">An error occurred. Backup file was not created. (Either FileNotFound or IOException.)</string>
+    <string name="toast_backup_created_successfully">Database Backup created successfully.</string>
+    <string name="toast_backup_restored_successfully">Database Backup restored successfully.</string>
+    <string name="toast_backup_created_error">Error during Database Backup creation.</string>
+    <string name="toast_backup_restored_error">Error during Database Backup restoration.</string>
     <string name="btn_do_backup">Do Backup</string>
+    <string name="btn_restore_backup">Restore Backup</string>
 
 
     <!--Delete Element-->

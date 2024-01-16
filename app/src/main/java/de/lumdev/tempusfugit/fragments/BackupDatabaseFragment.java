@@ -5,11 +5,13 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.ParcelFileDescriptor;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.threeten.bp.Instant;
 import org.threeten.bp.OffsetDateTime;
@@ -27,149 +29,173 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.fragment.NavHostFragment;
+import de.lumdev.tempusfugit.MainActivity;
 import de.lumdev.tempusfugit.MainViewModel;
 import de.lumdev.tempusfugit.R;
+import de.raphaelebner.roomdatabasebackup.core.RoomBackup;
 
 public class BackupDatabaseFragment extends Fragment {
 
-        private MainViewModel viewModel;
-        private Toolbar toolbar;
-        private OnBackPressedCallback backPressedCallback;
+    private MainViewModel viewModel;
+    private Toolbar toolbar;
+    private OnBackPressedCallback backPressedCallback;
 
-        private TextView backup_tV;
-        private Button backup_btn;
-        private View.OnClickListener doBackupOnClickListener = new View.OnClickListener() {
+    private RoomBackup roomBackup;
+    public int app_version_code;
+    public String app_version_name;
+    private TextView backup_tV;
+    private Button do_backup_btn;
+    private Button restore_backup_btn;
+    private View.OnClickListener doBackupOnClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            System.out.println("---------- do Backup clicked.");
+            doBackup();
+        }
+    };
+    private View.OnClickListener restoreBackupOnClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            //restore backup here
+            System.out.println("---------- restore Backup clicked.");
+            restoreBackup();
+        }
+    };
+
+    public BackupDatabaseFragment() {
+        // Required empty public constructor
+    }
+
+    /**
+     * Use this factory method to create a new instance of
+     * this fragment using the provided parameters.
+     * @return A new instance of fragment OverviewGroupEventFragment.
+     */
+    public static de.lumdev.tempusfugit.fragments.BackupDatabaseFragment newInstance() {
+        de.lumdev.tempusfugit.fragments.BackupDatabaseFragment fragment = new de.lumdev.tempusfugit.fragments.BackupDatabaseFragment();
+        return fragment;
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        viewModel = ViewModelProviders.of(this).get(MainViewModel.class);
+        //handle back press
+        backPressedCallback = new OnBackPressedCallback(true) {
             @Override
-            public void onClick(View v) {
-                createFile(null);
-//                backup_tV.setText(viewModel.getDatabaseAsJson());
+            public void handleOnBackPressed() {
+                //handle back press here
+                //use next line if you just need navigate up
+                assert getParentFragment() != null;
+                NavHostFragment.findNavController(getParentFragment()).navigateUp();
+                toolbar.setNavigationIcon(null);
+                //Log.e(getClass().getSimpleName(), "handleOnBackPressed");
             }
         };
 
-        public BackupDatabaseFragment() {
-            // Required empty public constructor
-        }
+    }
 
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         * @return A new instance of fragment OverviewGroupEventFragment.
-         */
-        public static de.lumdev.tempusfugit.fragments.BackupDatabaseFragment newInstance() {
-            de.lumdev.tempusfugit.fragments.BackupDatabaseFragment fragment = new de.lumdev.tempusfugit.fragments.BackupDatabaseFragment();
-            return fragment;
-        }
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        final View rootView = inflater.inflate(R.layout.fragment_backup_database, container, false);
 
-        @Override
-        public void onCreate(Bundle savedInstanceState) {
-            super.onCreate(savedInstanceState);
-            viewModel = ViewModelProviders.of(this).get(MainViewModel.class);
-            //handle back press
-            backPressedCallback = new OnBackPressedCallback(true) {
-                @Override
-                public void handleOnBackPressed() {
-                    //handle back press here
-                    //use next line if you just need navigate up
-                    assert getParentFragment() != null;
-                    NavHostFragment.findNavController(getParentFragment()).navigateUp();
-                    toolbar.setNavigationIcon(null);
-                    //Log.e(getClass().getSimpleName(), "handleOnBackPressed");
-                }
-            };
-        }
+        //register onBackPressedCallback
+        getActivity().getOnBackPressedDispatcher().addCallback(getViewLifecycleOwner(), backPressedCallback);
 
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                                 Bundle savedInstanceState) {
-            final View rootView = inflater.inflate(R.layout.fragment_backup_database, container, false);
-
-            //register onBackPressedCallback
-            getActivity().getOnBackPressedDispatcher().addCallback(getViewLifecycleOwner(), backPressedCallback);
-
-            // Inflate the layout for this fragment
-            return rootView;
-        }
+        // Inflate the layout for this fragment
+        return rootView;
+    }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         backup_tV = view.findViewById(R.id.tV_label_backup);
-        backup_btn = view.findViewById(R.id.btn_do_backup);
-        backup_btn.setOnClickListener(doBackupOnClickListener);
+        do_backup_btn = view.findViewById(R.id.btn_do_backup);
+        do_backup_btn.setOnClickListener(doBackupOnClickListener);
+        restore_backup_btn = view.findViewById(R.id.btn_restore_backup);
+        restore_backup_btn.setOnClickListener(restoreBackupOnClickListener);
     }
 
     // Request code for creating a PDF document.
-        private static final int CREATE_FILE = 1;
+    private static final int CREATE_FILE = 1;
 
-        private void createFile(Uri pickerInitialUri) {
-            Intent intent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
-            intent.addCategory(Intent.CATEGORY_OPENABLE);
-            // complete list of mime type: https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types/Common_types
+    private void createFile(Uri pickerInitialUri) {
+        Intent intent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
+        intent.addCategory(Intent.CATEGORY_OPENABLE);
+        // complete list of mime type: https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types/Common_types
 //            intent.setType("application/json");
-            intent.setType("text/html");
-            String date_now = OffsetDateTime.ofInstant(Instant.now(), ZoneOffset.systemDefault()).format(DateTimeFormatter.ISO_LOCAL_DATE);
-            intent.putExtra(Intent.EXTRA_TITLE, date_now+"_backup_tempus_fugit.html");
-            // Optionally, specify a URI for the directory that should be opened in
-            // the system file picker when your app creates the document.
+        intent.setType("text/html");
+        String date_now = OffsetDateTime.ofInstant(Instant.now(), ZoneOffset.systemDefault()).format(DateTimeFormatter.ISO_LOCAL_DATE);
+        intent.putExtra(Intent.EXTRA_TITLE, date_now+"_backup_tempus_fugit.html");
+        // Optionally, specify a URI for the directory that should be opened in
+        // the system file picker when your app creates the document.
 //            intent.putExtra(DocumentsContract.EXTRA_INITIAL_URI, pickerInitialUri);
-            startActivityForResult(intent, CREATE_FILE);
-        }
-        //code snippets from https://developer.android.com/training/data-storage/shared/documents-files
-        @Override
-        public void onActivityResult(int requestCode, int resultCode,
-                                     Intent resultData) {
-            if (requestCode == CREATE_FILE
-                    && resultCode == Activity.RESULT_OK) {
-                // The result data contains a URI for the document or directory that
-                // the user selected.
-                Uri uri = null;
-                if (resultData != null) {
-                    uri = resultData.getData();
-                    // Perform operations on the document using its URI.
-                    writeDocument(uri, viewModel.getDatabaseAsJson());
-                }
+        startActivityForResult(intent, CREATE_FILE);
+    }
+    //code snippets from https://developer.android.com/training/data-storage/shared/documents-files
+    @Override
+    public void onActivityResult(int requestCode, int resultCode,
+                                 Intent resultData) {
+        if (requestCode == CREATE_FILE
+                && resultCode == Activity.RESULT_OK) {
+            // The result data contains a URI for the document or directory that
+            // the user selected.
+            Uri uri = null;
+            if (resultData != null) {
+                uri = resultData.getData();
+                // Perform operations on the document using its URI.
+                writeDocument(uri, viewModel.getDatabaseAsJson());
             }
         }
-        private void writeDocument(Uri uri, String stuff_to_write) {
-            try {
-                ParcelFileDescriptor pfd = getActivity().getContentResolver().
-                        openFileDescriptor(uri, "w");
-                FileOutputStream fileOutputStream =
-                        new FileOutputStream(pfd.getFileDescriptor());
-    //                fileOutputStream.write(("Overwritten at " + System.currentTimeMillis() +
-    //                        "\n").getBytes());
-                fileOutputStream.write((stuff_to_write).getBytes());
-                // Let the document provider know you're done by closing the stream.
-                fileOutputStream.close();
-                pfd.close();
-                //output info for successful creation
-                backup_tV.setText(getString(R.string.tV_label_backup_successful));
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
-                //output info for error during creation
-                backup_tV.setText(getString(R.string.tV_label_backup_not_successful));
-            }
+    }
+    private void writeDocument(Uri uri, String stuff_to_write) {
+        try {
+            ParcelFileDescriptor pfd = getActivity().getContentResolver().
+                    openFileDescriptor(uri, "w");
+            FileOutputStream fileOutputStream =
+                    new FileOutputStream(pfd.getFileDescriptor());
+//                fileOutputStream.write(("Overwritten at " + System.currentTimeMillis() +
+//                        "\n").getBytes());
+            fileOutputStream.write((stuff_to_write).getBytes());
+            // Let the document provider know you're done by closing the stream.
+            fileOutputStream.close();
+            pfd.close();
+            //output info for successful creation
+            backup_tV.setText(getString(R.string.toast_backup_created_successfully));
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+            //output info for error during creation
+            backup_tV.setText(getString(R.string.tV_label_backup_not_successful));
         }
+    }
 
 
 
 
     // used for handling back press (on physical/ soft button); see: https://stackoverflow.com/questions/51043428/handling-back-button-in-android-navigation-component
-        @Override
-        public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-            super.onActivityCreated(savedInstanceState);
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
 //            getActivity().addOnBackPressedCallback(getViewLifecycleOwner(),this);
-            toolbar = getActivity().findViewById(R.id.toolbar_main);
-            toolbar.setTitle(R.string.toolbar_label_backup_database_event);
-            toolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp);
-            toolbar.setNavigationContentDescription(R.string.toolbar_settings_navigation_description);
-            toolbar.setNavigationOnClickListener((View v) -> {
-                NavHostFragment.findNavController(this).navigateUp();
-                toolbar.setNavigationIcon(null); //disbale icon in toolbar again
-            });
-        }
+        toolbar = getActivity().findViewById(R.id.toolbar_main);
+        toolbar.setTitle(R.string.toolbar_label_backup_database_event);
+        toolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp);
+        toolbar.setNavigationContentDescription(R.string.toolbar_settings_navigation_description);
+        toolbar.setNavigationOnClickListener((View v) -> {
+            NavHostFragment.findNavController(this).navigateUp();
+            toolbar.setNavigationIcon(null); //disbale icon in toolbar again
+        });
+
+        //retrieve roomBackup instance from activity
+        MainActivity mainActivity = (MainActivity) getActivity();
+        assert mainActivity != null;
+        this.roomBackup = mainActivity.roomBackup;
+        this.app_version_code = mainActivity.app_version_code;
+        this.app_version_name = mainActivity.app_version_name;
+    }
 //        @Override
 //        public boolean handleOnBackPressed() {
 //            //Do your job here
@@ -179,12 +205,68 @@ public class BackupDatabaseFragment extends Fragment {
 //            //Log.e(getClass().getSimpleName(), "handleOnBackPressed");
 //            return true;
 //        }
-        @Override
-        public void onDestroyView() {
-            super.onDestroyView();
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
 //            getActivity().removeOnBackPressedCallback(this);
-            //unregister listener here
-            backPressedCallback.remove();
+        //unregister listener here
+        backPressedCallback.remove();
 
+    }
+
+    private void doBackup(){
+//        Boolean useMaxFileCount = true;
+        Boolean enableLog = true;
+        int storageLocation = RoomBackup.BACKUP_FILE_LOCATION_CUSTOM_DIALOG;
+
+        roomBackup.backupLocation(storageLocation);
+//        roomBackup.backupLocationCustomFile(new File(getContext().getFilesDir() + "/databasebackup/geilesBackup.sqlite3"));
+//        roomBackup.database(FruitDatabase.Companion.getInstance(getContext()));
+        roomBackup.database(viewModel.getDatabase());
+        roomBackup.enableLogDebug(enableLog);
+//        roomBackup.backupIsEncrypted(encryptBackup);
+//        roomBackup.customEncryptPassword(MainActivity.SECRET_PASSWORD);
+        String date_now = OffsetDateTime.ofInstant(Instant.now(), ZoneOffset.systemDefault()).format(DateTimeFormatter.ISO_LOCAL_DATE);
+        roomBackup.customBackupFileName("Tempus_Fugit_" + app_version_name + "_DB_BACKUP_" + date_now + ".sqlite3");
+//        if (useMaxFileCount) roomBackup.maxFileCount(5);
+        roomBackup.onCompleteListener((success, message, exitCode) -> {
+            Log.d("TF_DB-Backup", "oncomplete: " + success + ", message: " + message + ", exitCode: " + exitCode);
+            if (success) {
+                toast(getString(R.string.toast_backup_created_successfully));
+                roomBackup.restartApp(new Intent(getContext(), MainActivity.class));
+            }else {
+                toast(getString(R.string.toast_backup_created_error));
+            }
+        });
+        roomBackup.backup();
+    }
+
+    private void restoreBackup(){
+        Boolean enableLog = true;
+
+        roomBackup.database(viewModel.getDatabase());
+        roomBackup.enableLogDebug(enableLog);
+//        roomBackup.backupIsEncrypted(encryptBackup);
+        roomBackup.backupLocation(RoomBackup.BACKUP_FILE_LOCATION_CUSTOM_DIALOG);
+//        roomBackup.customRestoreDialogTitle("Custom Restore title"); //only for internal or external storage
+        roomBackup.onCompleteListener((success, message, exitCode) -> {
+            Log.d("TF_DB-Backup", "success: " + success + ", message: " + message + ", exitCode: " + exitCode);
+            if (success) {
+                toast(getString(R.string.toast_backup_restored_successfully));
+                roomBackup.restartApp(new Intent(getContext(), MainActivity.class));
+            }else {
+                toast(getString(R.string.toast_backup_restored_error));
+            }
+        });
+        //TODO: check for version name before restoring
+        //verify correct selection of backup file to restore
+        roomBackup.restore();
+    }
+
+    public void toast(String textToToast){
+        //added check for NULL after facing issues and reading http://justmobiledev.com/resolving-fragment-context-loss-issues/
+        if(this.getContext() != null) {
+            Toast.makeText(getActivity().getApplicationContext(), textToToast, Toast.LENGTH_SHORT).show();
         }
+    }
 }
